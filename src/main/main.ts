@@ -2,6 +2,9 @@ import {app, BrowserWindow, ipcMain} from 'electron'
 import path from 'node:path'
 
 
+import './ipcHandlers'
+
+
 // This is going to be replaced with a better system in the future, only testing for right now.
 let firstOpen = true;
 const initialPage = (hasBeenSetup: boolean): string => {
