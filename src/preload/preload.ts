@@ -8,5 +8,11 @@ contextBridge.exposeInMainWorld('versions', {
 
 contextBridge.exposeInMainWorld('save-secure', {
     saveAPIKey: (key: string) => ipcRenderer.invoke('save-api-key', key),
-    getAPIKey: () => ipcRenderer.invoke('get-api-key')
+    getAPIKey: () => ipcRenderer.invoke('get-api-key'),
+    saveUsername: (username: string) => ipcRenderer.invoke('save-username', username),
+    getUsername: () => ipcRenderer.invoke('get-username')
+})
+
+contextBridge.exposeInMainWorld('api', {
+    createPost: (filePath: string, tags: string, sources: string[], rating: 's'|'q'|'e', description:string="", parentId:string|null) => ipcRenderer.invoke('api-create-post', filePath, tags, sources, rating, description, parentId)
 })
