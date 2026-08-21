@@ -19,7 +19,7 @@
     "start": "npm run build && electron .",
     "build": "npm run build:main && npm run build:renderer",
     "build:main": "tsc -p tsconfig.json",
-    "build:renderer": "copyfiles -u 2 \"src/renderer/pages/**/*.html\" dist/renderer",
+    "build:renderer": "copyfiles -u 2 \"src/renderer/pages/**/*.html\" dist/renderer && copyfiles -u 2 \"src/renderer/assets/**/*.css\" dist/renderer",
     "quickstart": "electron ."
   },
   "devDependencies": {
