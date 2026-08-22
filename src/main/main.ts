@@ -8,7 +8,7 @@ import './ipcHandlers'
 // This is going to be replaced with a better system in the future, only testing for right now.
 let firstOpen = false;
 const initialPage = (hasBeenSetup: boolean): string => {
-    return hasBeenSetup ? path.join(__dirname, "../renderer/pages/startup/index.html") : path.join(__dirname, "../renderer/pages/home/index.html");
+    return hasBeenSetup ? path.join(__dirname, "../renderer/pages/startup/index.html") : path.join(__dirname, "../renderer/pages/upload/index.html");
 }
 
 const createWindow = () => {

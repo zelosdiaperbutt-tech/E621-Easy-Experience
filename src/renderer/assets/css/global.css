@@ -2,6 +2,31 @@
     box-sizing: border-box;
 }
 
+@font-face {
+    font-family: 'Inter';
+    src: url('../fonts/Inter-VariableFont_opsz\,wght.ttf') format('ttf');
+    font-weight: normal;
+    font-size: normal;
+}
+
+body {
+    font-family: var(--ff);
+    background: var(--grey-50);
+    color: var(--grey-800);
+    margin: 0;
+    padding: 0;
+}
+
+button {
+    background: white;
+    font-family: var(-ff);
+    cursor: pointer;
+    color: var(--grey-700);
+    border: 1px var(--grey-500) solid;
+    padding: var(--space-4) var(--space-12);
+    border-radius: var(--space-4);
+}
+
 :root {
     --red-50: #fef1f1;
     --red-100: #fcdede;
@@ -62,4 +87,20 @@
     --grey-600: #595959;
     --grey-700: #404040;
     --grey-800: #262626;
+    --grey-900: black;
+
+    --space-4: 4px;
+    --space-8: 8px;
+    --space-12: 12px;
+    --space-16: 16px;
+    --space-20: 20px;
+    --space-24: 24px;
+    --space-28: 28px;
+    --space-32: 32px;
+    --space-36: 36px;
+    --space-40: 40px;
+    --space-44: 44px;
+    --space-48: 48px;
+
+    --ff: sans-serif;
 }

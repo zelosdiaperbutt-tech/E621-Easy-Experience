@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload</title>
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <link rel="stylesheet" href="./index.css">
+    <script src="./index.js" defer></script>
+</head>
+<body>
+    <div id="upload-manager-layout">
+        <div id="upload-main-area">
+            <div id="upload-main-area-top">
+                <div class="upload-main-area-top-element" id="upload-main-text">
+                    <h1>Upload</h1>
+                    <p>Manage uploads and tags before uploading in bulk.</p>
+                </div>
+                <div class="upload-main-area-top-element upload-main-area-top-buttons" id="upload-buttons">
+                    <button id="upload-setting">Settings</button>
+                    <button id="upload-history">History</button>
+                </div>
+            </div>
+            <div id="upload-main-area-file">
+                <p class="bold">Drag &amp; drop files here or <span class="open-file-select">Browse files</span></p>
+                <p class="dull-text">Supports images _, _ and videos _, _, _</p>
+            </div>
+            <div id="upload-main-area-bulkaction-bar">
+                <input type="checkbox" name="bulkaction" id="bulkaction-checkbox">
+                <p id="bulkaction-total">3 of 12 selected</p>
+            </div>
+            <div id="upload-main-area-grid"></div>
+        </div>
+        <div id="upload-right-sidebar">
+            <h1>Multi-select Actions</h1>
+        </div>
+    </div>
+</body>
+</html>
