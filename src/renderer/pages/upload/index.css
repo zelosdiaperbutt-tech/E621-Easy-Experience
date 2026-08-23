@@ -1,4 +1,9 @@
 
+body {
+    margin: 0;
+    padding: 0;
+}
+
 #upload-manager-layout {
     display: flex;
     flex-direction: row;
@@ -6,13 +11,13 @@
     justify-content: flex-start;
     align-items: flex-start;
     gap: 0;
-    margin: var(--space-16);
+    padding: var(--space-16);
     background: var(--grey-50);
+    margin: 0;
 }
 
 #upload-main-area {
     flex-basis: 75%;
-    border: 1px green solid;
     display: flex;
     flex-direction: column;
     padding: var(--space-12);
@@ -36,6 +41,13 @@
 #upload-main-text p {
     font-size: 0.8rem;
     color: var(--grey-600);
+}
+
+#upload-buttons {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: var(--space-12);
 }
 
 #upload-main-area-file {
@@ -65,9 +77,103 @@ p.dull-text {
     color: var(--grey-500);
 }
 
-#upload-right-sidebar {
-    flex-basis: 25%;
-    border: 1px green solid;
+#upload-main-area-bulkaction-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+    background: white;
+    padding: var(--space-8) var(--space-24);
+    border-radius: var(--space-8);
+    line-height: 0;
+    border: 1px var(--grey-200) solid;
+}
+
+.flex-group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: baseline;
+    justify-content: flex-start;
+    gap: var(--space-8);
+}
+
+#upload-main-area-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-8);
+    width: 100%;
+}
+
+.upload-item {
+    width: 100%;
+    background: white;
+    border: 1px var(--grey-200) solid;
+    border-radius: var(--space-8);
+    position: relative;
+    overflow: hidden;
+}
+
+.upload-item[data-selected="true"] {
+    border: 2px var(--blue-400) solid;
+}
+
+.upload-item-content {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 7/5;
+    border-bottom: 1px var(--grey-200) solid;
+    background: var(--grey-100);
+}
+
+.upload-item-content img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    cursor: pointer;
+}
+
+.upload-item-content-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    margin: var(--space-4);
+}
+
+.upload-item-footer {
+    padding: var(--space-8);
     display: flex;
     flex-direction: column;
+    gap: var(--space-4);
+    background: white;
+}
+
+.upload-item-footer p {
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.upload-item-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.upload-item-footer-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--grey-400);
+}
+
+#upload-right-sidebar {
+    flex-basis: 25%;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border-left: 2px var(--grey-100) solid;
+    padding: var(--space-8);
 }
