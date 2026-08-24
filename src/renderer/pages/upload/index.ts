@@ -4,6 +4,7 @@ let selectedItems: HTMLElement[] = [];
 const selectedLabel = document.getElementById('bulkaction-total');
 const bulkactionCheckbox = document.getElementById('bulkaction-checkbox') as HTMLInputElement;
 const mainAreaFileDrop = document.getElementById('upload-main-area-file') as HTMLElement;
+const uploadGrid = document.getElementById('upload-main-area-grid') as HTMLElement;
 
 const addToSelected = (element: HTMLElement) => {
     if (!selectedItems.includes(element)) {
@@ -28,8 +29,7 @@ const updateSelectionQuantityLabel = () => {
     selectedLabel.innerText = `${numberSelected} of ${totalItems}`;
 }
 
-document.querySelectorAll<HTMLElement>('.upload-item').forEach((item) => {
-    
+const addEventListenersToUploadItem = (item: HTMLElement): void => {
     item.addEventListener('become-selected', () => {
         item.dataset.selected = "true"
 
@@ -60,7 +60,11 @@ document.querySelectorAll<HTMLElement>('.upload-item').forEach((item) => {
         } else if (selected) {  // the item is going to be deselected
             item.dispatchEvent(new Event('become-deselected'))
         }
-    })
+    })   
+}
+
+document.querySelectorAll<HTMLElement>('.upload-item').forEach((item) => {
+    addEventListenersToUploadItem(item);
 })
 
 bulkactionCheckbox.addEventListener('change', (event: Event) => {
@@ -106,13 +110,53 @@ mainAreaFileDrop.addEventListener('drop', (event: DragEvent) => {
 
         const path = window.electronAPI.getFilePath(file);
 
-        console.log({
-            name: file.name,
-            path,
-            type: file.type,
-            size: file.size
-        })
+        const uploadElement = createImageUploadItem(path, file.name, file.type, file.size)
+        uploadGrid.insertAdjacentElement('beforeend', uploadElement)
     }
+
+    updateSelectionQuantityLabel();
 })
+
+
+const getSizeString = (bytes: number): string => {
+
+    if (bytes < 1024) {
+        return `${bytes} B`;
+    } else if (bytes < 1024 ** 2) {
+        return `${(bytes / 1024).toFixed(1)} KB`;
+    } else if (bytes < 1024 ** 3) {
+        return `${(bytes / 1024 / 1024).toFixed(1)} MB`
+    } else {
+        return `${(bytes / (1024 ** 3)).toFixed(1)} GB`
+    }
+}
+
+const createImageUploadItem = (path: string, name: string, type: string, size: number): HTMLElement => {
+    
+    const newItem = document.createElement('section');
+    newItem.className = 'upload-item'
+    newItem.setAttribute('data-selected', 'false')
+    newItem.innerHTML = `
+        <div class="upload-item-content">
+            <div class="upload-item-content-header">
+                <input type="checkbox" class="upload-item-select-checkbox">
+            </div>
+            <img src="${path}">
+        </div>
+        <div class="upload-item-footer">
+            <p class="upload-item-name">${name}</p>
+            <div class="upload-item-footer-info">
+                <p class="upload-item-format">${type}</p>
+                <p class="upload-item-size">${getSizeString(size)}</p>
+            </div>
+        </div>
+    `
+
+    addEventListenersToUploadItem(newItem)
+
+    return newItem;
+}
+
+
 
 updateSelectionQuantityLabel()

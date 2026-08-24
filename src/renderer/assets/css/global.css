@@ -46,10 +46,18 @@ button:hover {
 }
 
 button.button-warn {
-    color: var(--red-400);
+    color: var(--yellow-600);
 }
 
 button.button-warn:hover {
+    background: var(--yellow-50);
+}
+
+button.button-danger {
+    color: var(--red-400);
+}
+
+button.button-danger:hover {
     background: var(--red-50);
 }
 
@@ -76,7 +84,7 @@ input[type="checkbox"] {
     --yellow-100: #F9F0BD;
     --yellow-200: #F6E793;
     --yellow-300: #F2DD69;
-    --yellow-400: #EED4Ef;
+    --yellow-400: #EED43F;
     --yellow-500: #E0C014;
     --yellow-600: #C0A611;
     --yellow-700: #96820D;
