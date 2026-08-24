@@ -1,19 +1,29 @@
-
-let selectedItems: HTMLElement[] = [];
-
 const selectedLabel = document.getElementById('bulkaction-total');
 const bulkactionCheckbox = document.getElementById('bulkaction-checkbox') as HTMLInputElement;
 const mainAreaFileDrop = document.getElementById('upload-main-area-file') as HTMLElement;
 const uploadGrid = document.getElementById('upload-main-area-grid') as HTMLElement;
 
-const addToSelected = (element: HTMLElement) => {
+
+// Selected upload elements
+let selectedItems: HTMLElement[] = [];
+
+
+/**
+ * Adds an upload element to the list of selected items
+ * @param element The element to add to the list
+ */
+const addToSelected = (element: HTMLElement): void => {
     if (!selectedItems.includes(element)) {
         selectedItems.push(element)
         updateSelectionQuantityLabel()
     }
 }
 
-const removeFromSelected = (element: HTMLElement) => {
+/**
+ * Removes an upload element from the list of selected items.
+ * @param element The element to be removed
+ */
+const removeFromSelected = (element: HTMLElement): void => {
     const index = selectedItems.indexOf(element)
     if (index !== -1) {
         selectedItems.splice(index, 1);
@@ -21,7 +31,13 @@ const removeFromSelected = (element: HTMLElement) => {
     }
 }
 
-const updateSelectionQuantityLabel = () => {
+
+/**
+ * Changes the text of the selection label on the bulk action bar to reflect
+ * the total number of items and the amount of items that are currently selected.
+ * @returns 
+ */
+const updateSelectionQuantityLabel = (): void => {
     const totalItems: number = document.querySelectorAll('.upload-item').length;
     const numberSelected: number = selectedItems.length;
 
@@ -29,6 +45,12 @@ const updateSelectionQuantityLabel = () => {
     selectedLabel.innerText = `${numberSelected} of ${totalItems}`;
 }
 
+/**
+ * Applies the corresponding event listeners to an upload item element
+ * so that it behaves properly.
+ * 
+ * @param item The upload item that needs to have event listeners added.
+ */
 const addEventListenersToUploadItem = (item: HTMLElement): void => {
     item.addEventListener('become-selected', () => {
         item.dataset.selected = "true"
@@ -63,6 +85,9 @@ const addEventListenersToUploadItem = (item: HTMLElement): void => {
     })   
 }
 
+// Applies events listeners to pre-generated upload items
+// Used in the case that templates are used to avoid having to constantly
+// re-submit files.
 document.querySelectorAll<HTMLElement>('.upload-item').forEach((item) => {
     addEventListenersToUploadItem(item);
 })
@@ -105,9 +130,7 @@ mainAreaFileDrop.addEventListener('drop', (event: DragEvent) => {
     
     if (!files) return;
 
-
     for (const file of files) {
-
         const path = window.electronAPI.getFilePath(file);
 
         const uploadElement = createImageUploadItem(path, file.name, file.type, file.size)
@@ -117,7 +140,13 @@ mainAreaFileDrop.addEventListener('drop', (event: DragEvent) => {
     updateSelectionQuantityLabel();
 })
 
-
+/**
+ * Formats a number of bytes to be more human readable. Results has at most
+ * one decimal point as is appended with B, KB, MB, or GB depending on the size.
+ * 
+ * @param bytes The number of bytes
+ * @returns A human-readable version of the number of bytes
+ */
 const getSizeString = (bytes: number): string => {
 
     if (bytes < 1024) {
@@ -131,6 +160,16 @@ const getSizeString = (bytes: number): string => {
     }
 }
 
+/**
+ * Creates an upload item for an image. The appropriate event listeners are added to
+ * the element before it is returned.
+ * 
+ * @param path The path to the image file, used for the preview
+ * @param name The name of the file, used as a small title
+ * @param type The filetype, used as supplemental information
+ * @param size The size of the file in raw bytes that will be formatted, supplemental information
+ * @returns The upload image item.
+ */
 const createImageUploadItem = (path: string, name: string, type: string, size: number): HTMLElement => {
     
     const newItem = document.createElement('section');
@@ -149,8 +188,7 @@ const createImageUploadItem = (path: string, name: string, type: string, size: n
                 <p class="upload-item-format">${type}</p>
                 <p class="upload-item-size">${getSizeString(size)}</p>
             </div>
-        </div>
-    `
+        </div>`
 
     addEventListenersToUploadItem(newItem)
 
@@ -158,5 +196,6 @@ const createImageUploadItem = (path: string, name: string, type: string, size: n
 }
 
 
-
+// In case there are pre-generated upload items, the bulk action bar
+// will automatically have the correct label.
 updateSelectionQuantityLabel()
