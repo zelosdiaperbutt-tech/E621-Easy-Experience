@@ -1,5 +1,6 @@
 const selectedLabel = document.getElementById('bulkaction-total');
 const bulkactionCheckbox = document.getElementById('bulkaction-checkbox') as HTMLInputElement;
+const bulkactionDeleteButton = document.getElementById('bulkaction-delete') as HTMLButtonElement
 const mainAreaFileDrop = document.getElementById('upload-main-area-file') as HTMLElement;
 const uploadGrid = document.getElementById('upload-main-area-grid') as HTMLElement;
 
@@ -31,6 +32,22 @@ const removeFromSelected = (element: HTMLElement): void => {
     }
 }
 
+/**
+ * 
+ */
+const deleteSelectedItems = (): void => {
+    while (selectedItems.length > 0) {
+        const currentItem = selectedItems[0];
+        currentItem.dispatchEvent(new Event('become-deselected'))
+        currentItem.remove()
+    }
+
+    updateSelectionQuantityLabel()
+}
+
+bulkactionDeleteButton.addEventListener('click', () => {
+    deleteSelectedItems()
+})
 
 /**
  * Changes the text of the selection label on the bulk action bar to reflect
