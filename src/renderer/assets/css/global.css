@@ -65,6 +65,28 @@ input[type="checkbox"] {
     cursor: pointer;
 }
 
+.always-hidden {
+    display: none;
+}
+
+.flex-group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: baseline;
+    justify-content: flex-start;
+    gap: var(--space-8);
+}
+
+.flex-group-wrap {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: var(--space-8);
+}
+
 :root {
 
 

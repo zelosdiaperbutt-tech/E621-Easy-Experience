@@ -17,6 +17,7 @@ body {
 
 #upload-main-area {
     flex-basis: 75%;
+    flex-shrink: 0;
     display: flex;
     flex-direction: column;
     padding: var(--space-12);
@@ -93,14 +94,7 @@ p.dull-text {
     border: 1px var(--grey-200) solid;
 }
 
-.flex-group {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: baseline;
-    justify-content: flex-start;
-    gap: var(--space-8);
-}
+
 
 #upload-main-area-grid {
     display: grid;
@@ -183,9 +177,37 @@ p.dull-text {
 
 #upload-right-sidebar {
     flex-basis: 25%;
+    flex-grow: 0;
     display: flex;
     flex-direction: column;
     background: white;
     border-left: 2px var(--grey-100) solid;
     padding: var(--space-8);
+    min-height: 100vh;
+    max-width: 25%;
+}
+
+.selectable-button[data-selected="true"] {
+    background: var(--green-100);
+}
+
+.conditional-button {
+    display: inline;
+}
+
+.conditional-button[data-visible="false"] {
+    display: none;
+}
+
+.upload-item-data {
+
+}
+
+.upload-item-data textarea {
+    resize: vertical;
+    width: 100%;
+}
+
+.upload-item-data[data-empty="true"] {
+
 }

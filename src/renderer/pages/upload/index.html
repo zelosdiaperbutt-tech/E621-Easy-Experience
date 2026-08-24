@@ -42,6 +42,93 @@
         </div>
         <div id="upload-right-sidebar">
             <h2>Multi-select Actions</h2>
+            <div id="creator-common" class="upload-item-data upload-item-tag-list upload-item-data-groupable" data-empty="true">
+                <h3>Creators</h3>
+                <textarea id="creator-tags-in-common" placeholder="creator1 creator2 ..."></textarea>
+            </div>
+            <div id="character-common" class="upload-item-data upload-item-tag-list upload-item-data-groupable" data-empty="true">
+                <h3>Characters</h3>
+                <div class="flex-group-wrap">
+                    <button class="selectable-button gender-button" data-selected="false" data-value="male">Male</button>
+                    <button class="selectable-button gender-button" data-selected="false" data-value="female">Female</button>
+                    <button class="selectable-button gender-button" data-selected="false" data-value="andromorph">Andromorph</button>
+                    <button class="selectable-button gender-button" data-selected="false" data-value="gynomorph">Gynomorph</button>
+                    <button class="selectable-button gender-button" data-selected="false" data-value="hermaphrodite">Hermaphrodite</button>
+                    <button class="selectable-button gender-button" data-selected="false" data-value="male-herm">Male-Herm</button>
+                    <button class="selectable-button gender-button" data-selected="false" data-value="ambiguous">Amgibuous</button>
+                </div>
+                <hr>
+                <div class="flex-group-wrap">
+                    <button class="selectable-button" data-selected="false">Zero</button>
+                    <button class="selectable-button" data-selected="false">Solo</button>
+                    <button class="selectable-button" data-selected="false">Duo</button>
+                    <button class="selectable-button" data-selected="false">Trio</button>
+                    <button class="selectable-button" data-selected="false">Group</button>
+                </div>
+                <hr>
+                <div class="flex-group-wrap">
+                    <button class="selectable-button conditional-button condition-male" date-selected="false" data-visible="false">Male/Male</button>
+                    <button class="selectable-button conditional-button condition-male condition-female" date-selected="false" data-visible="false">Male/Female</button>
+                    <button class="selectable-button conditional-button condition-male condition-andromorph" date-selected="false" data-visible="false">Male/Andromorph</button>
+                    <button class="selectable-button conditional-button condition-male condition-gynomorph" date-selected="false" data-visible="false">Male/Gynomorph</button>
+                    <button class="selectable-button conditional-button condition-male condition-hermaphrodite" data-selected="false" data-visible="false">Male/Hermaphrodite</button>
+                    <button class="selectable-button conditional-button condition-male condition-male-herm" date-selected="false" data-visible="false">Male/Male-Herm</button>
+                    <button class="selectable-button conditional-button condition-male condition-ambiguous" date-selected="false" data-visible="false">Male/Ambiguous</button>
+                    <button class="selectable-button conditional-button condition-female" date-selected="false" data-visible="false">Female/Female</button>
+                    <button class="selectable-button conditional-button condition-female condition-andromorph" date-selected="false" data-visible="false">Female/Andromorph</button>
+                    <button class="selectable-button conditional-button condition-female condition-gynomorph" date-selected="false" data-visible="false">Female/Gynomorph</button>
+                    <button class="selectable-button conditional-button condition-female condition-hermaphrodite" date-selected="false" data-visible="false">Female/Hermaphrodite</button>
+                    <button class="selectable-button conditional-button condition-female condition-male-herm" date-selected="false" data-visible="false">Female/Male-Herm</button>
+                    <button class="selectable-button conditional-button condition-female condition-ambiguous" date-selected="false" data-visible="false">Female/Ambiguous</button>
+                    <button class="selectable-button conditional-button condition-andromorph" date-selected="false" data-visible="false">Andromorph/Andromorph</button>
+                    <button class="selectable-button conditional-button condition-andromorph condition-gynomorph" date-selected="false" data-visible="false">Andromorph/Gynomorph</button>
+                    <button class="selectable-button conditional-button condition-andromorph condition-hermaphrodite" date-selected="false" data-visible="false">Andromorph/Hermaphrodite</button>
+                    <button class="selectable-button conditional-button condition-andromorph condition-male-herm" date-selected="false" data-visible="false">Andromorph/Male-Herm</button>
+                    <button class="selectable-button conditional-button condition-andromorph condition-ambiguous" date-selected="false" data-visible="false">Andromorph/Ambiguous</button>
+                    <button class="selectable-button conditional-button condition-gynomorph" date-selected="false" data-visible="false">Gynomorph/Gynomorph</button>
+                    <button class="selectable-button conditional-button condition-gynomorph condition-hermaphrodite" date-selected="false" data-visible="false">Gynomorph/Hermaphrodite</button>
+                    <button class="selectable-button conditional-button condition-gynomorph condition-male-herm" date-selected="false" data-visible="false">Gynomorph/Male-Herm</button>
+                    <button class="selectable-button conditional-button condition-gynomorph condition-ambiguous" date-selected="false" data-visible="false">Gynomorph/Ambiguous</button>
+                    <button class="selectable-button conditional-button condition-hermaphrodite" date-selected="false" data-visible="false">Hermaphrodite/Hermaphrodite</button>
+                    <button class="selectable-button conditional-button condition-hermaphrodite condition-male-herm" date-selected="false" data-visible="false">Hermaphrodite/Male-Herm</button>
+                    <button class="selectable-button conditional-button condition-hermaphrodite condition-ambiguous" date-selected="false" data-visible="false">Hermaphrodite/Ambiguous</button>
+                    <button class="selectable-button conditional-button condition-male-herm" date-selected="false" data-visible="false">Male-Herm/Male-Herm</button>
+                    <button class="selectable-button conditional-button condition-male-herm condition-ambiguous" date-selected="false" data-visible="false">Male-Herm/Ambiguous</button>
+                    <button class="selectable-button conditional-button condition-ambiguous" date-selected="false" data-visible="false">Ambiguous/Ambiguous</button>
+                </div>
+                <textarea id="character-tags-in-common" placeholder="character1 character2 ..."></textarea>
+            </div>
+            <div id="species-common" class="upload-item-data upload-item-tag-list upload-item-data-groupable" data-empty="true">
+                <h3>Species</h3>
+                <div class="flex-group-wrap">
+                    <button class="selectable-button" data-selected="false">Anthro</button>
+                    <button class="selectable-button" data-selected="false">Feral</button>
+                    <button class="selectable-button" data-selected="false">Humanoid</button>
+                    <button class="selectable-button" data-selected="false">Human</button>
+                    <button class="selectable-button" data-selected="false">Taur</button>
+                </div>
+                <textarea placeholder="Ex: bear dragon hyena rat newt etc." id="species-tags-in-common"></textarea>
+            </div>
+            <div id="rating-common" class="upload-item-data-upload-item-data-groupable">
+                <h3>Rating</h3>
+                <div class="flex-group-wrap">
+                    <button class="selectable-button exclusive-selectable-button" data-selected="false" data-groupname="rating-button">Explicit</button>
+                    <button class="selectable-button exclusive-selectable-button" data-selected="false" data-groupname="rating-button">Questionable</button>
+                    <button class="selectable-button exclusive-selectable-button" data-selected="false" data-groupname="rating-button">Safe</button>
+                </div>
+            </div>
+            <div id="general-common" class="upload-item-data upload-item-tag-list upload-item-data-groupable" data-empty="true">
+                <h3>General</h3>
+                <textarea id="general-tags-in-common" placeholder="Ex: standing outside smile 4_toes etc."></textarea>
+            </div>
+            <div id="parent-post-select" class="upload-item-data upload-item-tag-list upload-item-data-individual" data-empty="true">
+                <h3>Parent</h3>
+                <input type="text" id="parent-post-input">
+            </div>
+            <div id="description" class="upload-item-data upload-item-data-groupable" data-empty="true">
+                <h3>Description</h3>
+                <textarea id="description-in-common"></textarea>
+            </div>
         </div>
     </div>
 </body>

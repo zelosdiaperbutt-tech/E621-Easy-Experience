@@ -212,6 +212,15 @@ const createImageUploadItem = (path: string, name: string, type: string, size: n
             </div>
             <img src="${path}">
         </div>
+        <div class="tag-section always-hidden" data-rating="u">
+            <div class="creator-tags"></div>
+            <div class="character-tags"></div>
+            <div class="gender-tags"></div>
+            <div class="species-tags"></div>
+            <div class="general-tags"></div>
+            <div class="parent-post" data-needsResolution="false"></div>
+            <div class="description"></div>
+        </div>
         <div class="upload-item-footer">
             <p class="upload-item-name">${name}</p>
             <div class="upload-item-footer-info">
@@ -225,6 +234,103 @@ const createImageUploadItem = (path: string, name: string, type: string, size: n
     return newItem;
 }
 
+enum Gender {
+    Male,
+    Female,
+    Andromorph,
+    Gynomorph,
+    Hermaphrodite,
+    MaleHerm,
+    Ambiguous
+}
+
+let selectedGenders: Set<Gender> = new Set<Gender>();
+
+document.querySelectorAll<HTMLElement>('.selectable-button').forEach(button => {
+    button.addEventListener('select', () => {
+        button.dataset.selected = "true"
+    })
+
+    button.addEventListener('deselect', () => {
+        button.dataset.selected = "false"
+    })
+
+    button.addEventListener('click', () => {
+        const currentlySelected = button.dataset.selected === "true";
+
+        if (currentlySelected) {
+            button.dispatchEvent(new Event('deselect'))
+        } else {
+            button.dispatchEvent(new Event('select'))
+        }
+    })
+})
+
+document.querySelectorAll<HTMLElement>('.exclusive-selectable-button').forEach(exclusive => {
+    exclusive.addEventListener('click', () => {
+        const currentlySelected = exclusive.dataset.selected === "true";
+
+        if (!currentlySelected) return;
+
+        const groupName = exclusive.dataset.groupname;
+        document.querySelectorAll<HTMLElement>(`.exclusive-selectable-button[data-groupname="${groupName}"]`).forEach(button => {
+            button.dispatchEvent(new Event('deselect'))
+        })
+
+        exclusive.dispatchEvent(new Event('select'))
+    })
+})
+
+document.querySelectorAll<HTMLElement>('.gender-button').forEach(button => {
+    button.addEventListener('select', () => {
+        if (button.dataset.value === "male") selectedGenders.add(Gender.Male)
+        if (button.dataset.value === "female") selectedGenders.add(Gender.Female)
+        if (button.dataset.value === "gynomorph") selectedGenders.add(Gender.Gynomorph)
+        if (button.dataset.value === "andromorph") selectedGenders.add(Gender.Andromorph)
+        if (button.dataset.value === "hermaphrodite") selectedGenders.add(Gender.Hermaphrodite)
+        if (button.dataset.value === "male-herm") selectedGenders.add(Gender.MaleHerm)
+        if (button.dataset.value === "ambiguous") selectedGenders.add(Gender.Ambiguous)
+
+        genderButtonsChanged()
+    })
+
+    button.addEventListener('deselect', () => {
+        if (button.dataset.value === "male") selectedGenders.delete(Gender.Male)
+        if (button.dataset.value === "female") selectedGenders.delete(Gender.Female)
+        if (button.dataset.value === "gynomorph") selectedGenders.delete(Gender.Gynomorph)
+        if (button.dataset.value === "andromorph") selectedGenders.delete(Gender.Andromorph)
+        if (button.dataset.value === "hermaphrodite") selectedGenders.delete(Gender.Hermaphrodite)
+        if (button.dataset.value === "male-herm") selectedGenders.delete(Gender.MaleHerm)
+        if (button.dataset.value === "ambiguous") selectedGenders.delete(Gender.Ambiguous)
+
+        genderButtonsChanged()
+    })
+})
+
+const genderButtonsChanged = () => {
+    document.querySelectorAll<HTMLElement>('.conditional-button').forEach(button => {
+        const active = shouldConditionalButtonActivate(button, selectedGenders)
+        button.dataset.visible = (active ? "true" : "false");
+        if (!active) button.dataset.selected = "false"
+    })
+}
+
+const shouldConditionalButtonActivate = (button: HTMLElement, genders: Set<Gender>): boolean => {
+    let gendersRequired: Gender[] = [];
+    if (button.classList.contains('condition-male')) gendersRequired.push(Gender.Male)
+    if (button.classList.contains('condition-female')) gendersRequired.push(Gender.Female)
+    if (button.classList.contains('condition-andromorph')) gendersRequired.push(Gender.Andromorph)
+    if (button.classList.contains('condition-gynomorph')) gendersRequired.push(Gender.Gynomorph)
+    if (button.classList.contains('condition-hermaphrodite')) gendersRequired.push(Gender.Hermaphrodite)
+    if (button.classList.contains('condition-male-herm')) gendersRequired.push(Gender.MaleHerm)
+    if (button.classList.contains('condition-ambiguous')) gendersRequired.push(Gender.Ambiguous)
+
+    for (let i = 0; i < gendersRequired.length; i++) {
+        if (!genders.has(gendersRequired[i])) return false;
+    }
+
+    return true;
+}
 
 // In case there are pre-generated upload items, the bulk action bar
 // will automatically have the correct label.
