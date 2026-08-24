@@ -3,6 +3,7 @@ let selectedItems: HTMLElement[] = [];
 
 const selectedLabel = document.getElementById('bulkaction-total');
 const bulkactionCheckbox = document.getElementById('bulkaction-checkbox') as HTMLInputElement;
+const mainAreaFileDrop = document.getElementById('upload-main-area-file') as HTMLElement;
 
 const addToSelected = (element: HTMLElement) => {
     if (!selectedItems.includes(element)) {
@@ -80,5 +81,38 @@ bulkactionCheckbox.addEventListener('change', (event: Event) => {
     }
 })
 
+
+mainAreaFileDrop.addEventListener('dragover', (event: Event) => {
+    event.preventDefault()
+
+    mainAreaFileDrop.classList.add('drag-over')
+})
+
+mainAreaFileDrop.addEventListener('dragleave', () => {
+    mainAreaFileDrop.classList.remove('drag-over')
+})
+
+mainAreaFileDrop.addEventListener('drop', (event: DragEvent) => {
+    event.preventDefault();
+
+    mainAreaFileDrop.classList.remove('drag-over');
+
+    const files = event.dataTransfer?.files;
+    
+    if (!files) return;
+
+
+    for (const file of files) {
+
+        const path = window.electronAPI.getFilePath(file);
+
+        console.log({
+            name: file.name,
+            path,
+            type: file.type,
+            size: file.size
+        })
+    }
+})
 
 updateSelectionQuantityLabel()

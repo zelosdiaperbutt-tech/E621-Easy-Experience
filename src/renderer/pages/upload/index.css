@@ -59,6 +59,10 @@ body {
     padding: var(--space-12);
 }
 
+#upload-main-area-file.drag-over {
+    background: var(--grey-100);
+}
+
 #upload-main-area-file p {
     line-height: var(--space-4);
 }
@@ -70,6 +74,7 @@ p.bold {
 .open-file-select {
     color: var(--blue-400);
     text-decoration: underline;
+    cursor: pointer;
 }
 
 p.dull-text {
