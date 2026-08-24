@@ -140,6 +140,19 @@ mainAreaFileDrop.addEventListener('drop', (event: DragEvent) => {
     updateSelectionQuantityLabel();
 })
 
+document.querySelectorAll<HTMLElement>('.open-file-select').forEach(fileSelect => {
+    fileSelect.addEventListener('click', async () => {
+        const files: FileInfo[] = await window.electronAPI.fileSelectDialog();
+
+        for (let i = 0; i < files.length; i++) {
+            const uploadElement = createImageUploadItem(files[i].path, files[i].name, files[i].type, files[i].size);
+            uploadGrid.insertAdjacentElement('beforeend', uploadElement)
+        }
+
+        updateSelectionQuantityLabel()
+    })
+})
+
 /**
  * Formats a number of bytes to be more human readable. Results has at most
  * one decimal point as is appended with B, KB, MB, or GB depending on the size.

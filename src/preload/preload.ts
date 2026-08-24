@@ -6,7 +6,7 @@ contextBridge.exposeInMainWorld('versions', {
     electron: () => process.versions.electron
 })
 
-contextBridge.exposeInMainWorld('save-secure', {
+contextBridge.exposeInMainWorld('saveSecure', {
     saveAPIKey: (key: string) => ipcRenderer.invoke('save-api-key', key),
     getAPIKey: () => ipcRenderer.invoke('get-api-key'),
     saveUsername: (username: string) => ipcRenderer.invoke('save-username', username),
@@ -18,5 +18,6 @@ contextBridge.exposeInMainWorld('api', {
 })
 
 contextBridge.exposeInMainWorld('electronAPI', {
-    getFilePath: (file: File): string => { return webUtils.getPathForFile(file); }
+    getFilePath: (file: File): string => { return webUtils.getPathForFile(file); },
+    fileSelectDialog: (): Promise<FileInfo[]> => ipcRenderer.invoke('dialog:file-select')
 })

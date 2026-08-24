@@ -1,4 +1,8 @@
-import { ipcMain } from 'electron'
+import { ipcMain, dialog } from 'electron'
+
+import fs from 'node:fs';
+import {stat} from 'node:fs/promises'
+import path from 'node:path';
 
 import * as saveSecure from './workers/saveSecure'
 import * as api from './api'
@@ -32,4 +36,40 @@ ipcMain.handle('get-username', async () => {
 
 ipcMain.handle('api-create-post', async (_, filePath, tags, sources, rating, description, parentId) => {
     return api.createPost(filePath, tags, sources, rating, description, parentId)   // Calling the createPost function directly will not go on forever, the queue will eventually take its place.
+})
+
+
+
+async function getFileSize(filePath: string): Promise<number> {
+    return new Promise((resolve, reject) => {
+        fs.stat(filePath, (err, stats) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+
+            resolve(stats.size)
+        })
+    })
+}
+
+ipcMain.handle('dialog:file-select', async () => {
+    const {canceled, filePaths} = await dialog.showOpenDialog({
+        properties: ['openFile', 'multiSelections']
+    });
+
+    if (canceled) return [];
+
+    let fileInfo: FileInfo[] = [];
+
+    for (let i = 0; i < filePaths.length; i++) {
+        fileInfo.push({
+            name: path.basename(filePaths[i]),
+            path: filePaths[i],
+            size: await getFileSize(filePaths[i]),
+            type: path.extname(filePaths[i])
+        })
+    }
+
+    return fileInfo;
 })
