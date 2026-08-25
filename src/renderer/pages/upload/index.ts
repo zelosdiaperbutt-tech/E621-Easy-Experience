@@ -3,6 +3,8 @@ const bulkactionCheckbox = document.getElementById('bulkaction-checkbox') as HTM
 const bulkactionDeleteButton = document.getElementById('bulkaction-delete') as HTMLButtonElement
 const mainAreaFileDrop = document.getElementById('upload-main-area-file') as HTMLElement;
 const uploadGrid = document.getElementById('upload-main-area-grid') as HTMLElement;
+const sidebar = document.getElementById('upload-right-sidebar') as HTMLElement;
+const bulkOptions = document.getElementById('bulkaction-options') as HTMLElement;
 
 
 // Selected upload elements
@@ -331,6 +333,54 @@ const shouldConditionalButtonActivate = (button: HTMLElement, genders: Set<Gende
 
     return true;
 }
+
+
+const setIntersection = <T>(stringSetList: Set<T>[]): Set<T> => {
+    let common: Set<T> = stringSetList[0];
+    let next: Set<T> = new Set<T>();
+    for (let i = 1; i < stringSetList.length; i++) {
+        stringSetList[i].forEach(t => {
+            if (common.has(t)) next.add(t);
+        })
+        common = structuredClone(next);
+        next.clear();
+    }
+
+    return common;
+}
+
+
+bulkOptions.addEventListener('click', () => {
+    const sidebarEnabled = sidebar.dataset.active === "true"
+
+    if (sidebarEnabled) {
+        sidebar.dataset.active = "false"
+        return;
+    }
+
+    if (!sidebarEnabled && selectedItems.length <= 1) {
+        sidebar.dataset.active = "true";
+        // some other stuff to make sure that all of the elements are set up correctly
+        // to begin adding stuff
+        return;
+    }
+
+    let itemTags: Set<String>[] = [];
+
+    selectedItems.forEach(item => {
+        const creatorTags = item.querySelector<HTMLElement>('.creator-tags')
+        if (creatorTags) {
+            itemTags.push( new Set<String>(creatorTags.innerText.split(' ')) );
+        }
+    })
+
+    // find all of the creator tags that are common to the selected items
+    let commonCreators: Set<String> = setIntersection<String>(itemTags);
+
+    console.log(commonCreators);
+
+})
+
 
 // In case there are pre-generated upload items, the bulk action bar
 // will automatically have the correct label.

@@ -17,11 +17,17 @@ body {
 
 #upload-main-area {
     flex-basis: 75%;
-    flex-shrink: 0;
     display: flex;
     flex-direction: column;
     padding: var(--space-12);
     gap: var(--space-24);
+    height: 100vh;
+    overflow-y: scroll;
+    transition: flex-basis 500ms ease;
+}
+
+#upload-main-area:has(+ #upload-right-sidebar[data-active="false"]) {
+    flex-basis: 100%;
 }
 
 #upload-main-area-top {
@@ -175,18 +181,6 @@ p.dull-text {
     font-size: 0.75rem;
 }
 
-#upload-right-sidebar {
-    flex-basis: 25%;
-    flex-grow: 0;
-    display: flex;
-    flex-direction: column;
-    background: white;
-    border-left: 2px var(--grey-100) solid;
-    padding: var(--space-8);
-    min-height: 100vh;
-    max-width: 25%;
-}
-
 .selectable-button[data-selected="true"] {
     background: var(--green-100);
 }
@@ -199,8 +193,47 @@ p.dull-text {
     display: none;
 }
 
+
+#upload-right-sidebar {
+    flex-basis: 25%;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border-left: 2px var(--grey-100) solid;
+    padding: var(--space-8);
+    height: 100vh;
+    overflow-y: scroll;
+    max-width: 25%;
+    gap: var(--space-16);
+}
+
+#upload-right-sidebar[data-active="false"] {
+    display: none;
+    flex-basis: 0%;
+}
+
+#upload-right-sidebar h2 {
+    font-size: 1.2rem;
+    margin: 0;
+    color: var(--grey-900);
+}
+
+#upload-right-sidebar-header {
+    border-bottom: 1px var(--grey-300) solid;
+}
+
+
+
 .upload-item-data {
 
+}
+
+
+.upload-item-data h3 {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--grey-900);
+    margin: 0;
 }
 
 .upload-item-data textarea {
