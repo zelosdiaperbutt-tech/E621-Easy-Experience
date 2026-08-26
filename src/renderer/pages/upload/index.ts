@@ -349,6 +349,51 @@ const setIntersection = <T>(stringSetList: Set<T>[]): Set<T> => {
     return common;
 }
 
+enum Rating {
+    Safe = "s",
+    Questionable = "q",
+    Explicit = "e",
+    Unset = "u"
+}
+
+const setupSidebar = (info: {
+    creators: string[], 
+    characters: string[], 
+    genders: string[], 
+    relations: string[],
+    species: string[],
+    rating: Rating,
+    general: string[],
+    parent: string,
+    description: string}) => {
+
+    document.getElementById('creator-tags-in-common')!.innerText = info.creators.join(' ')
+    document.getElementById('character-tags-in-common')!.innerText = info.characters.join(' ')
+    document.getElementById('species-tags-in-common')!.innerText = info.species.join(' ')
+    document.getElementById('general-tags-in-common')!.innerText = info.general.join(' ');
+    (document.getElementById('parent-post-input')! as HTMLInputElement).value = info.parent
+    document.getElementById('description-in-common')!.innerText = info.description
+
+    // need to do some specific logic for the selectable buttons 'n shit
+    console.log("Rating:", info.rating)
+    switch(info.rating) {
+        case "s":
+            document.querySelector('.exclusive-selectable-button[data-groupname="rating-button"][data-value="safe"]')!.dispatchEvent(new Event('click'))
+            break;
+        case "q":
+            document.querySelector('.exclusive-selectable-button[data-groupname="rating-button"][data-value="questionable"]')!.dispatchEvent(new Event('click'))
+            break;
+        case "e":
+            document.querySelector('.exclusive-selectable-button[data-groupname="rating-button"][data-value="explicit"]')!.dispatchEvent(new Event('click'))
+            break;
+        case 'u':
+            document.querySelectorAll<HTMLElement>('.exclusive-selectable-button[data-groupname="rating-button"]').forEach(button => button.dispatchEvent(new Event('deselect')))
+            break;
+        default:
+            throw new Error('Improper rating');
+    }
+}
+
 
 bulkOptions.addEventListener('click', () => {
     const sidebarEnabled = sidebar.dataset.active === "true"
@@ -358,10 +403,41 @@ bulkOptions.addEventListener('click', () => {
         return;
     }
 
-    if (!sidebarEnabled && selectedItems.length <= 1) {
+    if (selectedItems.length === 0) return;
+
+    if (selectedItems.length === 1) {
+
+        const selectedItem = selectedItems[0];
+        const tagSection = (selectedItem.querySelector('.tag-section') as HTMLElement)
+        const creators = (selectedItem.querySelector('.creator-tags') as HTMLElement).innerText.split(' ')
+        const characters = (selectedItem.querySelector('.character-tags') as HTMLElement).innerText.split(' ')
+        const genders = (selectedItem.querySelector('.gender-tags') as HTMLElement).innerText.split(' ')
+        const species = (selectedItem.querySelector('.species-tags') as HTMLElement).innerText.split(' ')
+        const general = (selectedItem.querySelector('.general-tags') as HTMLElement).innerText.split(' ')
+        const parent = (selectedItem.querySelector('.parent-post') as HTMLElement).innerText
+        const description = (selectedItem.querySelector('.description') as HTMLElement).innerText
+
+
+        let ratingT = ( tagSection.dataset.rating ?? 'u')
+        if (ratingT !== 's' && ratingT !== 'q' && ratingT !=='e') {
+            tagSection.dataset.rating = 'u'
+            ratingT = 'u'
+        }
+
+        setupSidebar({
+            creators,
+            characters,
+            genders,
+            relations: [],
+            species,
+            rating: (ratingT as Rating),
+            general,
+            parent,
+            description
+        })
+
         sidebar.dataset.active = "true";
-        // some other stuff to make sure that all of the elements are set up correctly
-        // to begin adding stuff
+        
         return;
     }
 
@@ -380,6 +456,48 @@ bulkOptions.addEventListener('click', () => {
     console.log(commonCreators);
 
 })
+
+
+enum TagType {
+    Creator,
+    Character,
+    Gender,
+    Species,
+    General
+}
+
+const addTagsToAllSelectedItems = (tags: string[], type: TagType) => {
+    let queryDestination: string = "";
+    switch (type) {
+        case TagType.Creator:
+            queryDestination = '.creator-tags'
+            break;
+        case TagType.Character:
+            queryDestination = '.character-tags'
+            break;
+        case TagType.Gender:
+            queryDestination = '.gender-tags'
+            break;
+        case TagType.Species:
+            queryDestination = '.species-tags'
+            break;
+        case TagType.General:
+            queryDestination = '.general-tags'
+            break;
+    }
+
+    selectedItems.forEach(item => {
+        const select = item.querySelector(queryDestination) as HTMLElement;
+        if (!select) return;
+
+        let tagsPresent: Set<string> = new Set<string>(select.innerText.split(' '))
+        tags.forEach(tag => tagsPresent.add(tag))
+        let newList: string[] = [];
+        tagsPresent.forEach(t => newList.push(t))
+
+        select.innerText = newList.join(' ').trim()
+    })
+}
 
 
 // In case there are pre-generated upload items, the bulk action bar
