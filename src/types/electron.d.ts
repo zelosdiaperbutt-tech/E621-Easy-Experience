@@ -4,7 +4,7 @@ declare global {
     interface Window {
         electronAPI: {
             getFilePath(file: File): string;
-            fileSelectDialog(): Promise<FileInfo[]>
+            fileSelectDialog(): Promise<FileInfo[]>;
         }
     }
 
@@ -14,4 +14,14 @@ declare global {
         type: string,
         size: number
     };
+
+    type Note = {
+        x: number,
+        y: number,
+        width: number,
+        height: number,
+        text: string
+    }
+
+    
 }

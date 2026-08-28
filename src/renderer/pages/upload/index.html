@@ -10,6 +10,129 @@
     <script src="./autocomplete.js" defer></script>
 </head>
 <body>
+    <div id="modal-background" class="modal-background modal-hidden">
+        <div class="modal" role="dialog" aria-modal="true">
+            
+            <div class="modal-section" id="left-modal">
+                <div id="content-container">
+                    <img src="https://media.istockphoto.com/id/1486674561/photo/young-woman-taking-a-selfie.jpg?s=612x612&w=0&k=20&c=ZbH8PakbBL8UAFhvsFSRAWXJakqz92UgnFFxRC3ucj0=">
+                </div>
+                <div id="content-information">
+                    <p class="content-name">Example</p>
+                    <p class="format">Format</p>
+                    <p class="file-size">00.0 B</p>
+                </div>
+                <div class="modal-section" id="modal-sources">
+                    <div class="flex-group">
+                        <p>Sources</p>
+                        <button>Add Source</button>
+                    </div>
+                    <div class="input-list">
+                        <input type="text" class="source-input">
+                        <input type="text" class="source-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-section" id="modal-rating">
+                <h3>Rating</h3>
+                <div class="flex-group-wrap">
+                    <button>Explicit</button>
+                    <button>Questionable</button>
+                    <button>Safe</button>
+                </div>
+            </div>
+
+            <div class="modal-section" id="modal-characters">
+                <h3>Characters</h3>
+                <div class="flex-group scroll">
+                    <button>Zero</button>
+                    <button>Solo</button>
+                    <button>Duo</button>
+                    <button>Trio</button>
+                    <button>Group</button>
+                </div>
+                <textarea></textarea>
+            </div>
+            <div class="modal-section" id="modal-relationships">
+                <div class="flex-group scroll">
+                    <button>Male</button>
+                    <button>Female</button>
+                    <button>Andromorph</button>
+                    <button>Gynomorph</button>
+                    <button>Hermaphrodite</button>
+                    <button>Male-Herm</button>
+                    <button>Ambiguous</button>
+                </div>
+                <div class="flex-group scroll" id="modal-relations">
+                    <button>Male/Male</button>
+                    <button>Male/Female</button>
+                    <button>Male/Andromorph</button>
+                    <button>Male/Gynomorph</button>
+                    <button>Male/Hermaphrodite</button>
+                    <button>Male/Male-Herm</button>
+                    <button>Male/Ambiguous</button>
+                    <button>Female/Female</button>
+                    <button>Female/Andromorph</button>
+                    <button>Female/Gynomorph</button>
+                    <button>Female/Hermaphrodite</button>
+                    <button>Female/Male-Herm</button>
+                    <button>Female/Ambiguous</button>
+                    <button>Andromorph/Andromorph</button>
+                    <button>Andromorph/Gynomorph</button>
+                    <button>Andromorph/Hermaphrodite</button>
+                    <button>Andromorph/Male-Herm</button>
+                    <button>Andromorph/Ambiguous</button>
+                    <button>Gynomorph/Gynomorph</button>
+                    <button>Gynomorph/Hermaphrodite</button>
+                    <button>Gynomorph/Male-Herm</button>
+                    <button>Gynomorph/Ambiguous</button>
+                    <button>Hermaphrodite/Hermaphrodite</button>
+                    <button>Hermaphrodite/Male-Herm</button>
+                    <button>Hermaphrodite/Ambiguous</button>
+                    <button>Male-Herm/Male-Herm</button>
+                    <button>Male-Herm/Ambiguous</button>
+                    <button>Ambiguous/Ambiguous</button>
+                </div>
+            </div>
+            <div class="modal-section" id="modal-species">
+                <h3>Species</h3>
+                <div class="flex-group scroll">
+                    <button>Anthro</button>
+                    <button>Feral</button>
+                    <button>Humanoid</button>
+                    <button>Human</button>
+                    <button>Taur</button>
+                </div>
+                <textarea></textarea>
+            </div>
+            
+            <div class="modal-section" id="modal-general">
+                <h3>General</h3>
+                <textarea></textarea>
+            </div>
+
+            <div class="modal-section" id="modal-description">
+                <h3>Description</h3>
+                <textarea></textarea>
+            </div>
+            
+            <div class="modal-section" id="modal-creators">
+                <h3>Creators</h3>
+                <textarea></textarea>
+            </div>
+
+            <div class="modal-section" id="modal-parent">
+                <h3>Parent</h3>
+                <input type="text" id="" placeholder="Ex: 12345">
+            </div>
+            
+            <footer id="modal-footer">
+                <button class="button-danger">Cancel</button>
+                <button class="button-good">Confirm</button>
+            </footer>
+        </div>
+    </div>
     <div id="upload-manager-layout">
         <div id="upload-main-area">
             <div id="upload-main-area-top">
@@ -33,7 +156,7 @@
                 </div>
                 <div class="flex-group">
                     <button id="bulkaction-options">Options</button>
-                    <button >Download</button>
+                    <button>Download</button>
                     <button id="bulkaction-delete" class="button-danger">Delete</button>
                 </div>
             </div>

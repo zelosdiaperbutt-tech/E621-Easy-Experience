@@ -61,6 +61,25 @@ button.button-danger:hover {
     background: var(--red-50);
 }
 
+button.button-good {
+    color: var(--green-500);
+}
+
+button.button-good:hover {
+    background: var(--green-50);
+}
+
+input[type="text"] {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    border-radius: var(--space-4);
+    outline: none;
+    border: 1px var(--grey-300) solid;
+    padding: var(--space-4);
+}
+
 input[type="checkbox"] {
     cursor: pointer;
 }
@@ -76,6 +95,15 @@ input[type="checkbox"] {
     align-items: baseline;
     justify-content: flex-start;
     gap: var(--space-8);
+}
+
+.flex-group.scroll {
+    overflow-x: auto;
+    min-width: 0;
+}
+
+.flex-group.scroll button {
+    white-space: nowrap;
 }
 
 .flex-group-wrap {

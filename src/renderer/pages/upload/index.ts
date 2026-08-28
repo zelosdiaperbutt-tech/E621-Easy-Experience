@@ -212,7 +212,7 @@ const createImageUploadItem = (path: string, name: string, type: string, size: n
             <div class="upload-item-content-header">
                 <input type="checkbox" class="upload-item-select-checkbox">
             </div>
-            <img src="${path}">
+            <img src="${path}" class="upload-item-media">
         </div>
         <div class="tag-section always-hidden" data-rating="u">
             <div class="creator-tags"></div>
