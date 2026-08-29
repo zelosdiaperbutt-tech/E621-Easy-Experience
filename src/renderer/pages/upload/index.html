@@ -6,11 +6,12 @@
     <title>Upload</title>
     <link rel="stylesheet" href="../../assets/css/global.css">
     <link rel="stylesheet" href="./index.css">
-    <script src="./index.js" defer></script>
+    <script type="module" src="./index.js" defer></script>
     <script src="./autocomplete.js" defer></script>
+    <script type="module" src="./modal.js" defer></script>
 </head>
 <body>
-    <div id="modal-background" class="modal-background modal-hidden">
+    <div id="modal-background" class="modal-background"> <!-- modal-hidden -->
         <div class="modal" role="dialog" aria-modal="true">
             
             <div class="modal-section" id="left-modal">
@@ -37,72 +38,72 @@
             <div class="modal-section" id="modal-rating">
                 <h3>Rating</h3>
                 <div class="flex-group-wrap">
-                    <button>Explicit</button>
-                    <button>Questionable</button>
-                    <button>Safe</button>
+                    <button class="selectable-button exclusive-selectable-button" data-selected="false" data-groupname="modal-rating-button" data-value="explicit">Explicit</button>
+                    <button class="selectable-button exclusive-selectable-button" data-selected="false" data-groupname="modal-rating-button" data-value="questionable">Questionable</button>
+                    <button class="selectable-button exclusive-selectable-button" data-selected="false" data-groupname="modal-rating-button" data-value="safe">Safe</button>
                 </div>
             </div>
 
             <div class="modal-section" id="modal-characters">
                 <h3>Characters</h3>
                 <div class="flex-group scroll">
-                    <button>Zero</button>
-                    <button>Solo</button>
-                    <button>Duo</button>
-                    <button>Trio</button>
-                    <button>Group</button>
+                    <button class="selectable-button exclusive-selectable-button" data-selected="false" data-groupname="modal-character-number" data-value="zero">Zero</button>
+                    <button class="selectable-button exclusive-selectable-button" data-selected="false" data-groupname="modal-character-number" data-value="solo">Solo</button>
+                    <button class="selectable-button exclusive-selectable-button" data-selected="false" data-groupname="modal-character-number" data-value="duo">Duo</button>
+                    <button class="selectable-button exclusive-selectable-button" data-selected="false" data-groupname="modal-character-number" data-value="trio">Trio</button>
+                    <button class="selectable-button exclusive-selectable-button" data-selected="false" data-groupname="modal-character-number" data-value="group">Group</button>
                 </div>
                 <textarea></textarea>
             </div>
             <div class="modal-section" id="modal-relationships">
                 <div class="flex-group scroll">
-                    <button>Male</button>
-                    <button>Female</button>
-                    <button>Andromorph</button>
-                    <button>Gynomorph</button>
-                    <button>Hermaphrodite</button>
-                    <button>Male-Herm</button>
-                    <button>Ambiguous</button>
+                    <button class="selectable-button condition-button" data-selected="false" data-groupname="modal-relations" data-value="male" data-conditionvalue="male">Male</button>
+                    <button class="selectable-button condition-button" data-selected="false" data-groupname="modal-relations" data-value="female" data-conditionvalue="female">Female</button>
+                    <button class="selectable-button condition-button" data-selected="false" data-groupname="modal-relations" data-value="andromorph" data-conditionvalue="andromorph">Andromorph</button>
+                    <button class="selectable-button condition-button" data-selected="false" data-groupname="modal-relations" data-value="gynomproh" data-conditionvalue="gynomorph">Gynomorph</button>
+                    <button class="selectable-button condition-button" data-selected="false" data-groupname="modal-relations" data-value="hermaphrodite" data-conditionvalue="hermaphrodite">Hermaphrodite</button>
+                    <button class="selectable-button condition-button" data-selected="false" data-groupname="modal-relations" data-value="male-herm" data-conditionvalue="male-herm">Male-Herm</button>
+                    <button class="selectable-button condition-button" data-selected="false" data-groupname="modal-relations" data-value="ambiguous" data-conditionvalue="ambiguous">Ambiguous</button>
                 </div>
                 <div class="flex-group scroll" id="modal-relations">
-                    <button>Male/Male</button>
-                    <button>Male/Female</button>
-                    <button>Male/Andromorph</button>
-                    <button>Male/Gynomorph</button>
-                    <button>Male/Hermaphrodite</button>
-                    <button>Male/Male-Herm</button>
-                    <button>Male/Ambiguous</button>
-                    <button>Female/Female</button>
-                    <button>Female/Andromorph</button>
-                    <button>Female/Gynomorph</button>
-                    <button>Female/Hermaphrodite</button>
-                    <button>Female/Male-Herm</button>
-                    <button>Female/Ambiguous</button>
-                    <button>Andromorph/Andromorph</button>
-                    <button>Andromorph/Gynomorph</button>
-                    <button>Andromorph/Hermaphrodite</button>
-                    <button>Andromorph/Male-Herm</button>
-                    <button>Andromorph/Ambiguous</button>
-                    <button>Gynomorph/Gynomorph</button>
-                    <button>Gynomorph/Hermaphrodite</button>
-                    <button>Gynomorph/Male-Herm</button>
-                    <button>Gynomorph/Ambiguous</button>
-                    <button>Hermaphrodite/Hermaphrodite</button>
-                    <button>Hermaphrodite/Male-Herm</button>
-                    <button>Hermaphrodite/Ambiguous</button>
-                    <button>Male-Herm/Male-Herm</button>
-                    <button>Male-Herm/Ambiguous</button>
-                    <button>Ambiguous/Ambiguous</button>
+                    <button class="selectable-button conditionally-active" data-active="false" data-selected="false" data-groupname="modal-relations" data-conditions="male" data-value="">Male/Male</button>
+                    <button class="selectable-button conditionally-active" data-active="false" data-selected="false" data-groupname="modal-relations" data-conditions="male female" data-value="">Male/Female</button>
+                    <button class="selectable-button conditionally-active" data-active="false" data-selected="false" data-groupname="modal-relations" data-conditions="male andromorph" data-value="">Male/Andromorph</button>
+                    <button class="selectable-button conditionally-active" data-active="false" data-selected="false" data-groupname="modal-relations" data-conditions="male gynomorph" data-value="">Male/Gynomorph</button>
+                    <button class="selectable-button conditionally-active" data-active="false" data-selected="false" data-groupname="modal-relations" data-conditions="male hermaphrodite" data-value="">Male/Hermaphrodite</button>
+                    <button class="selectable-button conditionally-active" data-active="false" data-selected="false" data-groupname="modal-relations" data-conditions="male male-herm" data-value="">Male/Male-Herm</button>
+                    <button class="selectable-button conditionally-active" data-active="false" data-selected="false" data-groupname="modal-relations" data-conditions="male ambiguous" data-value="">Male/Ambiguous</button>
+                    <button class="selectable-button conditionally-active" data-active="false" data-selected="false" data-groupname="modal-relations" data-conditions="female" data-value="">Female/Female</button>
+                    <button class="selectable-button conditionally-active" data-active="false" data-selected="false" data-groupname="modal-relations" data-conditions="female andromorph" data-value="">Female/Andromorph</button>
+                    <button class="selectable-button conditionally-active" data-active="false" data-selected="false" data-groupname="modal-relations" data-conditions="female gynomorph" data-value="">Female/Gynomorph</button>
+                    <button class="selectable-button conditionally-active" data-active="false" data-selected="false" data-groupname="modal-relations" data-conditions="female hermaphrodite" data-value="">Female/Hermaphrodite</button>
+                    <button class="selectable-button conditionally-active" data-active="false" data-selected="false" data-groupname="modal-relations" data-conditions="female male-herm" data-value="">Female/Male-Herm</button>
+                    <button class="selectable-button conditionally-active" data-active="false" data-selected="false" data-groupname="modal-relations" data-conditions="female ambiguous" data-value="">Female/Ambiguous</button>
+                    <button class="selectable-button conditionally-active" data-active="false" data-selected="false" data-groupname="modal-relations" data-conditions="andromorph" data-value="">Andromorph/Andromorph</button>
+                    <button class="selectable-button conditionally-active" data-active="false" data-selected="false" data-groupname="modal-relations" data-conditions="andromorph gynomorph" data-value="">Andromorph/Gynomorph</button>
+                    <button class="selectable-button conditionally-active" data-active="false" data-selected="false" data-groupname="modal-relations" data-conditions="andromorph hermaphrodite" data-value="">Andromorph/Hermaphrodite</button>
+                    <button class="selectable-button conditionally-active" data-active="false" data-selected="false" data-groupname="modal-relations" data-conditions="andromorph male-herm" data-value="">Andromorph/Male-Herm</button>
+                    <button class="selectable-button conditionally-active" data-active="false" data-selected="false" data-groupname="modal-relations" data-conditions="andromorph ambiguous" data-value="">Andromorph/Ambiguous</button>
+                    <button class="selectable-button conditionally-active" data-active="false" data-selected="false" data-groupname="modal-relations" data-conditions="gynomorph" data-value="">Gynomorph/Gynomorph</button>
+                    <button class="selectable-button conditionally-active" data-active="false" data-selected="false" data-groupname="modal-relations" data-conditions="gynomorph hermaphrodite" data-value="">Gynomorph/Hermaphrodite</button>
+                    <button class="selectable-button conditionally-active" data-active="false" data-selected="false" data-groupname="modal-relations" data-conditions="gynomorph male-herm" data-value="">Gynomorph/Male-Herm</button>
+                    <button class="selectable-button conditionally-active" data-active="false" data-selected="false" data-groupname="modal-relations" data-conditions="gynomorph ambiguous" data-value="">Gynomorph/Ambiguous</button>
+                    <button class="selectable-button conditionally-active" data-active="false" data-selected="false" data-groupname="modal-relations" data-conditions="hermaphrodite" data-value="">Hermaphrodite/Hermaphrodite</button>
+                    <button class="selectable-button conditionally-active" data-active="false" data-selected="false" data-groupname="modal-relations" data-conditions="hermaphrodite male-herm" data-value="">Hermaphrodite/Male-Herm</button>
+                    <button class="selectable-button conditionally-active" data-active="false" data-selected="false" data-groupname="modal-relations" data-conditions="hermaphrodite ambiguous" data-value="">Hermaphrodite/Ambiguous</button>
+                    <button class="selectable-button conditionally-active" data-active="false" data-selected="false" data-groupname="modal-relations" data-conditions="male-herm" data-value="">Male-Herm/Male-Herm</button>
+                    <button class="selectable-button conditionally-active" data-active="false" data-selected="false" data-groupname="modal-relations" data-conditions="male-herm ambiguous" data-value="">Male-Herm/Ambiguous</button>
+                    <button class="selectable-button conditionally-active" data-active="false" data-selected="false" data-groupname="modal-relations" data-conditions="ambiguous" data-value="">Ambiguous/Ambiguous</button>
                 </div>
             </div>
             <div class="modal-section" id="modal-species">
                 <h3>Species</h3>
                 <div class="flex-group scroll">
-                    <button>Anthro</button>
-                    <button>Feral</button>
-                    <button>Humanoid</button>
-                    <button>Human</button>
-                    <button>Taur</button>
+                    <button class="selectable-button">Anthro</button>
+                    <button class="selectable-button">Feral</button>
+                    <button class="selectable-button">Humanoid</button>
+                    <button class="selectable-button">Human</button>
+                    <button class="selectable-button">Taur</button>
                 </div>
                 <textarea></textarea>
             </div>

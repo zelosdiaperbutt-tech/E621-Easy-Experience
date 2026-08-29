@@ -236,7 +236,7 @@ const createImageUploadItem = (path: string, name: string, type: string, size: n
     return newItem;
 }
 
-enum Gender {
+export enum Gender {
     Male,
     Female,
     Andromorph,
@@ -244,6 +244,45 @@ enum Gender {
     Hermaphrodite,
     MaleHerm,
     Ambiguous
+}
+
+export enum Relations {
+    MM,
+    MF,
+    MAnd,
+    MGyn,
+    MHerm,
+    MMherm,
+    MAmb,
+    FF,
+    FAnd,
+    FGyn,
+    FHerm,
+    FMherm,
+    FAmb,
+    AndAnd,
+    AndGyn,
+    AndHerm,
+    AndMherm,
+    AndAmb,
+    GynGyn,
+    GynHerm,
+    GynMherm,
+    GynAmb,
+    HermHerm,
+    HermMherm,
+    HermAmb,
+    MhermMherm,
+    MhermAmb,
+    AmbAmb
+}
+
+export enum SpeciesType {
+    Anthro,
+    Feral,
+    Humanoid,
+    Human,
+    Taur
 }
 
 let selectedGenders: Set<Gender> = new Set<Gender>();
@@ -310,7 +349,7 @@ document.querySelectorAll<HTMLElement>('.gender-button').forEach(button => {
 })
 
 const genderButtonsChanged = () => {
-    document.querySelectorAll<HTMLElement>('.conditional-button').forEach(button => {
+    document.querySelectorAll<HTMLElement>('#upload-right-sidebar .conditional-button').forEach(button => {
         const active = shouldConditionalButtonActivate(button, selectedGenders)
         button.dataset.visible = (active ? "true" : "false");
         if (!active) button.dataset.selected = "false"

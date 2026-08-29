@@ -15,6 +15,7 @@ body {
 
     background: rgba(0, 0, 0, 0.5);
     z-index: 100;
+    cursor: pointer;
 }
 
 .modal-background.modal-hidden {
@@ -404,3 +405,8 @@ p.dull-text {
 .upload-item-data[data-empty="true"] {
 
 }
+
+
+button.conditionally-active[data-active="false"] {
+    display: none;
+} 
