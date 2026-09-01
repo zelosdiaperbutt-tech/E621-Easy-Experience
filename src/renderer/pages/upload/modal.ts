@@ -2,6 +2,7 @@ const modalBackground = document.getElementById('modal-background') as HTMLEleme
 
 import {getSizeString} from './index.js'
 import {ItemUpload} from '../../components/itemUpload.js'
+import {SelectableButton} from '../../components/selectableButton.js'
 
 modalBackground.addEventListener('show', () => {
     modalBackground.classList.remove('modal-hidden')
@@ -66,7 +67,7 @@ export const updateModalInfo = (
     }
 
     uploadElement.speciesTypes.forEach(species => {
-        document.querySelector(`button.selectable-button[data-value="${species.toString()}"`)?.dispatchEvent(new Event('select'))
+        document.querySelector<SelectableButton>(`selectable-button[value="${species.toString()}"`)?.dispatchEvent(new Event('select'))
     })
     
     uploadElement.genders.forEach(gender => {
@@ -129,6 +130,9 @@ const closeModal = () => {
     })
     modalBackground.querySelectorAll<HTMLInputElement>('input[type="text"]').forEach(input => {
         input.value = ""
+    })
+    modalBackground.querySelectorAll<SelectableButton>('selectable-button').forEach(button => {
+        button.dispatchEvent(new Event('deselect'))
     })
 }
 
