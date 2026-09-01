@@ -3,6 +3,7 @@ const modalBackground = document.getElementById('modal-background') as HTMLEleme
 import {getSizeString} from './index.js'
 import {ItemUpload} from '../../components/itemUpload.js'
 import {SelectableButton} from '../../components/selectableButton.js'
+import { ExclusiveButton } from '../../components/exclusiveButton.js';
 
 modalBackground.addEventListener('show', () => {
     modalBackground.classList.remove('modal-hidden')
@@ -132,6 +133,9 @@ const closeModal = () => {
         input.value = ""
     })
     modalBackground.querySelectorAll<SelectableButton>('selectable-button').forEach(button => {
+        button.dispatchEvent(new Event('deselect'))
+    })
+    modalBackground.querySelectorAll<ExclusiveButton>('exclusive-button').forEach(button => {
         button.dispatchEvent(new Event('deselect'))
     })
 }
