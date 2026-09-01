@@ -25,6 +25,14 @@ export const setCurrentUploadItem = (item: ItemUpload): void => {
     currentUploadItem = item;
 }
 
+/**
+ * Updates the various elements inside of the modal to reflect the information of the 
+ * element that they selected.
+ * 
+ * @param uploadElement The item that whose information is being displayed in the modal
+ * @param type Whether the media is an image or a video
+ * @param info Meta information about the file for the user's benefit
+ */
 export const updateModalInfo = (
     uploadElement: ItemUpload,
     type: 'image'|'video',
@@ -90,14 +98,28 @@ export const updateModalInfo = (
     modalBackground.querySelector<HTMLTextAreaElement>('#modal-parent input[type="text"]')!.value = uploadElement.parent
 }
 
+/**
+ * Updates the currently selected element's attributes and properties to affect the
+ * selected buttons and typed text on the modal.
+ * @todo Finish Implementation
+ */
 export const writeModalChanges = () => {
 
 }
 
+/**
+ * Displays the modal with the information it currenly has.
+ * To update its information, call `updateModalInfo()` beforehand.
+ * @see {@link updateModalInfo}
+ */
 export const activateModal = () => {
     modalBackground.dispatchEvent(new Event('show'))
 }
 
+/**
+ * Called when the modal needs to be closed, prevents changes to the previous element
+ * from mistakenly being carried over to the next element.
+ */
 const closeModal = () => {
     modalBackground.querySelectorAll<HTMLElement>('.selectable-button').forEach(button => {
         button.dispatchEvent(new Event('deselect'))
@@ -110,7 +132,11 @@ const closeModal = () => {
     })
 }
 
-
+// "Conditionally Active" buttons require that one or more conditional buttons
+// be selected in order to be available to the user. Being available does not
+// automatically mean that it is selected/chosen. This kinds of button's
+// 'data-selected' attribute should only be read if its 'data-active' attribute
+// is set to "true".
 document.querySelectorAll<HTMLButtonElement>('button.conditionally-active').forEach(button => {
     button.addEventListener('activate', () => {
         button.dataset.active = "true"
@@ -140,6 +166,8 @@ document.querySelectorAll<HTMLButtonElement>('button.conditionally-active').forE
     })
 })
 
+// "Conditional buttons" are buttons that represent required conditions for another
+// selectable button to be available. 
 document.querySelectorAll<HTMLButtonElement>('button.condition-button').forEach(button => {
     button.addEventListener('click', () => {
         const groupName = button.dataset.groupname;
