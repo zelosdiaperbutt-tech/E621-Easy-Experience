@@ -14,9 +14,10 @@
     <script type="module" src="./modal.js" defer></script>
 </head>
 <body>
-    <div id="modal-background" class="modal-background"> <!-- modal-hidden -->
+    <div id="modal-background" class="modal-background modal-hidden"> <!-- modal-hidden -->
         <div class="modal" role="dialog" aria-modal="true">
             
+
             <div class="modal-section" id="left-modal">
                 <div id="content-container">
                     <img src="https://media.istockphoto.com/id/1486674561/photo/young-woman-taking-a-selfie.jpg?s=612x612&w=0&k=20&c=ZbH8PakbBL8UAFhvsFSRAWXJakqz92UgnFFxRC3ucj0=">
@@ -101,12 +102,12 @@
             </div>
             <div class="modal-section" id="modal-species">
                 <h3>Species</h3>
-                <div class="flex-group scroll">
-                    <button class="selectable-button">Anthro</button>
-                    <button class="selectable-button">Feral</button>
-                    <button class="selectable-button">Humanoid</button>
-                    <button class="selectable-button">Human</button>
-                    <button class="selectable-button">Taur</button>
+                <div class="flex-group scroll" id="modal-species-types">
+                    <button class="selectable-button" data-value="anthro">Anthro</button>
+                    <button class="selectable-button" data-value="feral">Feral</button>
+                    <button class="selectable-button" data-value="humanoid">Humanoid</button>
+                    <button class="selectable-button" data-value="human">Human</button>
+                    <button class="selectable-button" data-value="taur">Taur</button>
                 </div>
                 <textarea></textarea>
             </div>
