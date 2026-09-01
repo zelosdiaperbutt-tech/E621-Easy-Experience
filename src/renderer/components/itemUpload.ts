@@ -119,7 +119,7 @@ export class ItemUpload extends HTMLElement {
     }
 
     get numberOfCharacters(): NumberOfCharacters {
-        return (this.getAttribute('number-of-characters') as NumberOfCharacters) ?? NumberOfCharacters.Unset;
+        return (this.getAttribute('number-of-characters') as NumberOfCharacters) ?? ("unset" as NumberOfCharacters);
     }
 
     connectedCallback(): void {

@@ -80,7 +80,7 @@ export const updateModalInfo = (
         document.querySelector(`button.selectable-button.conditionally-active[data-groupname="modal-relations"][data-value="${relation.toString()}"]`)?.dispatchEvent(new Event('select'));
     })
 
-    if (uploadElement.numberOfCharacters !== NumberOfCharacters.Unset) {
+    if (uploadElement.numberOfCharacters !== ("unset" as NumberOfCharacters)) {
         let numberOfCharactersButton: HTMLButtonElement = modalBackground.querySelector<HTMLButtonElement>(`#modal-characters button[data-groupname="modal-character-number"][data-value="${uploadElement.numberOfCharacters.toString()}"]`) as HTMLButtonElement;
         numberOfCharactersButton.dispatchEvent(new Event('exclusive'))
         numberOfCharactersButton.dispatchEvent(new Event('select'))
