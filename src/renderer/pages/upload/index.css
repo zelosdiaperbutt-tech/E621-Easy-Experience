@@ -344,7 +344,6 @@ p.dull-text {
     font-size: 0.75rem;
 }
 
-.selectable-button[data-selected="true"] {
 selectable-button[selected="true"] button,
 exclusive-button[selected="true"] button {
     background: var(--green-100);
