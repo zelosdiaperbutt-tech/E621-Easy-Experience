@@ -165,7 +165,7 @@ const createImageUploadItem = (path: string, name: string, type: string, size: n
     item.setAttribute('path', path)
     item.setAttribute('name', name)
     item.setAttribute('type', type)
-    item.setAttribute('size', getSizeString(size))
+    item.setAttribute('size', size.toString())
     return item;
 
 }
@@ -193,15 +193,19 @@ document.querySelectorAll<HTMLElement>('.selectable-button').forEach(button => {
 })
 
 document.querySelectorAll<HTMLElement>('.exclusive-selectable-button').forEach(exclusive => {
+    exclusive.addEventListener('exclusive', () => {
+        const groupName = exclusive.dataset.groupname;
+        document.querySelectorAll<HTMLElement>(`.exclusive-selectable-button[data-groupname="${groupName}"]`).forEach(button => {
+            button.dispatchEvent(new Event('deselect'))
+        })
+    })
+
     exclusive.addEventListener('click', () => {
         const currentlySelected = exclusive.dataset.selected === "true";
 
         if (!currentlySelected) return;
 
-        const groupName = exclusive.dataset.groupname;
-        document.querySelectorAll<HTMLElement>(`.exclusive-selectable-button[data-groupname="${groupName}"]`).forEach(button => {
-            button.dispatchEvent(new Event('deselect'))
-        })
+        exclusive.dispatchEvent(new Event('exclusive'))
 
         exclusive.dispatchEvent(new Event('select'))
     })
