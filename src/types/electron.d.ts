@@ -29,7 +29,7 @@ declare global {
         Andromorph = "andromorph",
         Gynomorph = "gynomorph",
         Hermaphrodite = "hermaphrodite",
-        MaleHerm = "maleherm",
+        MaleHerm = "male-herm",
         Ambiguous = "ambiguous"
     }
 
