@@ -1,5 +1,6 @@
 
-import {addToSelected, removeFromSelected} from '../pages/upload/index.js'
+import {addToSelected, removeFromSelected, getSizeString} from '../pages/upload/index.js'
+import {setCurrentUploadItem, updateModalInfo, writeModalChanges, activateModal} from '../pages/upload/modal.js'
 
 /**
  * An individual item that is going to be uploaded
@@ -17,8 +18,8 @@ export class ItemUpload extends HTMLElement {
         return this.getAttribute('name') ?? "";
     }
 
-    get size(): string {
-        return this.getAttribute('size') ?? "";
+    get size(): number {
+        return Number(this.getAttribute('size')) ?? 0;
     }
 
     get type(): string {
@@ -113,12 +114,12 @@ export class ItemUpload extends HTMLElement {
         return this.getAttribute('species-types')?.split(' ').map(sT => sT as SpeciesType) ?? []
     }
 
-    set numberOfCharacters(n: number) {
+    set numberOfCharacters(n: NumberOfCharacters) {
         this.setAttribute('number-of-characters', n.toString())
     }
 
-    get numberOfCharacters(): number {
-        return Number(this.getAttribute('number-of-characters')) ?? 0
+    get numberOfCharacters(): NumberOfCharacters {
+        return (this.getAttribute('number-of-characters') as NumberOfCharacters) ?? NumberOfCharacters.Unset;
     }
 
     connectedCallback(): void {
@@ -146,7 +147,7 @@ export class ItemUpload extends HTMLElement {
                 <p class="upload-item-name">${this.name}</p>
                 <div class="upload-item-footer-info">
                     <p class="upload-item-format">${this.type}</p>
-                    <p class="upload-item-size">${this.size}</p>
+                    <p class="upload-item-size">${getSizeString(this.size)}</p>
                 </div>
             </div>
         `
