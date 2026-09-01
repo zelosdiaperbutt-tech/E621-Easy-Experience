@@ -204,6 +204,13 @@ const getSizeString = (bytes: number): string => {
  */
 const createImageUploadItem = (path: string, name: string, type: string, size: number): HTMLElement => {
     
+    const item = document.createElement('item-upload')
+    item.setAttribute('path', path)
+    item.setAttribute('name', name)
+    item.setAttribute('type', type)
+    item.setAttribute('size', getSizeString(size))
+    return item;
+
     const newItem = document.createElement('section');
     newItem.className = 'upload-item'
     newItem.setAttribute('data-selected', 'false')

@@ -17,10 +17,10 @@ modalBackground.addEventListener('click', (event) => {
     }
 })
 
-let currentUploadItem: HTMLElement | null;
+let currentUploadItem: ItemUpload | null;
 
-export const setCurrentUploadItem = (item: HTMLElement): void => {
-
+export const setCurrentUploadItem = (item: ItemUpload): void => {
+    currentUploadItem = item;
 }
 
 export const updateModalInfo = (
