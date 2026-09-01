@@ -1,6 +1,6 @@
 const modalBackground = document.getElementById('modal-background') as HTMLElement;
 
-import {Gender, Relations, SpeciesType} from './index.js'
+import {getSizeString} from './index.js'
 
 modalBackground.addEventListener('show', () => {
     modalBackground.classList.remove('modal-hidden')

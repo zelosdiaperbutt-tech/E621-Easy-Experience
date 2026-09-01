@@ -236,55 +236,6 @@ const createImageUploadItem = (path: string, name: string, type: string, size: n
     return newItem;
 }
 
-export enum Gender {
-    Male,
-    Female,
-    Andromorph,
-    Gynomorph,
-    Hermaphrodite,
-    MaleHerm,
-    Ambiguous
-}
-
-export enum Relations {
-    MM,
-    MF,
-    MAnd,
-    MGyn,
-    MHerm,
-    MMherm,
-    MAmb,
-    FF,
-    FAnd,
-    FGyn,
-    FHerm,
-    FMherm,
-    FAmb,
-    AndAnd,
-    AndGyn,
-    AndHerm,
-    AndMherm,
-    AndAmb,
-    GynGyn,
-    GynHerm,
-    GynMherm,
-    GynAmb,
-    HermHerm,
-    HermMherm,
-    HermAmb,
-    MhermMherm,
-    MhermAmb,
-    AmbAmb
-}
-
-export enum SpeciesType {
-    Anthro,
-    Feral,
-    Humanoid,
-    Human,
-    Taur
-}
-
 let selectedGenders: Set<Gender> = new Set<Gender>();
 
 document.querySelectorAll<HTMLElement>('.selectable-button').forEach(button => {
@@ -386,13 +337,6 @@ const setIntersection = <T>(stringSetList: Set<T>[]): Set<T> => {
     }
 
     return common;
-}
-
-enum Rating {
-    Safe = "s",
-    Questionable = "q",
-    Explicit = "e",
-    Unset = "u"
 }
 
 const setupSidebar = (info: {
@@ -497,13 +441,7 @@ bulkOptions.addEventListener('click', () => {
 })
 
 
-enum TagType {
-    Creator,
-    Character,
-    Gender,
-    Species,
-    General
-}
+
 
 const addTagsToAllSelectedItems = (tags: string[], type: TagType) => {
     let queryDestination: string = "";
