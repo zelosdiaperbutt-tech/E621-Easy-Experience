@@ -23,8 +23,9 @@ body {
 }
 
 .modal {
-    max-width: calc(100vw - 20px);
-    height: calc(100vh - 20px);
+    --outside-gap: 40px;
+    max-width: calc(100vw - var(--outside-gap));
+    height: calc(100vh - var(--outside-gap));
     background: var(--grey-50);
     border-radius: var(--space-8);
     padding: var(--space-8);
@@ -386,10 +387,6 @@ p.dull-text {
 
 
 
-.upload-item-data {
-
-}
-
 
 .upload-item-data h3 {
     font-size: 1rem;
@@ -402,11 +399,6 @@ p.dull-text {
     resize: vertical;
     width: 100%;
 }
-
-.upload-item-data[data-empty="true"] {
-
-}
-
 
 button.conditionally-active[data-active="false"] {
     display: none;
