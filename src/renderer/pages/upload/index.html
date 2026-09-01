@@ -44,20 +44,28 @@
             <div class="modal-section" id="modal-rating">
                 <h3>Rating</h3>
                 <div class="flex-group-wrap">
-                    <button class="selectable-button exclusive-selectable-button" data-selected="false" data-groupname="modal-rating-button" data-value="explicit">Explicit</button>
+                    <!-- <button class="selectable-button exclusive-selectable-button" data-selected="false" data-groupname="modal-rating-button" data-value="explicit">Explicit</button>
                     <button class="selectable-button exclusive-selectable-button" data-selected="false" data-groupname="modal-rating-button" data-value="questionable">Questionable</button>
-                    <button class="selectable-button exclusive-selectable-button" data-selected="false" data-groupname="modal-rating-button" data-value="safe">Safe</button>
+                    <button class="selectable-button exclusive-selectable-button" data-selected="false" data-groupname="modal-rating-button" data-value="safe">Safe</button> -->
+                    <exclusive-button group-name="modal-rating-button" value="explicit">Explicit</exclusive-button>
+                    <exclusive-button group-name="modal-rating-button" value="questionable">Questionable</exclusive-button>
+                    <exclusive-button group-name="modal-rating-button" value="safe">Safe</exclusive-button>
                 </div>
             </div>
 
             <div class="modal-section" id="modal-characters">
                 <h3>Characters</h3>
                 <div class="flex-group scroll">
-                    <button class="selectable-button exclusive-selectable-button" data-selected="false" data-groupname="modal-character-number" data-value="zero">Zero</button>
+                    <!-- <button class="selectable-button exclusive-selectable-button" data-selected="false" data-groupname="modal-character-number" data-value="zero">Zero</button>
                     <button class="selectable-button exclusive-selectable-button" data-selected="false" data-groupname="modal-character-number" data-value="solo">Solo</button>
                     <button class="selectable-button exclusive-selectable-button" data-selected="false" data-groupname="modal-character-number" data-value="duo">Duo</button>
                     <button class="selectable-button exclusive-selectable-button" data-selected="false" data-groupname="modal-character-number" data-value="trio">Trio</button>
-                    <button class="selectable-button exclusive-selectable-button" data-selected="false" data-groupname="modal-character-number" data-value="group">Group</button>
+                    <button class="selectable-button exclusive-selectable-button" data-selected="false" data-groupname="modal-character-number" data-value="group">Group</button> -->
+                    <exclusive-button group-name="modal-character-number" value="zero">Zero</exclusive-button>
+                    <exclusive-button group-name="modal-character-number" value="solo">Solo</exclusive-button>
+                    <exclusive-button group-name="modal-character-number" value="duo">Duo</exclusive-button>
+                    <exclusive-button group-name="modal-character-number" value="trio">Trio</exclusive-button>
+                    <exclusive-button group-name="modal-character-number" value="group">Group</exclusive-button>
                 </div>
                 <textarea></textarea>
             </div>
