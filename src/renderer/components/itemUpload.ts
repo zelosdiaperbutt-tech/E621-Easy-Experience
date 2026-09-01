@@ -180,7 +180,10 @@ export class ItemUpload extends HTMLElement {
     private handleClickEvent = (event: PointerEvent): void => {
         const target = event.target as HTMLElement;
 
-        if (target.closest('img')) return;
+        if (target.closest('img')) {
+            this.selectedForModal();
+            return;
+        }
 
         const selected = this.dataset.selected === "true";
         if (!selected) {
@@ -188,6 +191,21 @@ export class ItemUpload extends HTMLElement {
         } else {
             this.handleDeselectEvent()
         }
+    }
+
+    private selectedForModal() {
+        setCurrentUploadItem(this);
+        updateModalInfo(
+            this,
+            'image',
+            {
+                path: this.path,
+                name: this.name,
+                type: this.type,
+                size: this.size
+            }
+        );
+        activateModal();
     }
 }
 
