@@ -5,6 +5,24 @@ body {
 }
 
 
+#suggestions {
+    position: fixed;
+    display: none;
+    margin: 0;
+    padding: var(--space-4);
+    list-style: none;
+
+    z-index: 1000;
+    background: var(--blue-50);
+    border: 1px solid var(--blue-400);
+}
+
+#suggestions li {
+    font-family: "Inter", sans-serif;
+    color: var(--blue-1000);
+}
+
+
 .modal-background {
     position: fixed;
     inset: 0;

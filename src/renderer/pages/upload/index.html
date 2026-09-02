@@ -13,11 +13,13 @@
     <script type="module" src="../../components/conditionButton.js"></script>
     <script type="module" src="../../components/conditionalButton.js"></script>
 
-    <script src="./autocomplete.js" defer></script>
+    <script type="module" src="./autocomplete.js" defer></script>
     <script type="module" src="./index.js" defer></script>
     <script type="module" src="./modal.js" defer></script>
 </head>
 <body>
+    <ul id="suggestions"></ul>
+
     <div id="modal-background" class="modal-background modal-hidden"> <!-- modal-hidden -->
         <div class="modal" role="dialog" aria-modal="true">
             
@@ -58,7 +60,7 @@
                     <exclusive-button group-name="modal-character-number" value="trio">Trio</exclusive-button>
                     <exclusive-button group-name="modal-character-number" value="group">Group</exclusive-button>
                 </div>
-                <textarea></textarea>
+                <textarea class="autocomplete-accepted"></textarea>
             </div>
             <div class="modal-section" id="modal-relationships">
                 <div class="flex-group scroll" id="modal-genders">
@@ -110,22 +112,22 @@
                     <selectable-button value="human">Human</selectable-button>
                     <selectable-button value="taur">Taur</selectable-button>
                 </div>
-                <textarea></textarea>
+                <textarea class="autocomplete-accepted"></textarea>
             </div>
             
             <div class="modal-section" id="modal-general">
                 <h3>General</h3>
-                <textarea></textarea>
+                <textarea class="autocomplete-accepted"></textarea>
             </div>
 
             <div class="modal-section" id="modal-description">
                 <h3>Description</h3>
-                <textarea></textarea>
+                <textarea class="autocomplete-accepted"></textarea>
             </div>
             
             <div class="modal-section" id="modal-creators">
                 <h3>Creators</h3>
-                <textarea></textarea>
+                <textarea class="autocomplete-accepted"></textarea>
             </div>
 
             <div class="modal-section" id="modal-parent">

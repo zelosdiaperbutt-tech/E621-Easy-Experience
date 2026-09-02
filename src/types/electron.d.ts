@@ -23,6 +23,14 @@ declare global {
         text: string
     }
 
+    type AutocompleteSuggestion = {
+        antecedent_name: string | null,
+        category: number,
+        id: number,
+        name: string,
+        post_count: number
+    }
+
     enum Gender {
         Male = "male",
         Female = "female",
