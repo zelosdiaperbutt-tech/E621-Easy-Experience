@@ -162,11 +162,6 @@ body {
     grid-area: rating;
 } 
 
-/* #modal-description {
-    grid-area: description;
-} */
-
-
 #upload-manager-layout {
     display: flex;
     flex-direction: row;

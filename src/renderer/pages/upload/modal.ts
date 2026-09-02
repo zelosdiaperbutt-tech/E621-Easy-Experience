@@ -96,7 +96,7 @@ export const updateModalInfo = (
     modalBackground.querySelector<HTMLTextAreaElement>('#modal-general textarea')!.innerText = uploadElement.general.join(' ')
     modalBackground.querySelector<HTMLTextAreaElement>('#modal-species textarea')!.innerText = uploadElement.species.join(' ')
     modalBackground.querySelector<HTMLTextAreaElement>('#modal-creators textarea')!.innerText = uploadElement.creators.join(' ')
-    modalBackground.querySelector<HTMLTextAreaElement>('#modal-description')!.innerText = uploadElement.description
+    modalBackground.querySelector<HTMLTextAreaElement>('#modal-description textarea')!.innerText = uploadElement.description
     modalBackground.querySelector<HTMLTextAreaElement>('#modal-parent input[type="text"]')!.value = uploadElement.parent
 }
 
