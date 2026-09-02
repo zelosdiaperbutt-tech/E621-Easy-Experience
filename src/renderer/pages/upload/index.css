@@ -344,9 +344,12 @@ p.dull-text {
     font-size: 0.75rem;
 }
 
-selectable-button[selected="true"] button,
-exclusive-button[selected="true"] button {
+*[selected="true"] button {
     background: var(--green-100);
+}
+
+conditional-button:not([active="true"]) {
+    display: none;
 }
 
 .conditional-button {
