@@ -37,7 +37,7 @@ export class ConditionalButton extends SelectableButton {
 
     get value(): string {
         if (!this.active) return ""
-        return this.value
+        return this.getAttribute('value') ?? ""
     }
 
     connectedCallback() {

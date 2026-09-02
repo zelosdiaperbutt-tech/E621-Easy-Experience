@@ -51,7 +51,7 @@ export class ItemUpload extends HTMLElement {
     }
 
     set characters(c: string[]) {
-        this.setAttribute('character', c.join(' '))
+        this.setAttribute('characters', c.join(' '))
     }
 
     get characters(): string[] {

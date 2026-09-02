@@ -1,9 +1,11 @@
 const modalBackground = document.getElementById('modal-background') as HTMLElement;
 
-import {getSizeString} from './index.js'
-import {ItemUpload} from '../../components/itemUpload.js'
-import {SelectableButton} from '../../components/selectableButton.js'
+import { getSizeString } from './index.js'
+import { ItemUpload } from '../../components/itemUpload.js'
+import { SelectableButton } from '../../components/selectableButton.js'
 import { ExclusiveButton } from '../../components/exclusiveButton.js';
+import { ConditionButton } from '../../components/conditionButton.js';
+import { ConditionalButton } from '../../components/conditionalButton.js';
 
 modalBackground.addEventListener('show', () => {
     modalBackground.classList.remove('modal-hidden')
@@ -50,7 +52,6 @@ export const updateModalInfo = (
     document.querySelector<HTMLElement>('#left-modal .format')!.innerText = info.type;
     document.querySelector<HTMLElement>('#left-modal .file-size')!.innerText = getSizeString(info.size);
 
-
     const ratingShorthandConvertion: Map<string, string> = new Map<string, string>();
     ratingShorthandConvertion.set("e", "explicit");
     ratingShorthandConvertion.set("q", "questionable");
@@ -58,11 +59,11 @@ export const updateModalInfo = (
     ratingShorthandConvertion.set("u", "unset");
     
     if (uploadElement.rating !== 'u') {
-        let ratingButton: HTMLButtonElement = document.querySelector<HTMLButtonElement>(`button.selectable-button.exclusive-selectable-button[data-groupname="modal-rating-button"][data-value="${ratingShorthandConvertion.get(uploadElement.rating)}"]`) as HTMLButtonElement;
-        ratingButton.dispatchEvent(new Event('exclusive'))
+        let ratingButton: ExclusiveButton = document.querySelector<ExclusiveButton>(`exclusive-button[group-name="modal-rating-button"][value="${ratingShorthandConvertion.get(uploadElement.rating)}"]`)!;
+        console.log(ratingButton)
         ratingButton.dispatchEvent(new Event('select'))
     } else {
-        document.querySelectorAll<HTMLElement>('button[data-groupname="modal-rating-button"]').forEach(button => {
+        document.querySelectorAll<ExclusiveButton>('exclusive-button[data-groupname="modal-rating-button"]').forEach(button => {
             button.dispatchEvent(new Event('deselect'));
         })       
     }
@@ -72,22 +73,18 @@ export const updateModalInfo = (
     })
     
     uploadElement.genders.forEach(gender => {
-        document.querySelector(`button.selectable-button.condition-button[data-groupname="modal-relations"][data-value="${gender.toString()}"]`)?.dispatchEvent(new Event('select'));
-    })
-    document.querySelectorAll<HTMLButtonElement>('button.selectable-button.conditionally-active[data-groupname="modal-relations"]').forEach(button => {
-        button.dispatchEvent(new Event('potential-condition-change'))
+        document.querySelector(`condition-button[group-name="modal-relations"][value="${gender.toString()}"]`)?.dispatchEvent(new Event('select'));
     })
 
     uploadElement.relations.forEach(relation => {
-        document.querySelector(`button.selectable-button.conditionally-active[data-groupname="modal-relations"][data-value="${relation.toString()}"]`)?.dispatchEvent(new Event('select'));
+        document.querySelector(`conditional-button[group-name="modal-relations"][value="${relation.toString()}"]`)?.dispatchEvent(new Event('select'));
     })
 
     if (uploadElement.numberOfCharacters !== ("unset" as NumberOfCharacters)) {
-        let numberOfCharactersButton: HTMLButtonElement = modalBackground.querySelector<HTMLButtonElement>(`#modal-characters button[data-groupname="modal-character-number"][data-value="${uploadElement.numberOfCharacters.toString()}"]`) as HTMLButtonElement;
-        numberOfCharactersButton.dispatchEvent(new Event('exclusive'))
+        let numberOfCharactersButton: ExclusiveButton = modalBackground.querySelector<ExclusiveButton>(`exclusive-button[group-name="modal-character-number"][value="${uploadElement.numberOfCharacters.toString()}"]`)!;
         numberOfCharactersButton.dispatchEvent(new Event('select'))
     } else {
-        modalBackground.querySelectorAll<HTMLButtonElement>('#modal-characters button[data-groupname="modal-character-number"]').forEach(button => {
+        modalBackground.querySelectorAll<HTMLButtonElement>('exclusive-button[group-name="modal-character-number"]').forEach(button => {
             button.dispatchEvent(new Event('deselect'))
         })
     }
@@ -103,10 +100,52 @@ export const updateModalInfo = (
 /**
  * Updates the currently selected element's attributes and properties to affect the
  * selected buttons and typed text on the modal.
- * @todo Finish Implementation
  */
-export const writeModalChanges = () => {
+export const writeModalChanges = (currentItem: ItemUpload) => {
 
+    const longRatingToLetter = new Map<string, string>();
+    longRatingToLetter.set('safe', 's')
+    longRatingToLetter.set('questionable', 'q')
+    longRatingToLetter.set('explicit', 'e')
+
+    const selectedRating = document.querySelector<ExclusiveButton>('exclusive-button[group-name="modal-rating-button"][selected="true"]')
+    if (selectedRating) {
+        currentItem.rating = (longRatingToLetter.get(selectedRating.value)) as 'e'|'q'|'s'|'u'
+    } else {
+        currentItem.rating = 'u'
+    }
+
+    let speciesTypes: SpeciesType[] = [];
+    modalBackground.querySelectorAll<SelectableButton>('#modal-species-types selectable-button[selected="true"]').forEach(button => {
+        speciesTypes.push(button.value as SpeciesType)
+    })
+    currentItem.speciesTypes = speciesTypes;
+
+    let genders: Gender[] = [];
+    modalBackground.querySelectorAll<ConditionButton>('#modal-relations condition-button[selected="true"]').forEach(button => {
+        genders.push(button.value as Gender)
+    })
+    currentItem.genders = genders;
+
+    let relations: Relations[] = [];
+    modalBackground.querySelectorAll<ConditionalButton>('#modal-relations conditional-button[active="true"][selected="true"]').forEach(button => {
+        if (button.value === "") return;
+        relations.push(button.value as Relations)
+    })
+
+    const selectedNumberOfCharacters = modalBackground.querySelector<ExclusiveButton>('#modal-characters exclusive-button[group-name="modal-character-number"][selected="true"]')
+    if (selectedNumberOfCharacters) {
+        currentItem.numberOfCharacters = (selectedNumberOfCharacters.value as NumberOfCharacters)
+    } else {
+        currentItem.numberOfCharacters = ('unset' as NumberOfCharacters)
+    }
+
+    currentItem.characters = modalBackground.querySelector<HTMLTextAreaElement>('#modal-characters textarea')!.innerText.split(' ')
+    currentItem.general = modalBackground.querySelector<HTMLTextAreaElement>('#modal-general textarea')!.innerText.split(' ')
+    currentItem.species = modalBackground.querySelector<HTMLTextAreaElement>('#modal-species textarea')!.innerText.split(' ')
+    currentItem.creators = modalBackground.querySelector<HTMLTextAreaElement>('#modal-creators textarea')!.innerText.split(' ')
+    currentItem.description = modalBackground.querySelector<HTMLTextAreaElement>('#modal-description textarea')!.innerText
+    currentItem.parent = modalBackground.querySelector<HTMLTextAreaElement>('#modal-parent input[type="text"]')!.value
 }
 
 /**
@@ -138,4 +177,19 @@ const closeModal = () => {
     modalBackground.querySelectorAll<ExclusiveButton>('exclusive-button').forEach(button => {
         button.dispatchEvent(new Event('deselect'))
     })
+    modalBackground.querySelectorAll<ConditionButton>('condition-button').forEach(button => {
+        button.dispatchEvent(new Event('deselect'))
+    })
+    modalBackground.querySelectorAll<ConditionalButton>('conditional-button').forEach(button => {
+        button.dispatchEvent(new Event('deselect'))
+    })
 }
+
+document.querySelector<HTMLButtonElement>('#modal-confirm-button')?.addEventListener('click', () => {
+    if (currentUploadItem) {
+        writeModalChanges(currentUploadItem)
+        console.log("Changes written")
+    }
+
+    modalBackground.dispatchEvent(new Event('hide'))
+})

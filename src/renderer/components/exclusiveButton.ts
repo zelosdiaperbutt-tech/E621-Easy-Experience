@@ -33,11 +33,15 @@ export class ExclusiveButton extends SelectableButton {
         })
     }
 
+    handleSelectEvent() {
+        this.handleExclusiveEvent()
+        this.selected = true;
+    }
+
     handleClickEvent() {
         if (this.selected) {
             this.handleDeselectEvent()
         } else {
-            this.handleExclusiveEvent()
             this.handleSelectEvent()
         }
     }
