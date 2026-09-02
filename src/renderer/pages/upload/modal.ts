@@ -1,4 +1,6 @@
 const modalBackground = document.getElementById('modal-background') as HTMLElement;
+const modalSourceInputs = document.getElementById('modal-sources-inputs') as HTMLElement;
+const modalAddSourceButton = document.getElementById('modal-add-source') as HTMLButtonElement;
 
 import { getSizeString } from './index.js'
 import { ItemUpload } from '../../components/itemUpload.js'
@@ -89,6 +91,15 @@ export const updateModalInfo = (
         })
     }
 
+    uploadElement.sources.forEach(source => {
+        const sourceElement = createNewModalSource(source)
+        modalSourceInputs.insertAdjacentElement('beforeend', sourceElement)
+    })
+    if (modalSourceInputs.innerHTML.trim() === "") {
+        const sourceElement = createNewModalSource("")
+        modalSourceInputs.insertAdjacentElement('beforeend', sourceElement)
+    }
+
     modalBackground.querySelector<HTMLTextAreaElement>('#modal-characters textarea')!.innerText = uploadElement.characters.join(' ')
     modalBackground.querySelector<HTMLTextAreaElement>('#modal-general textarea')!.innerText = uploadElement.general.join(' ')
     modalBackground.querySelector<HTMLTextAreaElement>('#modal-species textarea')!.innerText = uploadElement.species.join(' ')
@@ -141,6 +152,12 @@ export const writeModalChanges = (currentItem: ItemUpload) => {
         currentItem.numberOfCharacters = ('unset' as NumberOfCharacters)
     }
 
+    let sources: string[] = [];
+    modalSourceInputs.querySelectorAll<HTMLInputElement>('input[type="text"]').forEach(source => {
+        if (source.value && source.value !== "") sources.push(source.value)
+    })
+    currentItem.sources = sources;
+
     currentItem.characters = modalBackground.querySelector<HTMLTextAreaElement>('#modal-characters textarea')!.innerText.split(' ')
     currentItem.general = modalBackground.querySelector<HTMLTextAreaElement>('#modal-general textarea')!.innerText.split(' ')
     currentItem.species = modalBackground.querySelector<HTMLTextAreaElement>('#modal-species textarea')!.innerText.split(' ')
@@ -184,6 +201,8 @@ const closeModal = () => {
     modalBackground.querySelectorAll<ConditionalButton>('conditional-button').forEach(button => {
         button.dispatchEvent(new Event('deselect'))
     })
+
+    modalSourceInputs.innerHTML = "";
 }
 
 document.querySelector<HTMLButtonElement>('#modal-confirm-button')?.addEventListener('click', () => {
@@ -197,3 +216,17 @@ document.querySelector<HTMLButtonElement>('#modal-confirm-button')?.addEventList
 document.querySelector<HTMLButtonElement>('#modal-cancel-button')?.addEventListener('click', () => {
     modalBackground.dispatchEvent(new Event('hide'))
 })
+
+
+modalAddSourceButton.addEventListener('click', () => {
+    const newSource = createNewModalSource()
+    modalSourceInputs.insertAdjacentElement('beforeend', newSource)
+})
+
+const createNewModalSource = (value: string = "") => {
+    const sourceInput = document.createElement('input')
+    sourceInput.setAttribute('type', 'text')
+    sourceInput.classList = "source-input"
+    sourceInput.setAttribute('value', value)
+    return sourceInput;
+}
