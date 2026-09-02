@@ -133,16 +133,6 @@ export class ItemUpload extends HTMLElement {
                 </div>
                 <img src="${this.path}" class="upload-item-media">
             </div>
-            <div class="tag-section always-hidden" data-rating="u">
-                <div class="creator-tags"></div>
-                <div class="sources"></div>
-                <div class="character-tags"></div>
-                <div class="gender-tags"></div>
-                <div class="species-tags"></div>
-                <div class="general-tags"></div>
-                <div class="parent-post" data-needsResolution="false"></div>
-                <div class="description"></div>
-            </div>
             <div class="upload-item-footer">
                 <p class="upload-item-name">${this.name}</p>
                 <div class="upload-item-footer-info">
@@ -159,7 +149,6 @@ export class ItemUpload extends HTMLElement {
 
 
     private handleSelectEvent = (): void => {
-        console.log("select event fired")
         this.dataset.selected = "true"
 
         const checkBox = this.querySelector<HTMLElement>('.upload-item-select-checkbox') as HTMLInputElement;
@@ -169,7 +158,6 @@ export class ItemUpload extends HTMLElement {
     }
 
     private handleDeselectEvent = (): void => {
-        console.log("deselect event fired")
         this.dataset.selected = "false"
 
         const checkBox = this.querySelector<HTMLElement>('.upload-item-select-checkbox') as HTMLInputElement;

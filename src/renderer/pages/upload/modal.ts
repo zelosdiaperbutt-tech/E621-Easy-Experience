@@ -122,7 +122,7 @@ export const writeModalChanges = (currentItem: ItemUpload) => {
     currentItem.speciesTypes = speciesTypes;
 
     let genders: Gender[] = [];
-    modalBackground.querySelectorAll<ConditionButton>('#modal-relations condition-button[selected="true"]').forEach(button => {
+    modalBackground.querySelectorAll<ConditionButton>('#modal-genders condition-button[selected="true"]').forEach(button => {
         genders.push(button.value as Gender)
     })
     currentItem.genders = genders;
@@ -132,6 +132,7 @@ export const writeModalChanges = (currentItem: ItemUpload) => {
         if (button.value === "") return;
         relations.push(button.value as Relations)
     })
+    currentItem.relations = relations;
 
     const selectedNumberOfCharacters = modalBackground.querySelector<ExclusiveButton>('#modal-characters exclusive-button[group-name="modal-character-number"][selected="true"]')
     if (selectedNumberOfCharacters) {
@@ -188,8 +189,11 @@ const closeModal = () => {
 document.querySelector<HTMLButtonElement>('#modal-confirm-button')?.addEventListener('click', () => {
     if (currentUploadItem) {
         writeModalChanges(currentUploadItem)
-        console.log("Changes written")
     }
 
+    modalBackground.dispatchEvent(new Event('hide'))
+})
+
+document.querySelector<HTMLButtonElement>('#modal-cancel-button')?.addEventListener('click', () => {
     modalBackground.dispatchEvent(new Event('hide'))
 })
