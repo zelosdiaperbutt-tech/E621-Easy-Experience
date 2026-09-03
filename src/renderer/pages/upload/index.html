@@ -18,7 +18,7 @@
     <script type="module" src="./modal.js" defer></script>
 </head>
 <body>
-    <ul id="suggestions">
+    <ul id="suggestions" data-active="false">
         <li class="autocomplete-suggestion general-tag">general</li>
         <li class="autocomplete-suggestion artist-tag">artist</li>
         <li class="autocomplete-suggestion contributor-tag">contributor</li>
@@ -133,7 +133,7 @@
 
             <div class="modal-section" id="modal-description">
                 <h3>Description</h3>
-                <textarea class="autocomplete-accepted"></textarea>
+                <textarea></textarea>
             </div>
             
             <div class="modal-section" id="modal-creators">

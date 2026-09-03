@@ -108,6 +108,12 @@ document.querySelectorAll<HTMLTextAreaElement>('.autocomplete-accepted').forEach
         const words = textBeforeCursor.split(/\s+/);
         const lastWord = words[words.length - 1]
 
+        // if (event.code === "Tab" && autocompleteSuggestions.dataset.active === "true") {
+        //     replaceCurrentWord(auto, autocompleteSuggestions.querySelector<HTMLElement>('.autocomplete-suggestion')?.dataset.value ?? "")
+        //     hideAutocompleteSuggestions()
+        //     return;
+        // }
+
         if (lastWord.length >= 3 && event.code !== "Escape") {
 
             const suggestions = await getAutocomplete(lastWord)
@@ -120,9 +126,27 @@ document.querySelectorAll<HTMLTextAreaElement>('.autocomplete-accepted').forEach
         }
 
     })
+
+    auto.addEventListener('keydown', (event) => {
+        if (autocompleteSuggestions.dataset.active !== "true") {
+            return;
+        }
+
+        switch (event.key) {
+            case "Tab":
+                event.preventDefault();
+                replaceCurrentWord(auto, autocompleteSuggestions.querySelector<HTMLElement>('.autocomplete-suggestion')?.dataset.value ?? "")
+                hideAutocompleteSuggestions()
+                break;
+        }
+    })
 })
 
 const autocompleteSuggestions = document.getElementById('suggestions')!;
+
+autocompleteSuggestions.addEventListener('mousedown', (event) => {
+    event.preventDefault()
+})
 
 const updateAutocompleteSuggestions = (suggestions: AutocompleteSuggestion[], textarea: HTMLTextAreaElement) => {
     const position = getCursorPosition(textarea)
@@ -132,6 +156,16 @@ const updateAutocompleteSuggestions = (suggestions: AutocompleteSuggestion[], te
         const item = document.createElement('li')
         item.classList = `autocomplete-suggestion ${tagTypeNumberToClassName(sug.category)}`
         item.innerText = sug.name
+        item.dataset.value = sug.name
+
+        item.addEventListener('click', () => {
+            // replace the current typed word with the value of the suggestion
+            console.log("click event fired")
+            replaceCurrentWord(textarea, item.dataset.value ?? "")
+
+            hideAutocompleteSuggestions()
+        })
+
         autocompleteSuggestions.appendChild(item)
     })
 
@@ -139,6 +173,7 @@ const updateAutocompleteSuggestions = (suggestions: AutocompleteSuggestion[], te
     autocompleteSuggestions.style.top = `${position.top + 20}px`
     autocompleteSuggestions.style.width = `${textarea.clientWidth}px`
     autocompleteSuggestions.style.display = "block";
+    autocompleteSuggestions.dataset.active = "true"
 }
 
 const tagTypeNumberToClassName = (tagTypeNumber: number): string => {
@@ -162,4 +197,40 @@ const tagTypeNumberToClassName = (tagTypeNumber: number): string => {
 const hideAutocompleteSuggestions = () => {
     autocompleteSuggestions.innerHTML = "";
     autocompleteSuggestions.style.display = "none";
+    autocompleteSuggestions.dataset.active = "false"
+}
+
+const getCurrentWord = (textarea: HTMLTextAreaElement): {word: string, start: number, end: number} => {
+    const text = textarea.value;
+    const cursor = textarea.selectionStart;
+
+    let start = cursor;
+    let end = cursor;
+
+    while (start > 0 && !/\s/.test(text[start-1])) {
+        start--;
+    }
+
+    while (end < text.length && !/\s/.test(text[end])) {
+        end++;
+    }
+
+    return {
+        word: text.slice(start, end),
+        start,
+        end
+    }
+}
+
+const replaceCurrentWord = (textarea: HTMLTextAreaElement, suggestion: string): void => {
+    const {start, end} = getCurrentWord(textarea)
+
+    textarea.value = textarea.value.slice(0, start) + suggestion + textarea.value.slice(end)
+
+    const newCursorPosition = start + suggestion.length;
+
+    textarea.selectionStart = newCursorPosition;
+    textarea.selectionEnd = newCursorPosition;
+
+    textarea.focus()
 }

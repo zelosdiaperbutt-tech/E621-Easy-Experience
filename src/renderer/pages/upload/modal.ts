@@ -62,7 +62,6 @@ export const updateModalInfo = (
     
     if (uploadElement.rating !== 'u') {
         let ratingButton: ExclusiveButton = document.querySelector<ExclusiveButton>(`exclusive-button[group-name="modal-rating-button"][value="${ratingShorthandConvertion.get(uploadElement.rating)}"]`)!;
-        console.log(ratingButton)
         ratingButton.dispatchEvent(new Event('select'))
     } else {
         document.querySelectorAll<ExclusiveButton>('exclusive-button[data-groupname="modal-rating-button"]').forEach(button => {
@@ -100,11 +99,11 @@ export const updateModalInfo = (
         modalSourceInputs.insertAdjacentElement('beforeend', sourceElement)
     }
 
-    modalBackground.querySelector<HTMLTextAreaElement>('#modal-characters textarea')!.innerText = uploadElement.characters.join(' ')
-    modalBackground.querySelector<HTMLTextAreaElement>('#modal-general textarea')!.innerText = uploadElement.general.join(' ')
-    modalBackground.querySelector<HTMLTextAreaElement>('#modal-species textarea')!.innerText = uploadElement.species.join(' ')
-    modalBackground.querySelector<HTMLTextAreaElement>('#modal-creators textarea')!.innerText = uploadElement.creators.join(' ')
-    modalBackground.querySelector<HTMLTextAreaElement>('#modal-description textarea')!.innerText = uploadElement.description
+    modalBackground.querySelector<HTMLTextAreaElement>('#modal-characters textarea')!.value = uploadElement.characters.join(' ')
+    modalBackground.querySelector<HTMLTextAreaElement>('#modal-general textarea')!.value = uploadElement.general.join(' ')
+    modalBackground.querySelector<HTMLTextAreaElement>('#modal-species textarea')!.value = uploadElement.species.join(' ')
+    modalBackground.querySelector<HTMLTextAreaElement>('#modal-creators textarea')!.value = uploadElement.creators.join(' ')
+    modalBackground.querySelector<HTMLTextAreaElement>('#modal-description textarea')!.value = uploadElement.description
     modalBackground.querySelector<HTMLTextAreaElement>('#modal-parent input[type="text"]')!.value = uploadElement.parent
 }
 
@@ -158,11 +157,11 @@ export const writeModalChanges = (currentItem: ItemUpload) => {
     })
     currentItem.sources = sources;
 
-    currentItem.characters = modalBackground.querySelector<HTMLTextAreaElement>('#modal-characters textarea')!.innerText.split(' ')
-    currentItem.general = modalBackground.querySelector<HTMLTextAreaElement>('#modal-general textarea')!.innerText.split(' ')
-    currentItem.species = modalBackground.querySelector<HTMLTextAreaElement>('#modal-species textarea')!.innerText.split(' ')
-    currentItem.creators = modalBackground.querySelector<HTMLTextAreaElement>('#modal-creators textarea')!.innerText.split(' ')
-    currentItem.description = modalBackground.querySelector<HTMLTextAreaElement>('#modal-description textarea')!.innerText
+    currentItem.characters = modalBackground.querySelector<HTMLTextAreaElement>('#modal-characters textarea')!.value.split(' ')
+    currentItem.general = modalBackground.querySelector<HTMLTextAreaElement>('#modal-general textarea')!.value.split(' ')
+    currentItem.species = modalBackground.querySelector<HTMLTextAreaElement>('#modal-species textarea')!.value.split(' ')
+    currentItem.creators = modalBackground.querySelector<HTMLTextAreaElement>('#modal-creators textarea')!.value.split(' ')
+    currentItem.description = modalBackground.querySelector<HTMLTextAreaElement>('#modal-description textarea')!.value
     currentItem.parent = modalBackground.querySelector<HTMLTextAreaElement>('#modal-parent input[type="text"]')!.value
 }
 
@@ -184,7 +183,7 @@ const closeModal = () => {
         button.dispatchEvent(new Event('deselect'))
     })
     modalBackground.querySelectorAll<HTMLTextAreaElement>('textarea').forEach(textArea => {
-        textArea.innerText = "";
+        textArea.value = "";
     })
     modalBackground.querySelectorAll<HTMLInputElement>('input[type="text"]').forEach(input => {
         input.value = ""
