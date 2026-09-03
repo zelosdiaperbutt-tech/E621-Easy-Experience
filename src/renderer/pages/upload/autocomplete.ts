@@ -115,19 +115,6 @@ export const getCursorPosition = (textarea: HTMLTextAreaElement): {left: number,
     return {left, top}    
 }
 
-document.querySelectorAll<HTMLTextAreaElement>('.autocomplete-input').forEach(auto => {
-    auto.addEventListener('keyup', () => {
-        const cursorPosition = auto.selectionEnd
-        const textBeforeCursor = auto.value.substring(0, cursorPosition)
-        const words = textBeforeCursor.split(/\s+/);
-        const lastWord = words[words.length - 1]
-
-        if (lastWord.length >= 3) {
-            debouncedAutocomplete(lastWord)
-        }
-    })
-})
-
 document.querySelectorAll<HTMLTextAreaElement>('.autocomplete-accepted').forEach(auto => {
     auto.addEventListener('keyup', async (event) => {
 
@@ -164,12 +151,17 @@ document.querySelectorAll<HTMLTextAreaElement>('.autocomplete-accepted').forEach
                 break
         }
     })
+
+    auto.addEventListener('blur', (event) => {
+        hideAutocompleteSuggestions()
+    })
 })
 
 const autocompleteSuggestions = document.getElementById('suggestions')!;
 
 autocompleteSuggestions.addEventListener('mousedown', (event) => {
     event.preventDefault()
+    event.stopPropagation()
 })
 
 const updateAutocompleteSuggestions = (suggestions: AutocompleteSuggestion[], textarea: HTMLTextAreaElement) => {
@@ -179,7 +171,8 @@ const updateAutocompleteSuggestions = (suggestions: AutocompleteSuggestion[], te
     suggestions.forEach(sug => {
         const item = document.createElement('li')
         item.classList = `autocomplete-suggestion ${tagTypeNumberToClassName(sug.category)}`
-        item.innerText = sug.name
+        item.innerText = sug.antecedent_name ? `${sug.antecedent_name} -> ${sug.name}` : sug.name;
+
         item.dataset.value = sug.name
 
         item.addEventListener('click', () => {
@@ -247,7 +240,7 @@ const getCurrentWord = (textarea: HTMLTextAreaElement): {word: string, start: nu
 }
 
 const replaceCurrentWord = (textarea: HTMLTextAreaElement, suggestion: string): void => {
-    const {start, end, word} = getCurrentWord(textarea)
+    const {start, end} = getCurrentWord(textarea)
 
     textarea.value = textarea.value.slice(0, start) + suggestion + textarea.value.slice(end)
 
