@@ -11,15 +11,73 @@ body {
     margin: 0;
     padding: var(--space-4);
     list-style: none;
+    min-width: 100px;
 
     z-index: 1000;
     background: var(--blue-50);
     border: 1px solid var(--blue-400);
+    border-radius: var(--space-4);
+    font-size: 0.85rem;
+    font-weight: normal;
 }
 
 #suggestions li {
     font-family: "Inter", sans-serif;
     color: var(--blue-1000);
+    cursor: pointer;
+    background: none;
+    padding: var(--space-4);
+    border-radius: var(--space-4);
+    transition: background 200ms ease;
+}
+
+#suggestions li.general-tag {
+    font-weight: 500;
+}
+
+#suggestions li.artist-tag {
+    color: var(--yellow-700);
+    font-weight: 500;
+}
+
+#suggestions li.contributor-tag {
+    color: var(--grey-700);
+    font-weight: 500;
+}
+
+#suggestions li.copyright-tag {
+    color: var(--purple-600);
+    font-weight: 500;
+}
+
+#suggestions li.character-tag {
+    color: var(--red-800);
+    font-weight: 500;
+}
+
+#suggestions li.species-tag {
+    color: var(--red-700);
+    font-weight: 500;
+}
+
+#suggestions li.invalid-tag {
+    color: var(--red-400);
+    font-weight: 500;
+    text-decoration: line-through;
+}
+
+#suggestions li.meta-tag {
+    font-weight: 700;
+    font-style: italic;
+}
+
+#suggestions li.lore-tag {
+    color: var(--green-700);
+    font-weight: 500;
+}
+
+#suggestions li:hover {
+    background: var(--blue-100);
 }
 
 

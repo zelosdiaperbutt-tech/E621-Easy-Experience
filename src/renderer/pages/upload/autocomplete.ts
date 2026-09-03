@@ -130,14 +130,33 @@ const updateAutocompleteSuggestions = (suggestions: AutocompleteSuggestion[], te
     autocompleteSuggestions.innerHTML = ""
     suggestions.forEach(sug => {
         const item = document.createElement('li')
-        item.classList = "autocomplete-suggestion"
+        item.classList = `autocomplete-suggestion ${tagTypeNumberToClassName(sug.category)}`
         item.innerText = sug.name
         autocompleteSuggestions.appendChild(item)
     })
 
     autocompleteSuggestions.style.left = `${position.left}px`
     autocompleteSuggestions.style.top = `${position.top + 20}px`
+    autocompleteSuggestions.style.width = `${textarea.clientWidth}px`
     autocompleteSuggestions.style.display = "block";
+}
+
+const tagTypeNumberToClassName = (tagTypeNumber: number): string => {
+    const map: Map<number, string> = new Map<number, string>([
+        [0, "general-tag"],
+        [1, "artist-tag"],
+        [2, "contributor-tag"],
+        [3, "copyright-tag"],
+        [4, "character-tag"],
+        [5, "species-tag"],
+        [6, "invalid-tag"],
+        [7, "meta-tag"],
+        [8, "lore-tag"]
+    ])
+
+    if (!map.has(tagTypeNumber)) return ""
+
+    return map.get(tagTypeNumber)!;
 }
 
 const hideAutocompleteSuggestions = () => {
