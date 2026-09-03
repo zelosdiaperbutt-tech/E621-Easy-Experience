@@ -238,19 +238,7 @@ body {
     grid-area: rating;
 } 
 
-#upload-manager-layout {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-items: flex-start;
-    gap: 0;
-    background: var(--grey-50);
-    margin: 0;
-}
-
 #upload-main-area {
-    flex-basis: 75%;
     display: flex;
     flex-direction: column;
     padding: var(--space-12);
@@ -430,51 +418,3 @@ conditional-button:not([active="true"]) {
 .conditional-button[data-visible="false"] {
     display: none;
 }
-
-
-#upload-right-sidebar {
-    flex-basis: 25%;
-    display: flex;
-    flex-direction: column;
-    background: white;
-    border-left: 2px var(--grey-100) solid;
-    padding: var(--space-8);
-    height: 100vh;
-    overflow-y: scroll;
-    max-width: 25%;
-    gap: var(--space-16);
-}
-
-#upload-right-sidebar[data-active="false"] {
-    display: none;
-    flex-basis: 0%;
-}
-
-#upload-right-sidebar h2 {
-    font-size: 1.2rem;
-    margin: 0;
-    color: var(--grey-900);
-}
-
-#upload-right-sidebar-header {
-    border-bottom: 1px var(--grey-300) solid;
-}
-
-
-
-
-.upload-item-data h3 {
-    font-size: 1rem;
-    font-weight: bold;
-    color: var(--grey-900);
-    margin: 0;
-}
-
-.upload-item-data textarea {
-    resize: vertical;
-    width: 100%;
-}
-
-button.conditionally-active[data-active="false"] {
-    display: none;
-} 
