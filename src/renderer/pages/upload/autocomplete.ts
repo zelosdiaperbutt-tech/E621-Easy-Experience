@@ -42,7 +42,34 @@ async function getAutocomplete(word: string): Promise<AutocompleteSuggestion[] |
     }
 }
 
+async function getAutocompleteAndUpdateSuggestions(word: string, textarea: HTMLTextAreaElement) {
+    autocompleteController?.abort()
+
+    autocompleteController = new AbortController();
+
+    try {
+        const response = await fetch(`https://e621.net/tags/autocomplete.json?expiry=7&search[name_matches]=${word}`, {
+            signal: autocompleteController.signal
+        });
+
+        if (!response.ok) {
+            throw new Error(`Autocomplete request failed: ${response.status}`)
+        }
+
+        const result = await response.json()
+
+        updateAutocompleteSuggestions(result, textarea);
+    } catch (err) {
+        // newer request replaced this one
+        if (err instanceof DOMException && err.name === "AbortError") return null;
+
+        console.log(err)
+        return null;
+    }
+}
+
 export const debouncedAutocomplete = debounce(getAutocomplete, 1000);
+export const debouncedAutocompleteAndUpdate = debounce(getAutocompleteAndUpdateSuggestions, 500);
 
 export const getCursorPosition = (textarea: HTMLTextAreaElement): {left: number, top: number} => {
     const mirror = document.createElement('div')
@@ -103,28 +130,20 @@ document.querySelectorAll<HTMLTextAreaElement>('.autocomplete-input').forEach(au
 
 document.querySelectorAll<HTMLTextAreaElement>('.autocomplete-accepted').forEach(auto => {
     auto.addEventListener('keyup', async (event) => {
+
+        const stopKeys = ["Escape", "Tab"];
+        if (stopKeys.includes(event.key)) return;
+
         const cursorPosition = auto.selectionEnd;
         const textBeforeCursor = auto.value.substring(0, cursorPosition)
         const words = textBeforeCursor.split(/\s+/);
         const lastWord = words[words.length - 1]
 
-        // if (event.code === "Tab" && autocompleteSuggestions.dataset.active === "true") {
-        //     replaceCurrentWord(auto, autocompleteSuggestions.querySelector<HTMLElement>('.autocomplete-suggestion')?.dataset.value ?? "")
-        //     hideAutocompleteSuggestions()
-        //     return;
-        // }
-
-        if (lastWord.length >= 3 && event.code !== "Escape") {
-
-            const suggestions = await getAutocomplete(lastWord)
-
-            if (suggestions) {
-                updateAutocompleteSuggestions(suggestions, auto)
-            }
+        if (lastWord.length >= 3) {
+            debouncedAutocompleteAndUpdate(lastWord, auto)
         } else {
             hideAutocompleteSuggestions();
         }
-
     })
 
     auto.addEventListener('keydown', (event) => {
@@ -138,6 +157,11 @@ document.querySelectorAll<HTMLTextAreaElement>('.autocomplete-accepted').forEach
                 replaceCurrentWord(auto, autocompleteSuggestions.querySelector<HTMLElement>('.autocomplete-suggestion')?.dataset.value ?? "")
                 hideAutocompleteSuggestions()
                 break;
+            case "Escape":
+                event.preventDefault();
+                event.stopPropagation();
+                hideAutocompleteSuggestions()
+                break
         }
     })
 })
@@ -223,7 +247,7 @@ const getCurrentWord = (textarea: HTMLTextAreaElement): {word: string, start: nu
 }
 
 const replaceCurrentWord = (textarea: HTMLTextAreaElement, suggestion: string): void => {
-    const {start, end} = getCurrentWord(textarea)
+    const {start, end, word} = getCurrentWord(textarea)
 
     textarea.value = textarea.value.slice(0, start) + suggestion + textarea.value.slice(end)
 
