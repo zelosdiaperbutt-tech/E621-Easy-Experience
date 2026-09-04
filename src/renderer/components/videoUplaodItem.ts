@@ -121,15 +121,15 @@ export class VideoUploadItem extends HTMLElement implements UploadItem {
     }
 
     connectedCallback(): void {
-        this.classList.add('uplod-item')
+        this.classList.add('upload-item')
         this.dataset.selected = "false"
 
         this.innerHTML = `
-            <div class="upload-item-content>
+            <div class="upload-item-content">
                 <div class="upload-item-content-header">
                     <input type="checkbox" class="upload-item-select-checkbox">
                 </div>
-                <video src="${this.path}" class="upload-item-media" controls></video>
+                <video src="${this.path}" class="upload-item-media"></video>
             </div>
             <div class="upload-item-footer">
                 <p class="upload-item-name">${this.name}</p>
@@ -166,7 +166,7 @@ export class VideoUploadItem extends HTMLElement implements UploadItem {
     private handleClickEvent = (event: PointerEvent): void => {
         const target = event.target as HTMLElement;
 
-        if (target.closest('img')) {
+        if (target.closest('video')) {
             this.selectedForModal();
             return;
         }
