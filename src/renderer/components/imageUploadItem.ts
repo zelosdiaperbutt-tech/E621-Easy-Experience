@@ -3,9 +3,9 @@ import {addToSelected, removeFromSelected, getSizeString} from '../pages/upload/
 import {setCurrentUploadItem, updateModalInfo, writeModalChanges, activateModal} from '../pages/upload/modal.js'
 
 /**
- * An individual item that is going to be uploaded
+ * An individual image that is going to be uploaded
  */
-export class ItemUpload extends HTMLElement {
+export class ImageUploadItem extends HTMLElement implements UploadItem {
     constructor() {
         super();
     }
@@ -199,4 +199,4 @@ export class ItemUpload extends HTMLElement {
 }
 
 
-customElements.define('item-upload', ItemUpload)
+customElements.define('image-item', ImageUploadItem)

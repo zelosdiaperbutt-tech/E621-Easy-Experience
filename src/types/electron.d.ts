@@ -8,6 +8,38 @@ declare global {
         }
     }
 
+    interface UploadItem {
+        get path(): string;
+        get name(): string;
+        get size(): number;
+        get type(): string;
+
+        get rating(r: 's'|'q'|'e'|'u');
+        set rating(): 's'|'q'|'e'|'u';
+        get creators(): string[];
+        set creators(c: string[]);
+        get sources(): string[];
+        set sources(s: string[]);
+        get characters(): string[];
+        set characters(c: string[]);
+        get genders(): Gender[];
+        set genders(g: Gender[]);
+        get species(): string[];
+        set species(s: string[]);
+        get general(): string[];
+        set general(g: string[]);
+        get parent(): string;
+        set parent(p: string);
+        get description(): string;
+        set description(d: string);
+        get relations(): Relations[];
+        set relations(r: Relations[]);
+        get speciesTypes(): SpeciesType[];
+        set speciesTypes(sT: SpeciesType[]);
+        get numberOfCharacters(): NumberOfCharacters;
+        set numberOfCharacters(n: NumberOfCharacters);
+    }
+
     type FileInfo = {
         path: string,
         name: string,

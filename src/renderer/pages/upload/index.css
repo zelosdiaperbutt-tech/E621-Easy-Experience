@@ -352,12 +352,17 @@ p.dull-text {
     background: var(--grey-100);
 }
 
-.upload-item-content img {
+.upload-item-content img,
+.upload-item-content video {
     display: block;
     width: 100%;
     height: 100%;
     object-fit: contain;
     cursor: pointer;
+}
+
+.upload-item-media[disabled="true"] {
+    display: none;
 }
 
 .upload-item-content-header {

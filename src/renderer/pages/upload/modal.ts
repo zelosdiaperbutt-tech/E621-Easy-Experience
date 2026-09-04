@@ -3,7 +3,7 @@ const modalSourceInputs = document.getElementById('modal-sources-inputs') as HTM
 const modalAddSourceButton = document.getElementById('modal-add-source') as HTMLButtonElement;
 
 import { getSizeString } from './index.js'
-import { ItemUpload } from '../../components/itemUpload.js'
+import { ImageUploadItem } from '../../components/imageUploadItem.js'
 import { SelectableButton } from '../../components/selectableButton.js'
 import { ExclusiveButton } from '../../components/exclusiveButton.js';
 import { ConditionButton } from '../../components/conditionButton.js';
@@ -25,9 +25,9 @@ modalBackground.addEventListener('click', (event) => {
     }
 })
 
-let currentUploadItem: ItemUpload | null;
+let currentUploadItem: UploadItem | null;
 
-export const setCurrentUploadItem = (item: ItemUpload): void => {
+export const setCurrentUploadItem = (item: UploadItem): void => {
     currentUploadItem = item;
 }
 
@@ -40,7 +40,7 @@ export const setCurrentUploadItem = (item: ItemUpload): void => {
  * @param info Meta information about the file for the user's benefit
  */
 export const updateModalInfo = (
-    uploadElement: ItemUpload,
+    uploadElement: UploadItem,
     type: 'image'|'video',
     info: FileInfo
 ) => {
@@ -111,7 +111,7 @@ export const updateModalInfo = (
  * Updates the currently selected element's attributes and properties to affect the
  * selected buttons and typed text on the modal.
  */
-export const writeModalChanges = (currentItem: ItemUpload) => {
+export const writeModalChanges = (currentItem: UploadItem) => {
 
     const longRatingToLetter = new Map<string, string>();
     longRatingToLetter.set('safe', 's')

@@ -8,7 +8,8 @@ const bulkOptions = document.getElementById('bulkaction-options') as HTMLElement
 
 
 import {setCurrentUploadItem, updateModalInfo, activateModal} from './modal.js'
-import {ItemUpload} from '../../components/itemUpload.js'
+import {ImageUploadItem} from '../../components/imageUploadItem.js'
+import { VideoUploadItem } from '../../components/videoUplaodItem.js';
 
 // Selected upload elements
 let selectedItems: HTMLElement[] = [];
@@ -161,7 +162,7 @@ export const getSizeString = (bytes: number): string => {
  */
 const createImageUploadItem = (path: string, name: string, type: string, size: number): HTMLElement => {
     
-    const item = document.createElement('item-upload')
+    const item = document.createElement('image-item')
     item.setAttribute('path', path)
     item.setAttribute('name', name)
     item.setAttribute('type', type)
@@ -170,6 +171,22 @@ const createImageUploadItem = (path: string, name: string, type: string, size: n
 
 }
 
+
+const createVideoUploadItem = (path: string, name: string, type: string, size: number): HTMLElement => {
+    const item = document.createElement('video-item')
+    item.setAttribute('path', path)
+    item.setAttribute('name', name)
+    item.setAttribute('type', type)
+    item.setAttribute('size', size.toString())
+    return item;
+}
+
+uploadGrid.insertAdjacentElement('beforeend', createVideoUploadItem(
+    "C:\\Users\\Mater\\OneDrive\\Desktop\\Call me Avatar 😏 [CYJTeUQVXAY].webm",
+    "Call me Avatar",
+    "video/webm",
+    5103616
+))
 
 // In case there are pre-generated upload items, the bulk action bar
 // will automatically have the correct label.

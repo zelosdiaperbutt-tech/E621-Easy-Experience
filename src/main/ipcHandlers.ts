@@ -55,7 +55,11 @@ async function getFileSize(filePath: string): Promise<number> {
 
 ipcMain.handle('dialog:file-select', async () => {
     const {canceled, filePaths} = await dialog.showOpenDialog({
-        properties: ['openFile', 'multiSelections']
+        properties: ['openFile', 'multiSelections'],
+        filters: [
+            {name: 'Images', extensions: ['png', 'apng', 'pjp', 'jfif', 'jpe', 'pjpeg', 'jpeg', 'jpg', 'webp']},
+            {name: 'Videos', extensions: ['webm', 'gif', 'm4v', 'mp4', 'webp']}
+        ]
     });
 
     if (canceled) return [];
