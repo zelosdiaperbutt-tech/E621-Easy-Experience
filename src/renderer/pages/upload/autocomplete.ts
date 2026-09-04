@@ -15,6 +15,7 @@ function debounce<T extends (...args: any[]) => void>(callback: T, delay: number
 }
 
 let autocompleteController: AbortController | undefined;
+let tagPreviewController: AbortController | undefined;
 
 async function getAutocomplete(word: string): Promise<AutocompleteSuggestion[] | null> {
     autocompleteController?.abort()
@@ -68,8 +69,47 @@ async function getAutocompleteAndUpdateSuggestions(word: string, textarea: HTMLT
     }
 }
 
+async function getTagPreview(tags: string[]): Promise<string[] | null> {
+    tagPreviewController?.abort()
+    tagPreviewController = new AbortController()
+
+    try {
+        const response = await fetch(`https://e621.net/tag_implications.json?search[antecedent_name]=${tags.join(',')}`, {
+            signal: tagPreviewController.signal
+        })
+
+        if (!response.ok) {
+            throw new Error(`Tag Preview request failed: ${response.status}`)
+        }
+
+        const result = await response.json()
+        if (result.tag_implications) return [];
+
+        let finalTags: Set<string> = new Set<string>();
+        result.forEach((r: any) => {
+            finalTags.add(r.consequent_name)
+            r.descendant_names.forEach((d: string) => {
+                finalTags.add(d)
+            })
+        })
+
+        let tagsArray: string[] = [];
+        finalTags.forEach(tag => tagsArray.push(tag))
+        console.log(tagsArray);
+        return tagsArray;
+
+    } catch (err) {
+        if (err instanceof DOMException && err.name === "AbortError") return null
+
+        console.log(err)
+        return null;
+    }
+}
+
 export const debouncedAutocomplete = debounce(getAutocomplete, 1000);
 export const debouncedAutocompleteAndUpdate = debounce(getAutocompleteAndUpdateSuggestions, 500);
+export const debouncedTagPreview = debounce(getTagPreview, 500)
+
 
 export const getCursorPosition = (textarea: HTMLTextAreaElement): {left: number, top: number} => {
     const mirror = document.createElement('div')
