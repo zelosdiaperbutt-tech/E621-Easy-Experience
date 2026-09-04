@@ -108,14 +108,38 @@ mainAreaFileDrop.addEventListener('drop', (event: DragEvent) => {
     if (!files) return;
 
     for (const file of files) {
-        const path = window.electronAPI.getFilePath(file);
+        const mediaType = mediaTypeOfFile(file.type.slice(file.type.indexOf('/') + 1))
+        if (mediaType === 'unknown') continue;
 
-        const uploadElement = createImageUploadItem(path, file.name, file.type, file.size)
+        const path = window.electronAPI.getFilePath(file);
+        let uploadElement: HTMLElement;
+
+        switch(mediaType) {
+            case 'image':
+                uploadElement = createImageUploadItem(path, file.name, file.type, file.size)
+                break;
+            case 'video':
+                uploadElement = createVideoUploadItem(path, file.name, file.type, file.size)
+                break;
+        }
+        
         uploadGrid.insertAdjacentElement('beforeend', uploadElement)
     }
 
     updateSelectionQuantityLabel();
 })
+
+
+const mediaTypeOfFile = (extName: string): 'image'|'video'|'unknown' => {
+    const IMAGE_FORMATS: string[] = ['png', 'apng', 'pjp', 'jfif', 'jpe', 'pjpeg', 'jpeg', 'jpg', 'webp'];
+    const VIDEO_FORMATS: string[] = ['webm', 'gif', 'm4v', 'mp4', 'webp', 'matroska'];
+
+    if (IMAGE_FORMATS.includes(extName)) return 'image';
+    if (VIDEO_FORMATS.includes(extName)) return 'video';
+
+    return 'unknown';
+}
+
 
 document.querySelectorAll<HTMLElement>('.open-file-select').forEach(fileSelect => {
     fileSelect.addEventListener('click', async () => {
@@ -181,12 +205,12 @@ const createVideoUploadItem = (path: string, name: string, type: string, size: n
     return item;
 }
 
-uploadGrid.insertAdjacentElement('beforeend', createVideoUploadItem(
-    "C:\\Users\\Mater\\OneDrive\\Desktop\\Call me Avatar 😏 [CYJTeUQVXAY].webm",
-    "Call me Avatar",
-    "video/webm",
-    5103616
-))
+// uploadGrid.insertAdjacentElement('beforeend', createVideoUploadItem(
+//     "C:\\Users\\Mater\\OneDrive\\Desktop\\Call me Avatar 😏 [CYJTeUQVXAY].webm",
+//     "Call me Avatar",
+//     "video/webm",
+//     5103616
+// ))
 
 // In case there are pre-generated upload items, the bulk action bar
 // will automatically have the correct label.
