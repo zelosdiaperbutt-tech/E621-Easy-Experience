@@ -146,7 +146,20 @@ document.querySelectorAll<HTMLElement>('.open-file-select').forEach(fileSelect =
         const files: FileInfo[] = await window.electronAPI.fileSelectDialog();
 
         for (let i = 0; i < files.length; i++) {
-            const uploadElement = createImageUploadItem(files[i].path, files[i].name, files[i].type, files[i].size);
+            const mediaType = mediaTypeOfFile(files[i].type.substring(files[i].type.indexOf('.') + 1))
+            if (mediaType === "unknown") continue;
+
+            let uploadElement: HTMLElement;
+
+            switch (mediaType) {
+                case 'image':
+                    uploadElement = createImageUploadItem(files[i].path, files[i].name, files[i].type, files[i].size);
+                    break;
+                case 'video':
+                    uploadElement = createVideoUploadItem(files[i].path, files[i].name, files[i].type, files[i].size)
+                    break;
+            }
+
             uploadGrid.insertAdjacentElement('beforeend', uploadElement)
         }
 

@@ -57,6 +57,7 @@ ipcMain.handle('dialog:file-select', async () => {
     const {canceled, filePaths} = await dialog.showOpenDialog({
         properties: ['openFile', 'multiSelections'],
         filters: [
+            {name: 'All', extensions: ['png', 'apng', 'pjp', 'jfif', 'jpe', 'pjpeg', 'jpeg', 'jpg', 'webp', 'webm', 'gif', 'm4v', 'mp4', 'webp']},
             {name: 'Images', extensions: ['png', 'apng', 'pjp', 'jfif', 'jpe', 'pjpeg', 'jpeg', 'jpg', 'webp']},
             {name: 'Videos', extensions: ['webm', 'gif', 'm4v', 'mp4', 'webp']}
         ]
