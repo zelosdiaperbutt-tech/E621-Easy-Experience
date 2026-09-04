@@ -1,6 +1,7 @@
 const modalBackground = document.getElementById('modal-background') as HTMLElement;
 const modalSourceInputs = document.getElementById('modal-sources-inputs') as HTMLElement;
 const modalAddSourceButton = document.getElementById('modal-add-source') as HTMLButtonElement;
+const modalContentContainer = document.getElementById('content-container') as HTMLElement;
 
 import { getSizeString } from './index.js'
 import { ImageUploadItem } from '../../components/imageUploadItem.js'
@@ -44,10 +45,18 @@ export const updateModalInfo = (
     type: 'image'|'video',
     info: FileInfo
 ) => {
+    modalContentContainer.innerHTML = "";
     if (type === 'image') {
-        modalBackground.querySelector<HTMLImageElement>('#content-container img')!.src = info.path;
+        // modalBackground.querySelector<HTMLImageElement>('#content-container img')!.src = info.path;
+        const imageElement = document.createElement('img')
+        imageElement.setAttribute('src', info.path)
+        modalContentContainer.insertAdjacentElement('beforeend', imageElement)
     } else {
-        throw new Error('Video file types not implemented')
+        // throw new Error('Video file types not implemented')
+        const videoElement = document.createElement('video')
+        videoElement.setAttribute('src', info.path)
+        videoElement.controls = true
+        modalContentContainer.insertAdjacentElement('beforeend', videoElement)
     }
 
     document.querySelector<HTMLElement>('#left-modal .content-name')!.innerText = info.name;
@@ -202,6 +211,8 @@ const closeModal = () => {
     })
 
     modalSourceInputs.innerHTML = "";
+
+    modalContentContainer.querySelector('video')?.pause()
 }
 
 document.querySelector<HTMLButtonElement>('#modal-confirm-button')?.addEventListener('click', () => {
