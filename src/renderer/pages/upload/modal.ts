@@ -10,7 +10,7 @@ import { ExclusiveButton } from '../../components/exclusiveButton.js';
 import { ConditionButton } from '../../components/conditionButton.js';
 import { ConditionalButton } from '../../components/conditionalButton.js';
 
-import { openSecondaryModal, debouncedTagPreview } from './autocomplete.js';
+import { debouncedTagPreview, tagTypeNumberToClassName } from './autocomplete.js';
 
 modalBackground.addEventListener('show', () => {
     modalBackground.classList.remove('modal-hidden')
@@ -311,7 +311,7 @@ const genderToTag = (g: Gender): string => {
 const relationsToTag = (r: Relations): string => {
     const map = new Map<Relations, string>([
         [Relations.MM, "male/male"],
-        [Relations.MF, "male/male"],
+        [Relations.MF, "male/female"],
         [Relations.MAnd, "andromorph/male"],
         [Relations.MGyn, "gynomorph/male"],
         [Relations.MHerm, "herm/male"],
@@ -386,11 +386,81 @@ const aggregateCurrentTags = (): string[] => {
     return tags.filter(t => t.trim() !== "");
 }
 
+const placeTagsInPreview = () => {
+
+}
+
+const bulkTagInfo = async (tags: string[]): Promise<{category: number, post_count: number, name: string}[]> => {
+    let list: any[] = [];
+
+    try {
+        const response = await fetch(`https://e621.net/tags.json?search[name]=${tags.join(',')}&limit=320`)
+        const result = await response.json()
+
+        list = list.concat(result)
+    } catch (err) {
+        console.log(err)
+    }
+
+    return list
+}
+
+const secondaryModal = document.getElementById('secondary-modal') as HTMLElement;
+const tagPreview = secondaryModal.querySelector('.tag-list') as HTMLElement;
+const secondaryModalClose = secondaryModal.querySelector('.modal-bottom button')
+
+
+const shortenNumber = (n: number): string => {
+    if (n === 0) return "0";
+
+    const lookup = [
+        {value: 1e9, symbol: "B"},
+        {value: 1e6, symbol: "M"},
+        {value: 1e3, symbol: "K"}
+    ]
+
+    const item = lookup.find(x => Math.abs(n) >= x.value);
+
+    if (!item) {
+        return Number(n.toPrecision(3)).toString()
+    }
+
+    const scaled = n / item.value
+    const formatted = Number(scaled.toPrecision(3))
+
+    return `${formatted}${item.symbol}`
+}
+
+
 document.querySelector<HTMLButtonElement>('#tag-preview-button')?.addEventListener('click', async () => {
     
     const currentTags = aggregateCurrentTags()
     if (currentTags.length === 0) return;
 
-    await debouncedTagPreview(currentTags)
-    openSecondaryModal()
+    debouncedTagPreview(currentTags, async (allTags) => {
+        const tagInfo = await bulkTagInfo(allTags)
+        console.log(tagInfo)
+
+        tagPreview.innerHTML = "";
+        tagInfo.forEach(tag => {
+            tagPreview.insertAdjacentHTML('beforeend', `
+                <div class="tag-preview ${tagTypeNumberToClassName(tag.category)} ${currentTags.includes(tag.name) ? '' : 'implied'}">
+                    <p class="tag-preview-name">${tag.name}</p>
+                    <p class="tag-preview-count">${shortenNumber(tag.post_count)}</p>
+                </div>
+            `)
+        })
+
+        openSecondaryModal()
+    }, () => {})
 })
+
+export const openSecondaryModal = () => {
+    secondaryModal.classList.remove('modal-hidden')
+}
+
+export const closeSecondaryModal = () => {
+    secondaryModal.classList.add('modal-hidden')
+}
+
+secondaryModalClose?.addEventListener('click', closeSecondaryModal)

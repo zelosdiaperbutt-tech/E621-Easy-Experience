@@ -31,47 +31,56 @@ body {
     transition: background 200ms ease;
 }
 
-#suggestions li.general-tag {
+#suggestions li.general-tag,
+.tag-list .general-tag {
     font-weight: 500;
 }
 
-#suggestions li.artist-tag {
+#suggestions li.artist-tag,
+.tag-list .artist-tag {
     color: var(--yellow-700);
     font-weight: 500;
 }
 
-#suggestions li.contributor-tag {
+#suggestions li.contributor-tag,
+.tag-list .contributor-tag {
     color: var(--grey-700);
     font-weight: 500;
 }
 
-#suggestions li.copyright-tag {
+#suggestions li.copyright-tag,
+.tag-list .copyright-tag {
     color: var(--purple-600);
     font-weight: 500;
 }
 
-#suggestions li.character-tag {
+#suggestions li.character-tag,
+.tag-list .character-tag {
     color: var(--red-800);
     font-weight: 500;
 }
 
-#suggestions li.species-tag {
+#suggestions li.species-tag,
+.tag-list .species-tag {
     color: var(--red-700);
     font-weight: 500;
 }
 
-#suggestions li.invalid-tag {
+#suggestions li.invalid-tag,
+.tag-list .invalid-tag {
     color: var(--red-400);
     font-weight: 500;
     text-decoration: line-through;
 }
 
-#suggestions li.meta-tag {
+#suggestions li.meta-tag,
+.tag-list .meta-tag {
     font-weight: 700;
     font-style: italic;
 }
 
-#suggestions li.lore-tag {
+#suggestions li.lore-tag,
+.tag-list .lore-tag {
     color: var(--green-700);
     font-weight: 500;
 }
@@ -277,19 +286,19 @@ body {
     background: var(--grey-50);
     font-weight: 500;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     padding: var(--space-4);
     border-radius: var(--space-4);
     cursor: pointer;
 }
 
-.tag-preview.implied {
-    box-shadow: 0px var(--space-4) 0 var(--green-600);
+.tag-preview p {
+    margin: 0;
 }
 
-.tag-preview.implied:hover {
-    box-shadow: 0 var(--space-8) 0 var(--green-600);
+.tag-preview.implied {
+    border-left: 2px var(--green-600) solid;
 }
 
 #secondary-modal .tag-list .tag-preview:hover {

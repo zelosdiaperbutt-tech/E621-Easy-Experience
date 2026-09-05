@@ -69,11 +69,9 @@ async function getAutocompleteAndUpdateSuggestions(word: string, textarea: HTMLT
     }
 }
 
-const secondaryModal = document.getElementById('secondary-modal') as HTMLElement;
-const tagPreview = secondaryModal.querySelector('.tag-list') as HTMLElement;
-const secondaryModalClose = secondaryModal.querySelector('.modal-bottom button')
 
-async function getTagPreview(tags: string[]): Promise<string[] | null> {
+
+async function getTagPreview(tags: string[], success: (previewTags: string[]) => void, error: () => void): Promise<string[] | null> {
     tagPreviewController?.abort()
     tagPreviewController = new AbortController()
 
@@ -100,18 +98,15 @@ async function getTagPreview(tags: string[]): Promise<string[] | null> {
         let tagsArray: string[] = [];
         finalTags.forEach(tag => tagsArray.push(tag))
         tagsArray = tagsArray.concat(tags)
-        
-        tagPreview.innerHTML = ""
-        tagsArray.forEach(tag => {
-            tagPreview.insertAdjacentHTML('beforeend', `<div class="tag-preview">${tag}</div>`)
-        })
-        
+
+        success(tagsArray)
         return tagsArray;
 
     } catch (err) {
         if (err instanceof DOMException && err.name === "AbortError") return null
 
         console.log(err)
+        error()
         return null;
     }
 }
@@ -136,7 +131,7 @@ export const getCursorPosition = (textarea: HTMLTextAreaElement): {left: number,
     mirror.style.left = `${textareaRect.left}px`
     mirror.style.top = `${textareaRect.top}px`
 
-    mirror.style.width = `${textarea.clientWidth}`
+    mirror.style.width = `${textarea.clientWidth}px`
 
     mirror.style.font = style.font;
     mirror.style.fontSize = style.fontSize;
@@ -243,7 +238,7 @@ const updateAutocompleteSuggestions = (suggestions: AutocompleteSuggestion[], te
     autocompleteSuggestions.dataset.active = "true"
 }
 
-const tagTypeNumberToClassName = (tagTypeNumber: number): string => {
+export const tagTypeNumberToClassName = (tagTypeNumber: number): string => {
     const map: Map<number, string> = new Map<number, string>([
         [0, "general-tag"],
         [1, "artist-tag"],
@@ -301,14 +296,3 @@ const replaceCurrentWord = (textarea: HTMLTextAreaElement, suggestion: string): 
 
     textarea.focus()
 }
-
-
-export const openSecondaryModal = () => {
-    secondaryModal.classList.remove('modal-hidden')
-}
-
-export const closeSecondaryModal = () => {
-    secondaryModal.classList.add('modal-hidden')
-}
-
-secondaryModalClose?.addEventListener('click', closeSecondaryModal)
