@@ -108,7 +108,9 @@ body {
     gap: var(--space-12);
     overflow-y: auto;
     cursor: default;
+}
 
+#modal-background .modal {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     grid-template-rows: 
@@ -238,6 +240,67 @@ body {
 #modal-rating {
     grid-area: rating;
 } 
+
+#secondary-modal {
+    z-index: 2000;
+}
+
+#secondary-modal .modal {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    gap: var(--space-8);
+}
+
+#secondary-modal h3 {
+    margin: 0;
+}
+
+#secondary-modal .tag-list {
+    background: var(--grey-100);
+    min-width: 400px;
+    border-radius: var(--space-8);
+    height: auto;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1.7rem;
+    grid-auto-rows: 1.7rem;
+    grid-auto-flow: row;
+    padding: var(--space-8);
+    gap: var(--space-8);
+    border: 1px var(--grey-400) solid;
+}
+
+#secondary-modal .tag-list .tag-preview {
+    font-size: 0.8rem;
+    background: var(--grey-50);
+    font-weight: 500;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: var(--space-4);
+    border-radius: var(--space-4);
+    cursor: pointer;
+}
+
+.tag-preview.implied {
+    box-shadow: 0px var(--space-4) 0 var(--green-600);
+}
+
+.tag-preview.implied:hover {
+    box-shadow: 0 var(--space-8) 0 var(--green-600);
+}
+
+#secondary-modal .tag-list .tag-preview:hover {
+    background: white;
+    transform: translateY(calc(-1 * var(--space-4)));
+}
+
+#secondary-modal .modal-bottom {
+    display: flex;
+    justify-content: flex-end;
+}
 
 #upload-main-area {
     display: flex;

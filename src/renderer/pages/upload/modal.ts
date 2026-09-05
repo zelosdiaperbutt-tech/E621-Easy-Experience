@@ -10,6 +10,8 @@ import { ExclusiveButton } from '../../components/exclusiveButton.js';
 import { ConditionButton } from '../../components/conditionButton.js';
 import { ConditionalButton } from '../../components/conditionalButton.js';
 
+import { openSecondaryModal, debouncedTagPreview } from './autocomplete.js';
+
 modalBackground.addEventListener('show', () => {
     modalBackground.classList.remove('modal-hidden')
 })
@@ -240,3 +242,155 @@ const createNewModalSource = (value: string = "") => {
     sourceInput.setAttribute('value', value)
     return sourceInput;
 }
+
+enum Gender {
+    Male = "male",
+    Female = "female",
+    Andromorph = "andromorph",
+    Gynomorph = "gynomorph",
+    Hermaphrodite = "hermaphrodite",
+    MaleHerm = "male-herm",
+    Ambiguous = "ambiguous"
+}
+
+enum Relations {
+    MM = "m/m",
+    MF = "m/f",
+    MAnd = "m/and",
+    MGyn = "m/gyn",
+    MHerm = "m/herm",
+    MMherm = "m/mherm",
+    MAmb = "m/amb",
+    FF = "f/f",
+    FAnd = "f/and",
+    FGyn = "f/gyn",
+    FHerm = "f/herm",
+    FMherm = "f/mherm",
+    FAmb = "f/amb",
+    AndAnd = "and/and",
+    AndGyn = "and/gyn",
+    AndHerm = "and/herm",
+    AndMherm = "and/mherm",
+    AndAmb = "and/amb",
+    GynGyn = "gyn/gyn",
+    GynHerm = "gyn/herm",
+    GynMherm = "gyn/mherm",
+    GynAmb = "gyn/amb",
+    HermHerm = "herm/herm",
+    HermMherm = "herm/mherm",
+    HermAmb = "herm/amb",
+    MhermMherm = "mherm/mherm",
+    MhermAmb = "mherm/amb",
+    AmbAmb = "amb/amb"
+}
+
+enum SpeciesType {
+    Anthro = "anthro",
+    Feral = "feral",
+    Humanoid = "humanoid",
+    Human = "human",
+    Taur = "taur"
+}
+
+enum NumberOfCharacters {
+    Zero = "zero",
+    Solo = "solo",
+    Duo = "duo",
+    Trio = "trio",
+    Group = "group",
+    Unset = "unset"
+}
+
+const genderToTag = (g: Gender): string => {
+    if (g === Gender.Ambiguous) return "ambiguous_gender"
+    if (g === Gender.MaleHerm) return "maleherm"
+
+    return g.toString();
+}
+
+const relationsToTag = (r: Relations): string => {
+    const map = new Map<Relations, string>([
+        [Relations.MM, "male/male"],
+        [Relations.MF, "male/male"],
+        [Relations.MAnd, "andromorph/male"],
+        [Relations.MGyn, "gynomorph/male"],
+        [Relations.MHerm, "herm/male"],
+        [Relations.MMherm, "maleherm/male"],
+        [Relations.MAmb, "male/ambiguous"],
+        [Relations.FF, "female/female"],
+        [Relations.FAnd, "andromorph/female"],
+        [Relations.FGyn, "gynomorph/female"],
+        [Relations.FHerm, "herm/female"],
+        [Relations.FMherm, "maleherm/female"],
+        [Relations.FAmb, "female/ambiguous"],
+        [Relations.AndAnd, "andromorph/andromorph"],
+        [Relations.AndGyn, "andromorph/gynomorph"],
+        [Relations.AndHerm, "andromorph/hermaphrodite"],
+        [Relations.AndMherm, "maleherm/andromorph"],
+        [Relations.AndAmb, "andromorph/ambiguous"],
+        [Relations.GynGyn, "gynomorph/gynomorph"],
+        [Relations.GynHerm, "gynomorph/hermaphrodite"],
+        [Relations.GynMherm, "maleherm/gynomorph"],
+        [Relations.GynAmb, "gynomorph/ambiguous"],
+        [Relations.HermHerm, "herm/herm"],
+        [Relations.HermMherm, "maleherm/herm"],
+        [Relations.HermAmb, "herm/ambiguous"],
+        [Relations.MhermMherm, "maleherm/maleherm"],
+        [Relations.MhermAmb, "maleherm/ambiguous"],
+        [Relations.AmbAmb, "ambiguous/ambiguous"]
+    ]);
+
+    return map.get(r) ?? "";
+}
+
+const speciesTypeToTag = (sT: SpeciesType): string => {
+    return sT.toString()
+}
+
+const numberOfCharactersToTag = (n: NumberOfCharacters): string => {
+    if (n === NumberOfCharacters.Unset) return ""
+    if (n === NumberOfCharacters.Zero) return "zero_pictured"
+
+    return n.toString()
+}
+
+
+const aggregateCurrentTags = (): string[] => {
+    let tags: string[] = [];
+
+    modalBackground.querySelectorAll<SelectableButton>('#modal-species-types selectable-button[selected="true"]').forEach(button => {
+        tags.push(speciesTypeToTag(button.value as SpeciesType))
+    })
+    modalBackground.querySelectorAll<ConditionalButton>('#modal-genders condition-button[selected="true"]').forEach(button => {
+        tags.push(genderToTag(button.value as Gender))
+    })
+    modalBackground.querySelectorAll<ConditionalButton>('#modal-relations conditional-button[active="true"][selected="true"]').forEach(button => {
+        if (button.value === "") return;
+        tags.push(relationsToTag(button.value as Relations))
+    })
+    modalAddSourceButton.querySelectorAll<ExclusiveButton>('#modal-characters exclusive-button[group-name="modal-character-number"][selected="true"]').forEach(button => {
+        tags.push(numberOfCharactersToTag(button.value as NumberOfCharacters))
+    })
+
+    tags = tags.concat(
+            modalBackground.querySelector<HTMLTextAreaElement>('#modal-characters textarea')!.value.split(' ')
+        ).concat(
+            modalBackground.querySelector<HTMLTextAreaElement>('#modal-general textarea')!.value.split(' ')
+        ).concat(
+            modalBackground.querySelector<HTMLTextAreaElement>('#modal-species textarea')!.value.split(' ')
+        ).concat(
+            modalBackground.querySelector<HTMLTextAreaElement>('#modal-creators textarea')!.value.split(' ')
+        )
+    
+
+    return tags.filter(t => t.trim() !== "");
+}
+
+document.querySelector<HTMLButtonElement>('#tag-preview-button')?.addEventListener('click', async () => {
+    
+    const currentTags = aggregateCurrentTags()
+    if (currentTags.length === 0) return;
+
+    await debouncedTagPreview(currentTags)
+    openSecondaryModal()
+})

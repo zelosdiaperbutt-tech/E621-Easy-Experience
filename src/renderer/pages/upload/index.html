@@ -19,6 +19,17 @@
     <script type="module" src="./modal.js" defer></script>
 </head>
 <body>
+
+    <div id="secondary-modal" class="modal-background modal-hidden">
+        <div class="modal">
+            <h3>Tag Preview</h3>
+            <div class="tag-list"></div>
+            <div class="modal-bottom">
+                <button>Close</button>
+            </div>
+        </div>
+    </div>
+
     <ul id="suggestions" data-active="false">
         <li class="autocomplete-suggestion general-tag">general</li>
         <li class="autocomplete-suggestion artist-tag">artist</li>
@@ -34,7 +45,6 @@
 
     <div id="modal-background" class="modal-background modal-hidden"> <!-- modal-hidden -->
         <div class="modal" role="dialog" aria-modal="true">
-            
 
             <div class="modal-section" id="left-modal">
                 <div id="content-container">
@@ -148,6 +158,7 @@
             </div>
             
             <footer id="modal-footer">
+                <button id="tag-preview-button">Tag Preview</button>
                 <button class="button-danger" id="modal-cancel-button">Cancel</button>
                 <button class="button-good" id="modal-confirm-button">Confirm</button>
             </footer>
