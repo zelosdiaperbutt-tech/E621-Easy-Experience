@@ -26,6 +26,14 @@ export class ImageUploadItem extends HTMLElement implements UploadItem {
         return this.getAttribute('type') ?? "";
     }
 
+    get itemID(): number {
+        return Number(this.getAttribute('item-id')) ?? 0;
+    }
+
+    set itemID(n: number) {
+        this.setAttribute('item-id', n.toString())
+    }
+
     set rating(r: 's'|'q'|'e'|'u') {
         this.setAttribute('rating', r)
     }

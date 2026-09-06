@@ -20,4 +20,8 @@ contextBridge.exposeInMainWorld('api', {
 contextBridge.exposeInMainWorld('electronAPI', {
     getFilePath: (file: File): string => { return webUtils.getPathForFile(file); },
     fileSelectDialog: (): Promise<FileInfo[]> => ipcRenderer.invoke('dialog:file-select')
+}),
+
+contextBridge.exposeInMainWorld('uploadItems', {
+    getID: (): Promise<number> => ipcRenderer.invoke('get-id')
 })

@@ -6,6 +6,7 @@ import path from 'node:path';
 
 import * as saveSecure from './workers/saveSecure'
 import * as api from './api'
+import {advanceCounter} from './services/postIds'
 
 ipcMain.handle('save-api-key', async (_, key: string) => {
     try {
@@ -37,7 +38,6 @@ ipcMain.handle('get-username', async () => {
 ipcMain.handle('api-create-post', async (_, filePath, tags, sources, rating, description, parentId) => {
     return api.createPost(filePath, tags, sources, rating, description, parentId)   // Calling the createPost function directly will not go on forever, the queue will eventually take its place.
 })
-
 
 
 async function getFileSize(filePath: string): Promise<number> {
@@ -77,4 +77,8 @@ ipcMain.handle('dialog:file-select', async () => {
     }
 
     return fileInfo;
+})
+
+ipcMain.handle('get-id', async () => {
+    return advanceCounter()
 })

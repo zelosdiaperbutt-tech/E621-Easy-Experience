@@ -98,7 +98,7 @@ mainAreaFileDrop.addEventListener('dragleave', () => {
     mainAreaFileDrop.classList.remove('drag-over')
 })
 
-mainAreaFileDrop.addEventListener('drop', (event: DragEvent) => {
+mainAreaFileDrop.addEventListener('drop', async (event: DragEvent) => {
     event.preventDefault();
 
     mainAreaFileDrop.classList.remove('drag-over');
@@ -116,10 +116,10 @@ mainAreaFileDrop.addEventListener('drop', (event: DragEvent) => {
 
         switch(mediaType) {
             case 'image':
-                uploadElement = createImageUploadItem(path, file.name, file.type, file.size)
+                uploadElement = await createImageUploadItem(path, file.name, file.type, file.size)
                 break;
             case 'video':
-                uploadElement = createVideoUploadItem(path, file.name, file.type, file.size)
+                uploadElement = await createVideoUploadItem(path, file.name, file.type, file.size)
                 break;
         }
         
@@ -153,10 +153,10 @@ document.querySelectorAll<HTMLElement>('.open-file-select').forEach(fileSelect =
 
             switch (mediaType) {
                 case 'image':
-                    uploadElement = createImageUploadItem(files[i].path, files[i].name, files[i].type, files[i].size);
+                    uploadElement = await createImageUploadItem(files[i].path, files[i].name, files[i].type, files[i].size);
                     break;
                 case 'video':
-                    uploadElement = createVideoUploadItem(files[i].path, files[i].name, files[i].type, files[i].size)
+                    uploadElement = await createVideoUploadItem(files[i].path, files[i].name, files[i].type, files[i].size)
                     break;
             }
 
@@ -197,24 +197,26 @@ export const getSizeString = (bytes: number): string => {
  * @param size The size of the file in raw bytes that will be formatted, supplemental information
  * @returns The upload image item.
  */
-const createImageUploadItem = (path: string, name: string, type: string, size: number): HTMLElement => {
+const createImageUploadItem = async (path: string, name: string, type: string, size: number): Promise<HTMLElement> => {
     
     const item = document.createElement('image-item')
     item.setAttribute('path', path)
     item.setAttribute('name', name)
     item.setAttribute('type', type)
     item.setAttribute('size', size.toString())
+    item.setAttribute('item-id', (await window.uploadItems.getID()).toString())
     return item;
 
 }
 
 
-const createVideoUploadItem = (path: string, name: string, type: string, size: number): HTMLElement => {
+const createVideoUploadItem = async (path: string, name: string, type: string, size: number): Promise<HTMLElement> => {
     const item = document.createElement('video-item')
     item.setAttribute('path', path)
     item.setAttribute('name', name)
     item.setAttribute('type', type)
     item.setAttribute('size', size.toString())
+    item.setAttribute('item-id', (await window.uploadItems.getID()).toString())
     return item;
 }
 

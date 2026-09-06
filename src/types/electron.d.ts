@@ -6,6 +6,11 @@ declare global {
             getFilePath(file: File): string;
             fileSelectDialog(): Promise<FileInfo[]>;
         }
+        uploadItems: {
+            getID(): Promise<number>;
+        }
+    }
+
     }
 
     interface UploadItem {
