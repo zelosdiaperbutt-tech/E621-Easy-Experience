@@ -11,8 +11,6 @@ declare global {
         }
     }
 
-    }
-
     interface UploadItem {
         get path(): string;
         get name(): string;
