@@ -1,10 +1,11 @@
+import { Network } from "node:inspector/promises";
+import { RateLimitError, NetworkError, ApiError } from "./Errors";
 
-class QueueManager implements ActionContext {
+export class QueueManager implements ActionContext {
 
     static assignID(action: QueueAction): string {
         return Date.now().toString()
     }
-
 
     private actions = new Map<string, QueueAction>();
 
@@ -112,6 +113,7 @@ class QueueManager implements ActionContext {
             console.log(`Action ${action.id} completed`)
 
         } catch (err) {
+            console.log("Error in execute:", err)
             await this.handleError(action, err);
         }
     }
@@ -120,7 +122,7 @@ class QueueManager implements ActionContext {
         action: QueueAction
     ): Promise<unknown> {
 
-        return action.execute(this)
+        return action.execute()
     }
 
     private async handleError(
@@ -129,26 +131,28 @@ class QueueManager implements ActionContext {
     ): Promise<void> {
         // check is the error is an instance of an error class and handle things
         // with the action appropriately.
-        // Example:
+        console.log(error)
 
-        /*
         if (error instanceof RateLimitError) {
-
             action.status = "waiting";
-            action.nextAttemptAt = error.retryAt;
+            action.nextAttemptAt = error.retryAt
 
             return;
         }
 
-
         if (error instanceof NetworkError) {
+            action.status = "pending"
+            return;
+        }
 
-            this.retryOrFail(action);
+        if (error instanceof ApiError) {
+            if (error.statusCode >= 500 && action.attempts < action.maxAttempts) {
+                action.status = "pending"
+            } else {
+                action.status = "failed"
+            }
 
             return;
-        } 
-        */
+        }
     }
-
-
 }

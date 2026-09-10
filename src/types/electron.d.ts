@@ -183,7 +183,7 @@ declare global {
         nextAttemptAt?: number;
         error?: QueueError;
 
-        execute(queueManager: QueueManager): Promise<TResult>;
+        execute(): Promise<TResult>;
     }
 
     interface ActionContext {

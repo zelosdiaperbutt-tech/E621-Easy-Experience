@@ -1,50 +1,29 @@
 
 export class UploadPostActionInput {
-    tags: string[];
-    filePath: string;
-    rating: 's'|'q'|'e';
-    sources: string[];
-    description?: string;
-    parentId?: string; // E621 ID of the parent, not local ID.
-    asPending: boolean = true;
-
     constructor(
-        filePath: string, 
-        tags: string[], 
-        sources: string[], 
-        rating:'s'|'q'|'e',
-        options: {
+        public readonly filePath: string, 
+        public readonly tags: string[], 
+        public readonly sources: string[], 
+        public readonly rating:'s'|'q'|'e',
+        public readonly options: {
             description?: string,
             parentId?: string,
             asPending: boolean
-        }) {
-        
-        this.tags = tags;
-        this.filePath = filePath
-        this.sources = sources;
-        this.rating = rating;
-        this.description = options.description
-        this.parentId = options.parentId
-        this.asPending = options.asPending
-    }
+        }
+    ) {}
 }
 
 export class UploadPostActionResult {
-    success: boolean;
-    location: string;
-    post_id: number;
-    reason?: string; // only appears if success is false
-
-    constructor(success: boolean, location: string, post_id: number, reason?: string) {
-        this.success = success;
-        this.location = location;
-        this.post_id = post_id
-        this.reason = reason
-    }
+    constructor(
+        public readonly location: string, 
+        public readonly post_id: number
+    ) {}
 }
 
+import {NetworkError, ApiError, RateLimitError} from './Errors.js'
 import {getHeaders} from '../api.js'
 import {readFile} from 'node:fs/promises'
+import { QueueManager } from './QueueManager.js'
 
 export class UploadPostAction implements QueueAction<UploadPostActionInput, UploadPostActionResult> {
     id: string = QueueManager.assignID(this);
@@ -67,8 +46,10 @@ export class UploadPostAction implements QueueAction<UploadPostActionInput, Uplo
         this.dependencies = dependencies;
     }
 
-    async execute(queueManager: QueueManager): Promise<UploadPostActionResult> {
+    async execute(): Promise<UploadPostActionResult> {
         
+        // Taking all of the data from the input and turning it into the acceptable 
+        // format that the endpoint expects
         const formData = new FormData();
         const fileBytes = await readFile(this.input.filePath)
         const file = new File([fileBytes], 'uploaded_file')
@@ -81,29 +62,42 @@ export class UploadPostAction implements QueueAction<UploadPostActionInput, Uplo
         formData.append('upload[tag_string]', this.input.tags.join(' '))
         formData.append('upload[rating]', this.input.rating)
         
-        if (this.input.description) formData.append('upload[description]', this.input.description)
-        if (this.input.parentId) formData.append('upload[parent_id]', this.input.parentId)
+        if (this.input.options.description) formData.append('upload[description]', this.input.options.description)
+        if (this.input.options.parentId) formData.append('upload[parent_id]', this.input.options.parentId)
 
         const headers = getHeaders()
 
+        // Networking and error management
+
+        let response: Response;
+
         try {
-            const response = await fetch(`https://e621.net/uploads.json`, {
+            response = await fetch(`https://e621.net/uploads.json`, {
                 method: "POST",
                 body: formData,
                 headers: headers
             })
 
-            if (!response.ok) {
-                console.log(response)
-                // do something with incorrect response
-            }
-
-            const jsonResponse = await response.json()
-            return new UploadPostActionResult(true, jsonResponse.location, jsonResponse.post_id)
         } catch (err) {
             console.log(err)
+            throw new NetworkError("Network Error");
+        }
+
+        if (response.status === 429) {
+            throw new RateLimitError(Date.now() + 3600 * 1000)
+        }
+
+        if(!response.ok) {
+            throw new ApiError(response.status, "The API rejected the post")
+        }
+
+
+        const jsonResponse = await response.json()
+        
+        if (jsonResponse?.reason) {
+            throw new ApiError(response.status, jsonResponse.reason)
         }
         
-        throw new Error("Not implemented");
+        return new UploadPostActionResult(jsonResponse.location, jsonResponse.post_id)
     }
 }
