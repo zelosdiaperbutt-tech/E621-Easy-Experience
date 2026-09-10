@@ -1,13 +1,21 @@
-import { Network } from "node:inspector/promises";
 import { RateLimitError, NetworkError, ApiError } from "./Errors";
 
 export class QueueManager implements ActionContext {
 
+    static currentId: number = 1;
     static assignID(action: QueueAction): string {
-        return Date.now().toString()
+        const current = this.currentId;
+        this.currentId++;
+        return current.toString();
     }
 
     private actions = new Map<string, QueueAction>();
+    private processing: boolean = false;
+    private wakeUpTimer?: ReturnType<typeof setTimeout>
+
+    start(): void {
+        this.process();
+    }
 
     add(action: QueueAction): void {
         this.actions.set(action.id, action)
@@ -89,20 +97,83 @@ export class QueueManager implements ActionContext {
         return true;
     }
 
-    async process(): Promise<void> {
-        while (true) {
-            const action = [...this.actions.values()]
-                .find(action => this.isReady(action));
+    private async process(): Promise<void> {
+        console.log("QueueManager Process running")
+        if (this.processing) return;
+        this.processing = true;
 
-            if (!action) break;
+        this.updateActionStatuses()
 
-            await this.execute(action);
+        try {
+            while (true) {
+                const action = [...this.actions.values()]
+                    .find(action => this.isReady(action));
+    
+                if (!action) {
+                    console.log("No action is ready")
+                    break;
+                }
+
+                console.log("action executing");
+                await this.execute(action);
+            }
+
+            this.scheduleNextWakeUp();
+        } finally {
+            this.processing = false;
         }
+
+    }
+
+    private updateActionStatuses() {
+        this.actions.forEach(action => {
+            if (action.status === "waiting" && action.nextAttemptAt && action.nextAttemptAt < Date.now()) {
+                action.status = "pending";
+                action.nextAttemptAt = undefined;
+            }
+
+            if (action.status === "pending" && action.nextAttemptAt) {
+                action.status = "waiting";
+            }
+        })
+    }
+
+    private scheduleNextWakeUp(): void {
+        const nextTime = this.findNextAttemptTime();
+
+        if (nextTime === undefined) {
+            return
+        }
+
+        const delay = Math.max(0, nextTime - Date.now())
+
+        this.wakeUpTimer = setTimeout(() => this.process(), delay)
+    }
+
+    private findNextAttemptTime(): number | undefined {
+        let nextTime: number | undefined;
+
+        for (const action of this.actions.values()) {
+            if (action.status !== "waiting" || action.nextAttemptAt === undefined) {
+                continue;
+            }
+
+            if (nextTime === undefined || action.nextAttemptAt < nextTime) {
+                nextTime = action.nextAttemptAt;
+            }
+        }
+
+        return nextTime;
     }
 
     private async execute(action: QueueAction): Promise<void> {
         action.status = "running";
         action.attempts++;
+
+        if (action.attempts > action.maxAttempts) {
+            action.status = "failed"
+            return;
+        }
 
         try {
             const result = await this.executeAction(action)
@@ -146,7 +217,7 @@ export class QueueManager implements ActionContext {
         }
 
         if (error instanceof ApiError) {
-            if (error.statusCode >= 500 && action.attempts < action.maxAttempts) {
+            if (error.statusCode >= 500 && action.attempts <= action.maxAttempts) {
                 action.status = "pending"
             } else {
                 action.status = "failed"

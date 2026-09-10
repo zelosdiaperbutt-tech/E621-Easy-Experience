@@ -5,25 +5,6 @@ import path from 'node:path'
 import './ipcHandlers'
 import * as postIds from './services/postIds'
 
-
-// Testing queueManager
-import {QueueManager} from './workers/QueueManager.js'
-import { UploadPostAction, UploadPostActionInput, UploadPostActionResult } from './workers/UploadPostAction'
-
-const qm: QueueManager = new QueueManager()
-const postInput = new UploadPostActionInput(
-    "C://shutup/articulations.jpg",
-    ["diaper", "fart"],
-    [],
-    "s",
-    {description: "", parentId: "", asPending: true}
-)
-const postAction = new UploadPostAction(postInput, [])
-qm.add(postAction)
-
-qm.process()
-
-
 // This is going to be replaced with a better system in the future, only testing for right now.
 let firstOpen = false;
 const initialPage = (hasBeenSetup: boolean): string => {

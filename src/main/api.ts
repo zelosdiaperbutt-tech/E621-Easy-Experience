@@ -21,6 +21,7 @@ export const getHeaders = () => {
  * @param description A string that will go in the description of the post
  * @param parentId Optional, the parent if of the post is there is going to be one
  * @returns 
+ * @deprecated
  */
 export const createPost = async (filePath: string, tags: string, sources: string[], rating: 's'|'q'|'e', description:string = "", parentId:number|null) => {
 
