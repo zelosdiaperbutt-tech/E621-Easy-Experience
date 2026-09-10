@@ -138,4 +138,55 @@ declare global {
         Species,
         General
     }
+
+    type ActionStatus = 
+        | "pending"
+        | "running"
+        | "waiting"
+        | "completed"
+        | "failed"
+
+    type QueueError = 
+        | {
+            type: "rate-limit";
+            retryAt: number;
+        }
+        | {
+            type: "network";
+            message: string;
+        }
+        | {
+            type: "api";
+            statusCode: number,
+            message: string
+        }
+        | {
+            type: "permanent";
+            message: string;
+        }
+    
+    interface QueueAction<TInput = unknown, TResult = unknown> {
+        id: string;
+        type: string;
+
+        input: TInput;
+
+        dependencies: string[]; // IDs of actions that must be completed first
+
+        status: ActionStatus;
+
+        result?: TResult; // Data returned by the action
+
+        attempts: number;
+        maxAttempts: number;
+
+        nextAttemptAt?: number;
+        error?: QueueError;
+
+        execute(queueManager: QueueManager): Promise<TResult>;
+    }
+
+    interface ActionContext {
+        getResult<T>(actionId: string): T;
+    }
 }
