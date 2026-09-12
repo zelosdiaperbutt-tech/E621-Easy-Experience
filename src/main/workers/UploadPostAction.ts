@@ -238,4 +238,19 @@ export class UploadPostAction implements QueueAction<UploadPostActionInput, Uplo
         
         return new UploadPostActionResult(jsonResponse.location, jsonResponse.post_id)
     }
+
+    serialize() {
+        return {
+            type: this.type,
+            id: this.id,
+            input: this.input,
+            dependencies: this.dependencies,
+            status: this.status.toString(),
+            result: this.result,
+            attempts: this.attempts,
+            maxAttempts: this.maxAttempts,
+            nextAttemptAt: this.nextAttemptAt,
+            error: this.error
+        }
+    }
 }

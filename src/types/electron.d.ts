@@ -208,6 +208,14 @@ declare global {
         error?: QueueError;
 
         execute(): Promise<TResult>;
+        serialize(): {
+            type: string,
+            status: string,
+            attempts: number,
+            maxAttempts: number,
+            dependencies: string[],
+            nextAttemptAt: number|undefined
+        };
     }
 
     interface ActionContext {
