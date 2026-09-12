@@ -384,15 +384,122 @@ p.dull-text {
 }
 
 #upload-main-area-bulkaction-bar {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    grid-template-areas: "left right" "common common";
     align-items: baseline;
+
     background: white;
     padding: var(--space-12) var(--space-8);
     border-radius: var(--space-8);
     line-height: 0;
     border: 1px var(--grey-200) solid;
+}
+
+.grid-area-left {
+    grid-area: left;
+    justify-self: start;
+}
+
+.grid-align-right {
+    grid-area: right;
+    justify-self: end;
+}
+
+#bulkaction-bar-common {
+    grid-area: common;
+
+    background: var(--blue-50);
+    padding: var(--space-8);
+    border: 1px var(--grey-500) solid;
+    border-radius: var(--space-8);
+
+    display: grid;
+    gap: var(--space-8);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: 
+        auto 
+        auto
+        auto 
+        1fr  
+        auto 
+        auto;
+    grid-template-areas: 
+        "rating creators"
+        "characters species"
+        "relations relations"
+        "general description"
+        "general parent";
+}
+
+@media (width >= 1350px) {
+    #bulkaction-bar-common {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-rows: auto auto 1fr;
+        grid-template-areas: 
+            "rating creators parent"
+            "characters species relations"
+            "general general description"
+    }
+}
+
+#common-rating {
+    grid-area: rating;
+}
+
+#common-characters {
+    grid-area: characters;
+}
+
+#common-relationships {
+    grid-area: relations;
+}
+
+#common-species {
+    grid-area: species;
+}
+
+#common-general {
+    grid-area: general;
+}
+
+#common-description {
+    grid-area: description;
+}
+
+#common-general textarea, #common-description textarea {
+    height: 100%;
+}
+
+#common-creators {
+    grid-area: creators;
+}
+
+#common-parent {
+    grid-area: parent;
+}
+
+.common-section {
+    border: 1px var(--grey-300) solid;
+    padding: var(--space-4);
+    border-radius: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: var(--space-4);
+    background: white;
+}
+
+.common-section textarea {
+    width: 100%;
+    resize: vertical;
+    background: var(--grey-50);
+    border-radius: var(--space-8);
+}
+
+.common-section h3 {
+    padding: 0;
 }
 
 

@@ -58,7 +58,7 @@ ipcMain.handle('dialog:file-select', async () => {
         filters: [
             {name: 'All', extensions: ['png', 'apng', 'pjp', 'jfif', 'jpe', 'pjpeg', 'jpeg', 'jpg', 'webp', 'webm', 'gif', 'm4v', 'mp4', 'webp']},
             {name: 'Images', extensions: ['png', 'apng', 'pjp', 'jfif', 'jpe', 'pjpeg', 'jpeg', 'jpg', 'webp']},
-            {name: 'Videos', extensions: ['webm', 'gif', 'm4v', 'mp4', 'webp']}
+            {name: 'Videos', extensions: ['webm', 'gif', 'm4v', 'mp4']}
         ]
     });
 
@@ -83,7 +83,6 @@ ipcMain.handle('get-id', async () => {
 })
 
 ipcMain.handle('queue:newUploadAction', (_, item: UploadItemInfo, dependencies: string[], asPending: boolean) => {
-    console.log("IPC ITEM:", item)
     const input = UploadPostActionInput.convert(item, asPending)
     const action = new UploadPostAction(input, dependencies)
     queueManager.add(action)

@@ -210,6 +210,7 @@ const createImageUploadItem = async (path: string, name: string, type: string, s
 }
 
 
+
 const createVideoUploadItem = async (path: string, name: string, type: string, size: number): Promise<HTMLElement> => {
     const item = document.createElement('video-item')
     item.setAttribute('path', path)
@@ -220,12 +221,75 @@ const createVideoUploadItem = async (path: string, name: string, type: string, s
     return item;
 }
 
-// uploadGrid.insertAdjacentElement('beforeend', createVideoUploadItem(
-//     "C:\\Users\\Mater\\OneDrive\\Desktop\\Call me Avatar 😏 [CYJTeUQVXAY].webm",
-//     "Call me Avatar",
-//     "video/webm",
-//     5103616
-// ))
+function commonElements<T>(arrays: T[][]): T[] {
+    if (arrays.length === 0) return [];
+    
+    return arrays.reduce((accumulator, currentArray) => {
+        return accumulator.filter(element => currentArray.includes(element))
+    })
+}
+
+function commonElement<T>(values: T[]): T | null {
+    if (values.length === 0) return null;
+    if (values.length === 1) return structuredClone(values[0]);
+    
+    for (let i = 0; i < values.length - 1; i++) {
+        if (values[i] !== values[i + 1]) return null;
+    }
+    
+    return structuredClone(values[0])
+}
+
+const findCommonalitiesInSelectedElements = (items: UploadItem[]) => {
+    const commonRating = commonElement(items.map(i => i.rating))
+    const commonParent = commonElement(items.map(i => i.parent))
+    const commonDescription = commonElement(items.map(i => i.description))
+    const commonNumberOfCharacters = commonElement(items.map(i => i.numberOfCharacters))
+    
+    const commonCreators = commonElements(items.map(i => i.creators));
+    const commonCharacters = commonElements(items.map(i => i.characters));
+    const commonGenders = commonElements(items.map(i => i.genders));
+    const commonSpecies = commonElements(items.map(i => i.species))
+    const commonGeneral = commonElements(items.map(i => i.general))
+    const commonRelations = commonElements(items.map(i => i.relations))
+    const commonSpeciesTypes = commonElements(items.map(i => i.speciesTypes))
+
+    console.log(commonRating)
+    console.log(commonParent)
+    console.log(commonDescription)
+    console.log(commonNumberOfCharacters)
+    console.log(commonCreators)
+    console.log(commonCharacters)
+    console.log(commonGenders)
+    console.log(commonSpecies)
+    console.log(commonGeneral)
+    console.log(commonRelations)
+    console.log(commonSpeciesTypes)
+}
+
+async function start() {
+    const item1: ImageUploadItem = await createImageUploadItem("C:\\Users\\Mater\\Downloads\\HRyyxL5aIAAkZ-L.jpg", "fox diaper gaming.jpg", '.jpg', 1) as ImageUploadItem
+    item1.rating = "e";
+    item1.genders = ["male" as Gender]
+    item1.general = ["diaper", "wearing_diaper", "sagging_diaper", "used_diaper", "soiled_diaper", "looking_back", "simple_background", "white_diaper"]
+    item1.creators = ['syeenyeen']
+    item1.species = ['fox']
+
+    const item2: ImageUploadItem = await createImageUploadItem("C:\\Users\\Mater\\Downloads\\HRzqhvoa4AAr4ET.jpg", "rocky handsfree blorts.jpg", ".jpg", 2) as ImageUploadItem;
+    item2.rating = "e";
+    item2.genders = ["male" as Gender]
+    item2.general = ["diaper", "wearing_diaper", "used_diaper", "soiled_diaper", "cum", "simple_background"]
+    item2.creators = ['poofbuttrocky']
+    item2.species = ['wolf']
+
+
+    uploadGrid.insertAdjacentElement('beforeend', item1)
+    uploadGrid.insertAdjacentElement('beforeend', item2)
+
+    findCommonalitiesInSelectedElements([item1, item2])
+}
+
+start()
 
 // In case there are pre-generated upload items, the bulk action bar
 // will automatically have the correct label.
