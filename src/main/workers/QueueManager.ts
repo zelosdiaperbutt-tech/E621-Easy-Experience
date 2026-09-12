@@ -19,6 +19,8 @@ class QueueManager implements ActionContext {
 
     add(action: QueueAction): void {
         this.actions.set(action.id, action)
+
+        this.process()
     }
 
     get(id: string): QueueAction | undefined {
