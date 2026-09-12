@@ -182,7 +182,6 @@ class QueueManager implements ActionContext {
             action.status = "completed"
 
         } catch (err) {
-            console.log("Error in execute:", err)
             await this.handleError(action, err);
         }
     }

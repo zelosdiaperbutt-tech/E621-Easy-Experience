@@ -221,8 +221,6 @@ const updateAutocompleteSuggestions = (suggestions: AutocompleteSuggestion[], te
         item.dataset.value = sug.name
 
         item.addEventListener('click', () => {
-            // replace the current typed word with the value of the suggestion
-            console.log("click event fired")
             replaceCurrentWord(textarea, item.dataset.value ?? "")
 
             hideAutocompleteSuggestions()

@@ -23,8 +23,6 @@ class QueueStorage {
             actions: actions.map(a => a.serialize())
         }
 
-        console.log(JSON.stringify(data));
-
         fs.writeFileSync(this.filePath, JSON.stringify(data, null, 2), 'utf-8')
     }
 

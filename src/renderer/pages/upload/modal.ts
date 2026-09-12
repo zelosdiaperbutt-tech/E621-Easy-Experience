@@ -439,7 +439,6 @@ document.querySelector<HTMLButtonElement>('#tag-preview-button')?.addEventListen
 
     debouncedTagPreview(currentTags, async (allTags) => {
         const tagInfo = await bulkTagInfo(allTags)
-        console.log(tagInfo)
 
         tagPreview.innerHTML = "";
         tagInfo.forEach(tag => {
