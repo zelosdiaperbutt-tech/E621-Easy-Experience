@@ -1,11 +1,11 @@
 import { RateLimitError, NetworkError, ApiError } from "./Errors";
 
-export class QueueManager implements ActionContext {
+class QueueManager implements ActionContext {
 
     static currentId: number = 1;
     static assignID(action: QueueAction): string {
-        const current = this.currentId;
-        this.currentId++;
+        const current = QueueManager.currentId;
+        QueueManager.currentId++;
         return current.toString();
     }
 
@@ -98,7 +98,6 @@ export class QueueManager implements ActionContext {
     }
 
     private async process(): Promise<void> {
-        console.log("QueueManager Process running")
         if (this.processing) return;
         this.processing = true;
 
@@ -114,7 +113,6 @@ export class QueueManager implements ActionContext {
                     break;
                 }
 
-                console.log("action executing");
                 await this.execute(action);
             }
 
@@ -181,8 +179,6 @@ export class QueueManager implements ActionContext {
             action.result = result;
             action.status = "completed"
 
-            console.log(`Action ${action.id} completed`)
-
         } catch (err) {
             console.log("Error in execute:", err)
             await this.handleError(action, err);
@@ -227,3 +223,6 @@ export class QueueManager implements ActionContext {
         }
     }
 }
+
+export const queueManager = new QueueManager();
+export const assignID = QueueManager.assignID

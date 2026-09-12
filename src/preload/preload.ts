@@ -25,3 +25,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
 contextBridge.exposeInMainWorld('uploadItems', {
     getID: (): Promise<number> => ipcRenderer.invoke('get-id')
 })
+
+contextBridge.exposeInMainWorld('queue', {
+    addUploadItem: (item: UploadItem, dependencies: string[], asPending: boolean = true): Promise<string> => {
+        return ipcRenderer.invoke('queue:newUploadAction', item.toData(), dependencies, asPending)
+    }
+})

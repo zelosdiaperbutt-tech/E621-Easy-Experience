@@ -8,6 +8,9 @@ import * as saveSecure from './workers/saveSecure'
 import * as api from './api'
 import {advanceCounter} from './services/postIds'
 
+import {queueManager} from './workers/QueueManager'
+import {UploadPostAction, UploadPostActionInput} from './workers/UploadPostAction'
+
 ipcMain.handle('save-api-key', async (_, key: string) => {
     try {
         saveSecure.saveAPIKey(key);
@@ -81,4 +84,13 @@ ipcMain.handle('dialog:file-select', async () => {
 
 ipcMain.handle('get-id', async () => {
     return advanceCounter()
+})
+
+ipcMain.handle('queue:newUploadAction', (_, item: UploadItemInfo, dependencies: string[], asPending: boolean) => {
+    console.log("IPC ITEM:", item)
+    const input = UploadPostActionInput.convert(item, asPending)
+    const action = new UploadPostAction(input, dependencies)
+    queueManager.add(action)
+    console.log(queueManager)
+    return action.id;
 })

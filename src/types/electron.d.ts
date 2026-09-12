@@ -9,6 +9,9 @@ declare global {
         uploadItems: {
             getID(): Promise<number>;
         }
+        queue: {
+            addUploadItem(item: UploadItem, dependencies: string[], asPending: boolean): Promise<string>;
+        }
     }
 
     interface UploadItem {
@@ -17,8 +20,8 @@ declare global {
         get size(): number;
         get type(): string;
 
-        get rating(r: 's'|'q'|'e'|'u');
-        set rating(): 's'|'q'|'e'|'u';
+        set rating(r: 's'|'q'|'e'|'u');
+        get rating(): 's'|'q'|'e'|'u';
         get creators(): string[];
         set creators(c: string[]);
         get sources(): string[];
@@ -41,6 +44,27 @@ declare global {
         set speciesTypes(sT: SpeciesType[]);
         get numberOfCharacters(): NumberOfCharacters;
         set numberOfCharacters(n: NumberOfCharacters);
+
+        toData(): UploadItemInfo;
+    }
+
+    type UploadItemInfo = {
+        path: string;
+        name: string;
+        size: number;
+        type: string;
+        rating: 's'|'e'|'q'|'u';
+        creators: string[];
+        sources: string[]
+        characters: string[]
+        genders: Gender[];
+        species: string[]
+        general: string[]
+        parent: string;
+        description: string;
+        relations: Relations[];
+        speciesTypes: SpeciesType[];
+        numberOfCharacters: NumberOfCharacters;
     }
 
     type FileInfo = {

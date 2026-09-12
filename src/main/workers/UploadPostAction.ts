@@ -124,7 +124,7 @@ export class UploadPostActionInput {
         }
     ) {}
 
-    static convert(item: UploadItem, asPending: boolean = true): UploadPostActionInput {
+    static convert(item: UploadItemInfo, asPending: boolean = true): UploadPostActionInput {
         if (item.rating === 'u') throw new Error('Rating is a required property')
         if (item.path === "") throw new Error('File path is a required property')
         
@@ -157,10 +157,10 @@ export class UploadPostActionResult {
 import {NetworkError, ApiError, RateLimitError} from './Errors.js'
 import {getHeaders} from '../api.js'
 import {readFile} from 'node:fs/promises'
-import { QueueManager } from './QueueManager.js'
+import { assignID } from './QueueManager.js'
 
 export class UploadPostAction implements QueueAction<UploadPostActionInput, UploadPostActionResult> {
-    id: string = QueueManager.assignID(this);
+    id: string = assignID(this);
     type: string = "uploadPostAction";
     input: UploadPostActionInput;
 

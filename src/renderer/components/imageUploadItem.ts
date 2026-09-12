@@ -155,6 +155,26 @@ export class ImageUploadItem extends HTMLElement implements UploadItem {
         this.addEventListener('click', this.handleClickEvent)
     }
 
+    toData(): UploadItemInfo {
+        return {
+            path: this.path,
+            name: this.name,
+            size: this.size,
+            type: this.type,
+            rating: this.rating,
+            creators: this.creators,
+            sources: this.sources,
+            characters: this.characters,
+            genders: this.genders,
+            species: this.species,
+            general: this.general,
+            parent: this.parent,
+            description: this.description,
+            relations: this.relations,
+            speciesTypes: this.speciesTypes,
+            numberOfCharacters: this.numberOfCharacters
+        }
+    }
 
     private handleSelectEvent = (): void => {
         this.dataset.selected = "true"

@@ -128,6 +128,27 @@ export class VideoUploadItem extends HTMLElement implements UploadItem {
         return (this.getAttribute('number-of-characters') as NumberOfCharacters) ?? ("unset" as NumberOfCharacters);
     }
 
+    toData(): UploadItemInfo {
+        return {
+            path: this.path,
+            name: this.name,
+            size: this.size,
+            type: this.type,
+            rating: this.rating,
+            creators: this.creators,
+            sources: this.sources,
+            characters: this.characters,
+            genders: this.genders,
+            species: this.species,
+            general: this.general,
+            parent: this.parent,
+            description: this.description,
+            relations: this.relations,
+            speciesTypes: this.speciesTypes,
+            numberOfCharacters: this.numberOfCharacters
+        }
+    }
+
     connectedCallback(): void {
         this.classList.add('upload-item')
         this.dataset.selected = "false"

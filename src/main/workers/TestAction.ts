@@ -15,10 +15,10 @@ export class TestActionResult {
 
 
 import {NetworkError, ApiError, RateLimitError} from './Errors.js'
-import { QueueManager } from './QueueManager.js'
+import { assignID } from './QueueManager.js'
 
 export class TestAction implements QueueAction<TestActionInput, TestActionResult> {
-    id: string = QueueManager.assignID(this)
+    id: string = assignID(this)
     type: string = "testAction"
     input: TestActionInput;
     dependencies: string[];
