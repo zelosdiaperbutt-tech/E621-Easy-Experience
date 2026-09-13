@@ -422,15 +422,20 @@ p.dull-text {
         auto 
         auto
         auto 
-        1fr  
-        auto 
-        auto;
+        1fr;
     grid-template-areas: 
         "rating creators"
         "characters species"
-        "relations relations"
+        "relations parent"
         "general description"
-        "general parent";
+}
+
+#bulkaction-bar-common[active="false"] {
+    display: none;
+}
+
+#bulkaction-bar-common h4 {
+    margin: 0.5rem 0;
 }
 
 @media (width >= 1350px) {
@@ -441,6 +446,14 @@ p.dull-text {
             "rating creators parent"
             "characters species relations"
             "general general description"
+    }
+}
+
+@media (width <= 750px) {
+    #bulkaction-bar-common {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: repeat(8, auto);
+        grid-template-areas: "rating" "creators" "characters" "species" "relations" "general" "description" "parent";
     }
 }
 

@@ -61,9 +61,9 @@ export const updateModalInfo = (
         modalContentContainer.insertAdjacentElement('beforeend', videoElement)
     }
 
-    document.querySelector<HTMLElement>('#left-modal .content-name')!.innerText = info.name;
-    document.querySelector<HTMLElement>('#left-modal .format')!.innerText = info.type;
-    document.querySelector<HTMLElement>('#left-modal .file-size')!.innerText = getSizeString(info.size);
+    modalBackground.querySelector<HTMLElement>('#left-modal .content-name')!.innerText = info.name;
+    modalBackground.querySelector<HTMLElement>('#left-modal .format')!.innerText = info.type;
+    modalBackground.querySelector<HTMLElement>('#left-modal .file-size')!.innerText = getSizeString(info.size);
 
     const ratingShorthandConvertion: Map<string, string> = new Map<string, string>();
     ratingShorthandConvertion.set("e", "explicit");
@@ -72,24 +72,24 @@ export const updateModalInfo = (
     ratingShorthandConvertion.set("u", "unset");
     
     if (uploadElement.rating !== 'u') {
-        let ratingButton: ExclusiveButton = document.querySelector<ExclusiveButton>(`exclusive-button[group-name="modal-rating-button"][value="${ratingShorthandConvertion.get(uploadElement.rating)}"]`)!;
+        let ratingButton: ExclusiveButton = modalBackground.querySelector<ExclusiveButton>(`exclusive-button[group-name="modal-rating-button"][value="${ratingShorthandConvertion.get(uploadElement.rating)}"]`)!;
         ratingButton.dispatchEvent(new Event('select'))
     } else {
-        document.querySelectorAll<ExclusiveButton>('exclusive-button[data-groupname="modal-rating-button"]').forEach(button => {
+        modalBackground.querySelectorAll<ExclusiveButton>('exclusive-button[group-name="modal-rating-button"]').forEach(button => {
             button.dispatchEvent(new Event('deselect'));
         })       
     }
 
     uploadElement.speciesTypes.forEach(species => {
-        document.querySelector<SelectableButton>(`selectable-button[value="${species.toString()}"`)?.dispatchEvent(new Event('select'))
+        modalBackground.querySelector<SelectableButton>(`selectable-button[value="${species.toString()}"`)?.dispatchEvent(new Event('select'))
     })
     
     uploadElement.genders.forEach(gender => {
-        document.querySelector(`condition-button[group-name="modal-relations"][value="${gender.toString()}"]`)?.dispatchEvent(new Event('select'));
+        modalBackground.querySelector(`condition-button[group-name="modal-relations"][value="${gender.toString()}"]`)?.dispatchEvent(new Event('select'));
     })
 
     uploadElement.relations.forEach(relation => {
-        document.querySelector(`conditional-button[group-name="modal-relations"][value="${relation.toString()}"]`)?.dispatchEvent(new Event('select'));
+        modalBackground.querySelector(`conditional-button[group-name="modal-relations"][value="${relation.toString()}"]`)?.dispatchEvent(new Event('select'));
     })
 
     if (uploadElement.numberOfCharacters !== ("unset" as NumberOfCharacters)) {
