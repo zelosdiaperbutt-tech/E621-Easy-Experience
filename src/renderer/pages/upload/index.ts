@@ -478,26 +478,34 @@ const reflectChanges = (toChange: string[], initial: string[], final: string[]):
     ]
 }
 
+const commonCancel = document.getElementById('common-cancel')
+const commonConfirm = document.getElementById('common-confirm')
 
 bulkOptions.addEventListener('click', () => {
     const active = commonTagsArea.getAttribute('active') === "true"
     
     if (!active) {
+        if (selectedItems.length === 0) return;
         commonTagsArea.setAttribute('active', 'true')
         startEnteringCommonTags()
-    } else {
-        commonTagsArea.setAttribute('active', 'false')
-        endEnteringCommonTags()
-        const selected = selectedItems.map(item => item as unknown as UploadItem)
-
-        console.log(selected)
-        
-        selected.forEach(i => {
-            updateCommonTags(i)
-        })
     }
 })
 
+commonConfirm?.addEventListener('click', () => {
+    if (commonTagsArea.getAttribute('active') === "true") {
+        endEnteringCommonTags();
+        selectedItems.map(i => i as unknown as UploadItem).forEach(item => {
+            updateCommonTags(item)
+        })
+        commonTagsArea.setAttribute('active', "false")
+    }
+})
+
+commonCancel?.addEventListener('click', () => {
+    if (commonTagsArea.getAttribute('active') === "true") {
+        commonTagsArea.setAttribute('active', 'false')
+    }
+})
 
 async function start() {
     const item1: ImageUploadItem = await createImageUploadItem("C:\\Users\\Mater\\Downloads\\HRyyxL5aIAAkZ-L.jpg", "fox diaper gaming.jpg", '.jpg', 1) as ImageUploadItem
@@ -528,9 +536,6 @@ async function start() {
 }
 
 start()
-
-console.log(reflectChanges(["a", "b", "c"], ["a", "b"], ["a", "b", "d"]))
-console.log(reflectChanges(["a", "b", "c"], ["a", "b"], ["a"]))
 
 // In case there are pre-generated upload items, the bulk action bar
 // will automatically have the correct label.

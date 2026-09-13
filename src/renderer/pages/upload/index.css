@@ -422,12 +422,14 @@ p.dull-text {
         auto 
         auto
         auto 
-        1fr;
+        1fr
+        auto;
     grid-template-areas: 
         "rating creators"
         "characters species"
         "relations parent"
         "general description"
+        "footer footer"
 }
 
 #bulkaction-bar-common[active="false"] {
@@ -446,14 +448,15 @@ p.dull-text {
             "rating creators parent"
             "characters species relations"
             "general general description"
+            "footer footer footer"
     }
 }
 
 @media (width <= 750px) {
     #bulkaction-bar-common {
         grid-template-columns: minmax(0, 1fr);
-        grid-template-rows: repeat(8, auto);
-        grid-template-areas: "rating" "creators" "characters" "species" "relations" "general" "description" "parent";
+        grid-template-rows: repeat(9, auto);
+        grid-template-areas: "rating" "creators" "characters" "species" "relations" "general" "description" "parent" "footer";
     }
 }
 
@@ -491,6 +494,14 @@ p.dull-text {
 
 #common-parent {
     grid-area: parent;
+}
+
+#common-footer {
+    grid-area: footer;
+    display:flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: baseline;
 }
 
 .common-section {
