@@ -1,10 +1,10 @@
-import { safeStorage } from 'electron'
+import { safeStorage, app } from 'electron'
 import path from 'node:path'
 import fs from 'node:fs'
 
 // FOR THE LOVE OF GOD, DO NOT SHIP THIS CODE
-const API_KEY_ENCRYPTION_LOCATION = path.join(__dirname, 'secure_key.dat');
-const USERNAME_STORAGE = path.join(__dirname, 'username.dat')
+const API_KEY_ENCRYPTION_LOCATION = path.join(app.getPath('userData'), 'secure_key.dat');
+const USERNAME_STORAGE = path.join(app.getPath('userData'), 'username.dat')
 
 /**
  * Saves the user's encrypted API key to disk. NOTE: The saved location is vulnerable, change

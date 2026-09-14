@@ -5,7 +5,6 @@ import path from 'node:path'
 import './ipcHandlers'
 import * as postIds from './services/postIds'
 
-
 // This is going to be replaced with a better system in the future, only testing for right now.
 let firstOpen = false;
 const initialPage = (hasBeenSetup: boolean): string => {

@@ -164,6 +164,7 @@
             </footer>
         </div>
     </div>
+    
     <div id="upload-manager-layout">
         <div id="upload-main-area">
             <div id="upload-main-area-top">
@@ -178,17 +179,119 @@
             </div>
             <div id="upload-main-area-file">
                 <p class="bold">Drag &amp; drop files here or <span class="open-file-select">Browse files</span></p>
-                <p class="dull-text">Supports images _, _ and videos _, _, _</p>
+                <p class="dull-text">Supports images (PNG, JPG, WEBP) and videos (MP4, M4V, WEBM, GIF)</p>
             </div>
             <div id="upload-main-area-bulkaction-bar">
-                <div class="flex-group">
+                <div class="flex-group grid-align-left">
                     <input type="checkbox" name="bulkaction" id="bulkaction-checkbox">
                     <p id="bulkaction-total">3 of 12 selected</p>
                 </div>
-                <div class="flex-group">
+                <div class="flex-group grid-align-right">
                     <button id="bulkaction-options">Options</button>
-                    <button>Download</button>
                     <button id="bulkaction-delete" class="button-danger">Delete</button>
+                </div>
+                <div id="bulkaction-bar-common" active="false">
+
+                    <div class="common-section" id="common-rating">
+                        <h4>Rating</h4>
+                        <div class="flex-group-wrap">
+                            <exclusive-button group-name="common-rating-button" value="explicit">Explicit</exclusive-button>
+                            <exclusive-button group-name="common-rating-button" value="questionable">Questionable</exclusive-button>
+                            <exclusive-button group-name="common-rating-button" value="safe">Safe</exclusive-button>
+                        </div>
+                    </div>
+
+                    <div class="common-section" id="common-characters">
+                        <h4>Characters</h4>
+                        <div class="flex-group scroll">
+                            <exclusive-button group-name="common-character-number" value="zero">Zero</exclusive-button>
+                            <exclusive-button group-name="common-character-number" value="solo">Solo</exclusive-button>
+                            <exclusive-button group-name="common-character-number" value="duo">Duo</exclusive-button>
+                            <exclusive-button group-name="common-character-number" value="trio">Trio</exclusive-button>
+                            <exclusive-button group-name="common-character-number" value="group">Group</exclusive-button>
+                        </div>
+                        <textarea class="autocomplete-accepted"></textarea>
+                    </div>
+
+                    <div class="common-section" id="common-relationships">
+                        <div class="flex-group scroll" id="common-genders">
+                            <condition-button group-name="common-relations" value="male" condition-value="male">Male</condition-button>
+                            <condition-button group-name="common-relations" value="female" condition-value="female">Female</condition-button>
+                            <condition-button group-name="common-relations" value="andromorph" condition-value="andromorph">Andromorph</condition-button>
+                            <condition-button group-name="common-relations" value="gynomorph" condition-value="gynomorph">Gynomorph</condition-button>
+                            <condition-button group-name="common-relations" value="hermaphrodite" condition-value="hermaphrodite">Hermaphrodite</condition-button>
+                            <condition-button group-name="common-relations" value="male-herm" condition-value="male-herm">Male-Herm</condition-button>
+                            <condition-button group-name="common-relations" value="ambiguous" condition-value="ambiguous">Ambiguous</condition-button>
+                        </div>
+                        <div class="flex-group scroll" id="common-relations">
+                            <conditional-button group-name="common-relations" value="m/m" conditions="male">Male/Male</conditional-button>
+                            <conditional-button group-name="common-relations" value="m/f" conditions="male female">Male/Female</conditional-button>
+                            <conditional-button group-name="common-relations" value="m/and" conditions="male andromorph">Male/Andromorph</conditional-button>
+                            <conditional-button group-name="common-relations" value="m/gyn" conditions="male gynomorph">Male/Gynomorph</conditional-button>
+                            <conditional-button group-name="common-relations" value="m/herm" conditions="male hermaphrodite">Male/Hermaphrodite</conditional-button>
+                            <conditional-button group-name="common-relations" value="m/mherm" conditions="male male-herm">Male/Male-Herm</conditional-button>
+                            <conditional-button group-name="common-relations" value="m/amb" conditions="male ambiguous">Male/Ambiguous</conditional-button>
+                            <conditional-button group-name="common-relations" value="f/f" conditions="female">Female/Female</conditional-button>
+                            <conditional-button group-name="common-relations" value="f/and" conditions="female andromorph">Female/Andromorph</conditional-button>
+                            <conditional-button group-name="common-relations" value="f/gyn" conditions="female gynomorph">Female/Gynomorph</conditional-button>
+                            <conditional-button group-name="common-relations" value="f/herm" conditions="female hermaphrodite">Female/Hermaphrodite</conditional-button>
+                            <conditional-button group-name="common-relations" value="f/mherm" conditions="female male-herm">Female/Male-Herm</conditional-button>
+                            <conditional-button group-name="common-relations" value="f/amb" conditions="female ambiguous">Female/Ambiguous</conditional-button>
+                            <conditional-button group-name="common-relations" value="and/and" conditions="andromorph">Andromorph/Andromorph</conditional-button>
+                            <conditional-button group-name="common-relations" value="and/gyn" conditions="andromorph gynomorph">Andromorph/Gynomorph</conditional-button>
+                            <conditional-button group-name="common-relations" value="and/herm" conditions="andromorph hermaphrodite">Andromorph/Hermaphrodite</conditional-button>
+                            <conditional-button group-name="common-relations" value="and/mherm" conditions="andromorph male-herm">Andromorph/Male-Herm</conditional-button>
+                            <conditional-button group-name="common-relations" value="and/amb" conditions="andromorph ambiguous">Andromorph/Ambiguous</conditional-button>
+                            <conditional-button group-name="common-relations" value="gyn/gyn" conditions="gynomorph">Gynomorph/Gynomorph</conditional-button>
+                            <conditional-button group-name="common-relations" value="gyn/herm" conditions="gynomorph hermaphrodite">Gynomorph/Hermaphrodite</conditional-button>
+                            <conditional-button group-name="common-relations" value="gyn/mherm" conditions="gynomorph male-herm">Gynomorph/Male-Herm</conditional-button>
+                            <conditional-button group-name="common-relations" value="gyn/amb" conditions="gynomorph ambiguous">Gynomorph/Ambiguous</conditional-button>
+                            <conditional-button group-name="common-relations" value="herm/herm" conditions="hermaphrodite">Hermaphrodite/Hermaphrodite</conditional-button>
+                            <conditional-button group-name="common-relations" value="herm/mherm" conditions="hermaphrodite male-herm">Hermaphrodite/Male-Herm</conditional-button>
+                            <conditional-button group-name="common-relations" value="herm/amb" conditions="hermaphrodite ambiguous">Hermaphrodite/Ambiguous</conditional-button>
+                            <conditional-button group-name="common-relations" value="mherm/mherm" conditions="male-herm">Male-Herm/Male-Herm</conditional-button>
+                            <conditional-button group-name="common-relations" value="mherm/amb" conditions="male-herm ambiguous">Male-Herm/Ambiguous</conditional-button>
+                            <conditional-button group-name="common-relations" value="amb/amb" conditions="ambiguous">Ambiguous/Ambiguous</conditional-button>
+                        </div>
+                    </div>
+
+                    <div class="common-section" id="common-species">
+                        <h4>Species</h4>
+                        <div class="flex-group scroll" id="common-species-types">
+                            <selectable-button value="anthro">Anthro</selectable-button>
+                            <selectable-button value="feral">Feral</selectable-button>
+                            <selectable-button value="humanoid">Humanoid</selectable-button>
+                            <selectable-button value="human">Human</selectable-button>
+                            <selectable-button value="taur">Taur</selectable-button>
+                        </div>
+                        <textarea class="autocomplete-accepted"></textarea>
+                    </div>
+
+                    <div class="common-section" id="common-general">
+                        <h4>General</h4>
+                        <textarea class="autocomplete-accepted"></textarea>
+                    </div>
+
+                    <div class="common-section" id="common-description">
+                        <h4>Description</h4>
+                        <textarea></textarea>
+                    </div>
+
+                    <div class="common-section" id="common-creators">
+                        <h4>Creators</h4>
+                        <textarea class="autocomplete-accepted"></textarea>
+                    </div>
+
+                    <div class="common-section" id="common-parent">
+                        <h4>Parent</h4>
+                        <input type="text" placeholder="Ex: 12345">
+                    </div>
+
+                    <div class="common-section" id="common-footer">
+                        <button class="button-danger" id="common-cancel">Cancel</button>
+                        <button class="button-good" id="common-confirm">Confirm</button>
+                    </div>
+
                 </div>
             </div>
             <div id="upload-main-area-grid">

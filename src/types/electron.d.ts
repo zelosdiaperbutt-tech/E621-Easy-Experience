@@ -9,6 +9,9 @@ declare global {
         uploadItems: {
             getID(): Promise<number>;
         }
+        queue: {
+            addUploadItem(item: UploadItem, dependencies: string[], asPending: boolean): Promise<string>;
+        }
     }
 
     interface UploadItem {
@@ -17,8 +20,8 @@ declare global {
         get size(): number;
         get type(): string;
 
-        get rating(r: 's'|'q'|'e'|'u');
-        set rating(): 's'|'q'|'e'|'u';
+        set rating(r: 's'|'q'|'e'|'u');
+        get rating(): 's'|'q'|'e'|'u';
         get creators(): string[];
         set creators(c: string[]);
         get sources(): string[];
@@ -41,6 +44,27 @@ declare global {
         set speciesTypes(sT: SpeciesType[]);
         get numberOfCharacters(): NumberOfCharacters;
         set numberOfCharacters(n: NumberOfCharacters);
+
+        toData(): UploadItemInfo;
+    }
+
+    type UploadItemInfo = {
+        path: string;
+        name: string;
+        size: number;
+        type: string;
+        rating: 's'|'e'|'q'|'u';
+        creators: string[];
+        sources: string[]
+        characters: string[]
+        genders: Gender[];
+        species: string[]
+        general: string[]
+        parent: string;
+        description: string;
+        relations: Relations[];
+        speciesTypes: SpeciesType[];
+        numberOfCharacters: NumberOfCharacters;
     }
 
     type FileInfo = {
@@ -137,5 +161,64 @@ declare global {
         Gender,
         Species,
         General
+    }
+
+    type ActionStatus = 
+        | "pending"
+        | "running"
+        | "waiting"
+        | "completed"
+        | "failed"
+
+    type QueueError = 
+        | {
+            type: "rate-limit";
+            retryAt: number;
+        }
+        | {
+            type: "network";
+            message: string;
+        }
+        | {
+            type: "api";
+            statusCode: number,
+            message: string
+        }
+        | {
+            type: "permanent";
+            message: string;
+        }
+    
+    interface QueueAction<TInput = unknown, TResult = unknown> {
+        id: string;
+        type: string;
+
+        input: TInput;
+
+        dependencies: string[]; // IDs of actions that must be completed first
+
+        status: ActionStatus;
+
+        result?: TResult; // Data returned by the action
+
+        attempts: number;
+        maxAttempts: number;
+
+        nextAttemptAt?: number;
+        error?: QueueError;
+
+        execute(): Promise<TResult>;
+        serialize(): {
+            type: string,
+            status: string,
+            attempts: number,
+            maxAttempts: number,
+            dependencies: string[],
+            nextAttemptAt: number|undefined
+        };
+    }
+
+    interface ActionContext {
+        getResult<T>(actionId: string): T;
     }
 }

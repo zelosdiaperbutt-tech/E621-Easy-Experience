@@ -8,6 +8,9 @@ import * as saveSecure from './workers/saveSecure'
 import * as api from './api'
 import {advanceCounter} from './services/postIds'
 
+import {queueManager} from './workers/QueueManager'
+import {UploadPostAction, UploadPostActionInput} from './workers/UploadPostAction'
+
 ipcMain.handle('save-api-key', async (_, key: string) => {
     try {
         saveSecure.saveAPIKey(key);
@@ -35,10 +38,6 @@ ipcMain.handle('get-username', async () => {
 })
 
 
-ipcMain.handle('api-create-post', async (_, filePath, tags, sources, rating, description, parentId) => {
-    return api.createPost(filePath, tags, sources, rating, description, parentId)   // Calling the createPost function directly will not go on forever, the queue will eventually take its place.
-})
-
 
 async function getFileSize(filePath: string): Promise<number> {
     return new Promise((resolve, reject) => {
@@ -59,7 +58,7 @@ ipcMain.handle('dialog:file-select', async () => {
         filters: [
             {name: 'All', extensions: ['png', 'apng', 'pjp', 'jfif', 'jpe', 'pjpeg', 'jpeg', 'jpg', 'webp', 'webm', 'gif', 'm4v', 'mp4', 'webp']},
             {name: 'Images', extensions: ['png', 'apng', 'pjp', 'jfif', 'jpe', 'pjpeg', 'jpeg', 'jpg', 'webp']},
-            {name: 'Videos', extensions: ['webm', 'gif', 'm4v', 'mp4', 'webp']}
+            {name: 'Videos', extensions: ['webm', 'gif', 'm4v', 'mp4']}
         ]
     });
 
@@ -81,4 +80,12 @@ ipcMain.handle('dialog:file-select', async () => {
 
 ipcMain.handle('get-id', async () => {
     return advanceCounter()
+})
+
+ipcMain.handle('queue:newUploadAction', (_, item: UploadItemInfo, dependencies: string[], asPending: boolean) => {
+    const input = UploadPostActionInput.convert(item, asPending)
+    const action = new UploadPostAction(input, dependencies)
+    queueManager.add(action)
+    console.log(queueManager)
+    return action.id;
 })

@@ -13,9 +13,6 @@ contextBridge.exposeInMainWorld('saveSecure', {
     getUsername: () => ipcRenderer.invoke('get-username')
 })
 
-contextBridge.exposeInMainWorld('api', {
-    createPost: (filePath: string, tags: string, sources: string[], rating: 's'|'q'|'e', description:string="", parentId:string|null) => ipcRenderer.invoke('api-create-post', filePath, tags, sources, rating, description, parentId)
-})
 
 contextBridge.exposeInMainWorld('electronAPI', {
     getFilePath: (file: File): string => { return webUtils.getPathForFile(file); },
@@ -24,4 +21,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
 contextBridge.exposeInMainWorld('uploadItems', {
     getID: (): Promise<number> => ipcRenderer.invoke('get-id')
+})
+
+contextBridge.exposeInMainWorld('queue', {
+    addUploadItem: (item: UploadItem, dependencies: string[], asPending: boolean = true): Promise<string> => {
+        return ipcRenderer.invoke('queue:newUploadAction', item, dependencies, asPending)
+    }
 })
