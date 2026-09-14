@@ -3,9 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <link rel="stylesheet" href="./index.css">
     <title>Document</title>
 </head>
 <body>
-    <h1>Startup</h1>
+    <div id="content-container">
+
+        <div id="account-setup" class="content-page">
+            <div class="content-page-header content-page-part">
+                <h1>Link Account</h1>
+                <h2>Most actions that can be done with this application require account credentials.</h2>
+            </div>
+            
+            <div id="account-setup-form" class="content-page-section content-page-part">
+                <div class="form">
+                    <div class="form-section">
+                        <label for="">
+                            <p>Username</p>
+                        </label>
+                        <input type="text" id="account-username-input" placeholder="username123">
+                    </div>
+                    <div class="form-section">
+                        <label for="">
+                            <p>Token</p>
+                        </label>
+                        <input type="text" id="account-token-input" placeholder="dfglfkjbioubdfg">
+                        <p class="faded">Your token is sensitive information, do not distribute it to untrusted sources.</p>
+                    </div>
+                </div>
+                <div class="flex-group">
+                    <button>Authorize</button>
+                </div>
+            </div>
+
+            <div class="content-page-footer content-page-part">
+                <div class="flex-group space-between">
+                    <a href="">Skip</a>
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </div>
 </body>
 </html>

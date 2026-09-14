@@ -105,6 +105,10 @@ input[type="checkbox"] {
     gap: var(--space-8);
 }
 
+.flex-group.space-between {
+    justify-content: space-between;
+}
+
 .flex-group.scroll {
     overflow-x: auto;
     min-width: 0;
