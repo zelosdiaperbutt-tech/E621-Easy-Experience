@@ -69,6 +69,14 @@ button.button-good:hover {
     background: var(--green-50);
 }
 
+button.button-info {
+    color: var(--blue-500);
+}
+
+button.button-info:hover {
+    background: var(--blue-50);
+}
+
 input[type="text"] {
     font-family: "Inter", sans-serif;
     font-optical-sizing: auto;
