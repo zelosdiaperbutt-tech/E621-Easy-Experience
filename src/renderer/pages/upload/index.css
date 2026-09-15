@@ -123,6 +123,7 @@ body {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     grid-template-rows: 
+        auto
         auto 
         auto
         auto 
@@ -130,6 +131,7 @@ body {
         auto 
         auto;
     grid-template-areas: 
+        "header header header"
         "left rating rating"
         "left characters species"
         "left relations relations"
@@ -161,6 +163,24 @@ body {
 .modal-section textarea {
     width: 100%;
     resize: vertical;
+}
+
+#modal-header {
+    grid-area: header;
+    display: flex;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.15);
+    justify-content: center;
+    padding: var(--space-4);
+    border: 1px var(--grey-500) solid;
+    border-radius: var(--space-8);
+}
+
+#modal-navigation-buttons {
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-8);
 }
 
 #left-modal {
@@ -240,7 +260,7 @@ body {
     flex-direction: row;
     gap: var(--space-8);
     justify-content: flex-end;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.15);
     border-radius: var(--space-8);
     padding: var(--space-4);
     border: 1px var(--grey-400) solid;
