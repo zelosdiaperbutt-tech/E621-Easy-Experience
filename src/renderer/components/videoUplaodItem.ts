@@ -128,6 +128,14 @@ export class VideoUploadItem extends HTMLElement implements UploadItem {
         return (this.getAttribute('number-of-characters') as NumberOfCharacters) ?? ("unset" as NumberOfCharacters);
     }
 
+    set state(s: UploadItemState) {
+        this.setAttribute('state', s.toString())
+    }
+
+    get state(): UploadItemState {
+        return (this.getAttribute('state') as UploadItemState) ?? ("unfinished" as UploadItemState)
+    }
+
     toData(): UploadItemInfo {
         return {
             path: this.path,
