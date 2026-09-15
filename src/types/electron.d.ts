@@ -45,7 +45,17 @@ declare global {
         get numberOfCharacters(): NumberOfCharacters;
         set numberOfCharacters(n: NumberOfCharacters);
 
+        set state(s: UploadItemState);
+        get state(): UploadItemState;
+
         toData(): UploadItemInfo;
+    }
+
+    enum UploadItemState {
+        RequiredFieldsMissing = "requiredFieldsMissing",
+        Unfinished = "unfinished",
+        Draft = "draft",
+        Ready = "ready"
     }
 
     type UploadItemInfo = {
