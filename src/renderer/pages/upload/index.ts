@@ -16,6 +16,10 @@ import { ExclusiveButton } from '../../components/exclusiveButton.js';
 import { ConditionButton } from '../../components/conditionButton.js';
 import { ConditionalButton } from '../../components/conditionalButton.js';
 
+import { ItemManager } from './itemManager.js'
+
+const itemManager = new ItemManager();
+
 // Selected upload elements
 let selectedItems: HTMLElement[] = [];
 
@@ -113,22 +117,7 @@ mainAreaFileDrop.addEventListener('drop', async (event: DragEvent) => {
     if (!files) return;
 
     for (const file of files) {
-        const mediaType = mediaTypeOfFile(file.type.slice(file.type.indexOf('/') + 1))
-        if (mediaType === 'unknown') continue;
-
-        const path = window.electronAPI.getFilePath(file);
-        let uploadElement: HTMLElement;
-
-        switch(mediaType) {
-            case 'image':
-                uploadElement = await createImageUploadItem(path, file.name, file.type, file.size)
-                break;
-            case 'video':
-                uploadElement = await createVideoUploadItem(path, file.name, file.type, file.size)
-                break;
-        }
-        
-        uploadGrid.insertAdjacentElement('beforeend', uploadElement)
+        await itemManager.createFromFile(uploadGrid, file);
     }
 
     updateSelectionQuantityLabel();
@@ -151,21 +140,7 @@ document.querySelectorAll<HTMLElement>('.open-file-select').forEach(fileSelect =
         const files: FileInfo[] = await window.electronAPI.fileSelectDialog();
 
         for (let i = 0; i < files.length; i++) {
-            const mediaType = mediaTypeOfFile(files[i].type.substring(files[i].type.indexOf('.') + 1))
-            if (mediaType === "unknown") continue;
-
-            let uploadElement: HTMLElement;
-
-            switch (mediaType) {
-                case 'image':
-                    uploadElement = await createImageUploadItem(files[i].path, files[i].name, files[i].type, files[i].size);
-                    break;
-                case 'video':
-                    uploadElement = await createVideoUploadItem(files[i].path, files[i].name, files[i].type, files[i].size)
-                    break;
-            }
-
-            uploadGrid.insertAdjacentElement('beforeend', uploadElement)
+            await itemManager.createFromFileInfo(uploadGrid, files[i])
         }
 
         updateSelectionQuantityLabel()
@@ -508,31 +483,31 @@ commonCancel?.addEventListener('click', () => {
 })
 
 async function start() {
-    const item1: ImageUploadItem = await createImageUploadItem("C:\\Users\\Mater\\Downloads\\HRyyxL5aIAAkZ-L.jpg", "fox diaper gaming.jpg", '.jpg', 1) as ImageUploadItem
-    item1.rating = "e";
-    item1.genders = ["male" as Gender]
-    item1.general = ["diaper"]
-    item1.creators = ['syeenyeen']
-    item1.species = ['fox']
-    item1.numberOfCharacters = "solo" as NumberOfCharacters
-    item1.speciesTypes = ['anthro' as SpeciesType]
-    item1.relations = ['m/m' as Relations]
+    // const item1: ImageUploadItem = await createImageUploadItem("C:\\Users\\Mater\\Downloads\\HRyyxL5aIAAkZ-L.jpg", "fox diaper gaming.jpg", '.jpg', 1) as ImageUploadItem
+    // item1.rating = "e";
+    // item1.genders = ["male" as Gender]
+    // item1.general = ["diaper"]
+    // item1.creators = ['syeenyeen']
+    // item1.species = ['fox']
+    // item1.numberOfCharacters = "solo" as NumberOfCharacters
+    // item1.speciesTypes = ['anthro' as SpeciesType]
+    // item1.relations = ['m/m' as Relations]
 
-    const item2: ImageUploadItem = await createImageUploadItem("C:\\Users\\Mater\\Downloads\\HRzqhvoa4AAr4ET.jpg", "rocky handsfree blorts.jpg", ".jpg", 2) as ImageUploadItem;
-    item2.rating = "e";
-    item2.genders = ["male" as Gender]
-    item2.general = ["diaper"]
-    item2.creators = ['poofbuttrocky']
-    item2.species = ['wolf']
-    item2.numberOfCharacters = "solo" as NumberOfCharacters
-    item2.speciesTypes = ['anthro' as SpeciesType]
-    item2.relations = ['m/m' as Relations]
+    // const item2: ImageUploadItem = await createImageUploadItem("C:\\Users\\Mater\\Downloads\\HRzqhvoa4AAr4ET.jpg", "rocky handsfree blorts.jpg", ".jpg", 2) as ImageUploadItem;
+    // item2.rating = "e";
+    // item2.genders = ["male" as Gender]
+    // item2.general = ["diaper"]
+    // item2.creators = ['poofbuttrocky']
+    // item2.species = ['wolf']
+    // item2.numberOfCharacters = "solo" as NumberOfCharacters
+    // item2.speciesTypes = ['anthro' as SpeciesType]
+    // item2.relations = ['m/m' as Relations]
 
 
-    uploadGrid.insertAdjacentElement('beforeend', item1)
-    uploadGrid.insertAdjacentElement('beforeend', item2)
+    // uploadGrid.insertAdjacentElement('beforeend', item1)
+    // uploadGrid.insertAdjacentElement('beforeend', item2)
 
-    findCommonalitiesInSelectedElements([item1, item2])
+    // findCommonalitiesInSelectedElements([item1, item2])
 }
 
 start()
