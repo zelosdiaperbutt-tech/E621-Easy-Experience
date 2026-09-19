@@ -123,18 +123,6 @@ mainAreaFileDrop.addEventListener('drop', async (event: DragEvent) => {
     updateSelectionQuantityLabel();
 })
 
-
-const mediaTypeOfFile = (extName: string): 'image'|'video'|'unknown' => {
-    const IMAGE_FORMATS: string[] = ['png', 'apng', 'pjp', 'jfif', 'jpe', 'pjpeg', 'jpeg', 'jpg', 'webp'];
-    const VIDEO_FORMATS: string[] = ['webm', 'gif', 'm4v', 'mp4', 'webp', 'matroska'];
-
-    if (IMAGE_FORMATS.includes(extName)) return 'image';
-    if (VIDEO_FORMATS.includes(extName)) return 'video';
-
-    return 'unknown';
-}
-
-
 document.querySelectorAll<HTMLElement>('.open-file-select').forEach(fileSelect => {
     fileSelect.addEventListener('click', async () => {
         const files: FileInfo[] = await window.electronAPI.fileSelectDialog();
@@ -165,40 +153,6 @@ export const getSizeString = (bytes: number): string => {
     } else {
         return `${(bytes / (1024 ** 3)).toFixed(1)} GB`
     }
-}
-
-/**
- * Creates an upload item for an image. The appropriate event listeners are added to
- * the element before it is returned.
- * 
- * @param path The path to the image file, used for the preview
- * @param name The name of the file, used as a small title
- * @param type The filetype, used as supplemental information
- * @param size The size of the file in raw bytes that will be formatted, supplemental information
- * @returns The upload image item.
- */
-const createImageUploadItem = async (path: string, name: string, type: string, size: number): Promise<HTMLElement> => {
-    
-    const item = document.createElement('image-item')
-    item.setAttribute('path', path)
-    item.setAttribute('name', name)
-    item.setAttribute('type', type)
-    item.setAttribute('size', size.toString())
-    item.setAttribute('item-id', (await window.uploadItems.getID()).toString())
-    return item;
-
-}
-
-
-
-const createVideoUploadItem = async (path: string, name: string, type: string, size: number): Promise<HTMLElement> => {
-    const item = document.createElement('video-item')
-    item.setAttribute('path', path)
-    item.setAttribute('name', name)
-    item.setAttribute('type', type)
-    item.setAttribute('size', size.toString())
-    item.setAttribute('item-id', (await window.uploadItems.getID()).toString())
-    return item;
 }
 
 function commonElements<T>(arrays: T[][]): T[] {
