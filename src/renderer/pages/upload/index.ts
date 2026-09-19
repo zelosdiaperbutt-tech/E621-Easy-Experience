@@ -14,8 +14,7 @@ import { ConditionalButton } from '../../components/conditionalButton.js';
 import { itemManager } from './itemManager.js'
 
 bulkactionDeleteButton.addEventListener('click', () => {
-    // deleteSelectedItems()
-    itemManager.deleteAllSelected()
+    itemManager.deleteAllSelected(updateSelectionQuantityLabel)
 })
 
 /**
@@ -23,7 +22,7 @@ bulkactionDeleteButton.addEventListener('click', () => {
  * the total number of items and the amount of items that are currently selected.
  * @returns 
  */
-const updateSelectionQuantityLabel = (): void => {
+export const updateSelectionQuantityLabel = (): void => {
     const totalItems: number = document.querySelectorAll('.upload-item').length;
     const numberSelected: number = itemManager.selectedItems.length;
 
