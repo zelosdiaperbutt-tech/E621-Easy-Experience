@@ -6,7 +6,7 @@ import { VideoUploadItem } from "../../components/videoUplaodItem.js";
  * Handles the creation, deletion, and selection of items while they are in the
  * grid.
  */
-export class ItemManager {
+class ItemManager {
 
     selectedItems: UploadItem[] = [];
 
@@ -156,3 +156,5 @@ export class ItemManager {
         return item;
     }
 }
+
+export const itemManager = new ItemManager()

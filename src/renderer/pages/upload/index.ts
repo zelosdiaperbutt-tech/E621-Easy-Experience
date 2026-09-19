@@ -3,26 +3,19 @@ const bulkactionCheckbox = document.getElementById('bulkaction-checkbox') as HTM
 const bulkactionDeleteButton = document.getElementById('bulkaction-delete') as HTMLButtonElement
 const mainAreaFileDrop = document.getElementById('upload-main-area-file') as HTMLElement;
 const uploadGrid = document.getElementById('upload-main-area-grid') as HTMLElement;
-const sidebar = document.getElementById('upload-right-sidebar') as HTMLElement;
 const bulkOptions = document.getElementById('bulkaction-options') as HTMLElement;
 
-
-import {setCurrentUploadItem, updateModalInfo, activateModal} from './modal.js'
-import {ImageUploadItem} from '../../components/imageUploadItem.js'
-import { VideoUploadItem } from '../../components/videoUplaodItem.js';
 
 import { SelectableButton } from '../../components/selectableButton.js'
 import { ExclusiveButton } from '../../components/exclusiveButton.js';
 import { ConditionButton } from '../../components/conditionButton.js';
 import { ConditionalButton } from '../../components/conditionalButton.js';
 
-import { ItemManager } from './itemManager.js'
+import { itemManager } from './itemManager.js'
 
-const itemManager = new ItemManager();
 
 // Selected upload elements
 let selectedItems: HTMLElement[] = [];
-
 
 /**
  * Adds an upload element to the list of selected items
