@@ -13,11 +13,6 @@ import { ConditionalButton } from '../../components/conditionalButton.js';
 
 import { itemManager } from './itemManager.js'
 
-
-// Selected upload elements
-let selectedItems: HTMLElement[] = [];
-
-
 bulkactionDeleteButton.addEventListener('click', () => {
     // deleteSelectedItems()
     itemManager.deleteAllSelected()
@@ -30,7 +25,7 @@ bulkactionDeleteButton.addEventListener('click', () => {
  */
 const updateSelectionQuantityLabel = (): void => {
     const totalItems: number = document.querySelectorAll('.upload-item').length;
-    const numberSelected: number = selectedItems.length;
+    const numberSelected: number = itemManager.selectedItems.length;
 
     if (!selectedLabel) return;
     selectedLabel.innerText = `${numberSelected} of ${totalItems}`;
@@ -206,7 +201,7 @@ let tagsInCommonAtEnd: CommonTagInformation = {
 };
 
 const startEnteringCommonTags = () => {
-    const selectedUploadItems = selectedItems.map(item => item as unknown as UploadItem)
+    const selectedUploadItems = itemManager.selectedItems.map(item => item as unknown as UploadItem)
     tagsInCommonAtStart = findCommonalitiesInSelectedElements(selectedUploadItems)
     console.log(tagsInCommonAtStart)
 
@@ -373,7 +368,7 @@ bulkOptions.addEventListener('click', () => {
     const active = commonTagsArea.getAttribute('active') === "true"
     
     if (!active) {
-        if (selectedItems.length === 0) return;
+        if (itemManager.selectedItems.length === 0) return;
         commonTagsArea.setAttribute('active', 'true')
         startEnteringCommonTags()
     }
@@ -382,7 +377,7 @@ bulkOptions.addEventListener('click', () => {
 commonConfirm?.addEventListener('click', () => {
     if (commonTagsArea.getAttribute('active') === "true") {
         endEnteringCommonTags();
-        selectedItems.map(i => i as unknown as UploadItem).forEach(item => {
+        itemManager.selectedItems.map(i => i as unknown as UploadItem).forEach(item => {
             updateCommonTags(item)
         })
         commonTagsArea.setAttribute('active', "false")

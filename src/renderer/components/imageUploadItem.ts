@@ -3,6 +3,7 @@ import {getSizeString} from '../pages/upload/index.js'
 import {setCurrentUploadItem, updateModalInfo, writeModalChanges, activateModal} from '../pages/upload/modal.js'
 
 import {itemManager} from '../pages/upload/itemManager.js'
+import { updateSelectionQuantityLabel } from '../pages/upload/index.js';
 
 /**
  * An individual image that is going to be uploaded
@@ -111,7 +112,7 @@ export class ImageUploadItem extends HTMLElement implements UploadItem {
         const checkBox = this.querySelector<HTMLElement>('.upload-item-select-checkbox') as HTMLInputElement;
         if (checkBox) checkBox.checked = true;
 
-        itemManager.addToSelection(this);
+        itemManager.addToSelection(this, updateSelectionQuantityLabel);
     }
 
     private handleDeselectEvent = (): void => {
@@ -120,7 +121,7 @@ export class ImageUploadItem extends HTMLElement implements UploadItem {
         const checkBox = this.querySelector<HTMLElement>('.upload-item-select-checkbox') as HTMLInputElement;
         if (checkBox) checkBox.checked = false;
 
-        itemManager.removeFromSelection(this);
+        itemManager.removeFromSelection(this, updateSelectionQuantityLabel);
     }
 
     private handleClickEvent = (event: PointerEvent): void => {
