@@ -1,7 +1,3 @@
-
-// import { ImageUploadItem } from "../../components/imageUploadItem.js";
-// import { VideoUploadItem } from "../../components/videoUplaodItem.js";
-
 /**
  * Handles the creation, deletion, and selection of items while they are in the
  * grid.
