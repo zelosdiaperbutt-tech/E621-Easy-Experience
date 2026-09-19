@@ -1,6 +1,8 @@
 
-import {addToSelected, removeFromSelected, getSizeString} from '../pages/upload/index.js'
+import {getSizeString} from '../pages/upload/index.js'
 import {setCurrentUploadItem, updateModalInfo, writeModalChanges, activateModal} from '../pages/upload/modal.js'
+
+import {itemManager} from '../pages/upload/itemManager.js'
 
 export class VideoUploadItem extends HTMLElement implements UploadItem {
 
@@ -188,7 +190,7 @@ export class VideoUploadItem extends HTMLElement implements UploadItem {
         const checkBox = this.querySelector<HTMLElement>('.upload-item-select-checkbox') as HTMLInputElement;
         if (checkBox) checkBox.checked = true;
 
-        addToSelected(this);
+        itemManager.addToSelection(this);
     }
 
     private handleDeselectEvent = (): void => {
@@ -197,7 +199,7 @@ export class VideoUploadItem extends HTMLElement implements UploadItem {
         const checkBox = this.querySelector<HTMLElement>('.upload-item-select-checkbox') as HTMLInputElement;
         if (checkBox) checkBox.checked = false;
 
-        removeFromSelected(this);
+        itemManager.removeFromSelection(this);
     }
 
     private handleClickEvent = (event: PointerEvent): void => {

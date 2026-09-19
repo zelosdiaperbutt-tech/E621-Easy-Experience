@@ -17,44 +17,10 @@ import { itemManager } from './itemManager.js'
 // Selected upload elements
 let selectedItems: HTMLElement[] = [];
 
-/**
- * Adds an upload element to the list of selected items
- * @param element The element to add to the list
- */
-export const addToSelected = (element: HTMLElement): void => {
-    if (!selectedItems.includes(element)) {
-        selectedItems.push(element)
-        updateSelectionQuantityLabel()
-    }
-}
-
-/**
- * Removes an upload element from the list of selected items.
- * @param element The element to be removed
- */
-export const removeFromSelected = (element: HTMLElement): void => {
-    const index = selectedItems.indexOf(element)
-    if (index !== -1) {
-        selectedItems.splice(index, 1);
-        updateSelectionQuantityLabel()
-    }
-}
-
-/**
- * 
- */
-const deleteSelectedItems = (): void => {
-    while (selectedItems.length > 0) {
-        const currentItem = selectedItems[0];
-        currentItem.dispatchEvent(new Event('become-deselected'))
-        currentItem.remove()
-    }
-
-    updateSelectionQuantityLabel()
-}
 
 bulkactionDeleteButton.addEventListener('click', () => {
-    deleteSelectedItems()
+    // deleteSelectedItems()
+    itemManager.deleteAllSelected()
 })
 
 /**

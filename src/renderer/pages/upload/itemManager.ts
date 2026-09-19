@@ -1,6 +1,6 @@
 
-import { ImageUploadItem } from "../../components/imageUploadItem.js";
-import { VideoUploadItem } from "../../components/videoUplaodItem.js";
+// import { ImageUploadItem } from "../../components/imageUploadItem.js";
+// import { VideoUploadItem } from "../../components/videoUplaodItem.js";
 
 /**
  * Handles the creation, deletion, and selection of items while they are in the
@@ -11,16 +11,33 @@ class ItemManager {
     selectedItems: UploadItem[] = [];
 
 
-    addToSelection() {
+    addToSelection(item: UploadItem, callback?: (selected: UploadItem[]) => void) {
+        if (!this.selectedItems.includes(item)) {
+            this.selectedItems.push(item)
 
+            callback?.(this.selectedItems);
+        }
     }
 
-    removeFromSelection() {
+    removeFromSelection(item: UploadItem, callback?: (selected: UploadItem[]) => void) {
+        const index = this.selectedItems.indexOf(item);
+        if (index !== -1) {
+            this.selectedItems.splice(index, 1)
 
+            callback?.(this.selectedItems);
+        }
     }
 
-    delete() {
+    deleteAllSelected(callback?: () => void) {
+        while (this.selectedItems.length > 0) {
+            const currentItem = this.selectedItems[0]
+            this.removeFromSelection(currentItem)
+            if (currentItem instanceof HTMLElement) {
+                currentItem.remove()
+            }
+        }
 
+        callback?.()
     }
 
     /**
