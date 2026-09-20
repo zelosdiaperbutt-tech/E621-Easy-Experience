@@ -6,7 +6,13 @@ class ItemManager {
 
     selectedItems: UploadItem[] = [];
 
-
+    /**
+     * Adds an upload item to the selection list. Will do nothing if the
+     * item is already in the selection list.
+     * 
+     * @param item The item being selected
+     * @param callback Optional callback if the addition is successful.
+     */
     addToSelection(item: UploadItem, callback?: (selected: UploadItem[]) => void) {
         if (!this.selectedItems.includes(item)) {
             this.selectedItems.push(item)
@@ -15,6 +21,13 @@ class ItemManager {
         }
     }
 
+    /**
+     * Removes an upload item from the selection list. Does nothing if the
+     * item is not in the selection list.
+     * 
+     * @param item The item to be removed.
+     * @param callback Optional callback if the removal is successful.
+     */
     removeFromSelection(item: UploadItem, callback?: (selected: UploadItem[]) => void) {
         const index = this.selectedItems.indexOf(item);
         if (index !== -1) {
@@ -24,6 +37,12 @@ class ItemManager {
         }
     }
 
+    /**
+     * Deletes all selected items from the DOM.
+     * 
+     * @param callback Optional callback that runs after all items have
+     * been deleted.
+     */
     deleteAllSelected(callback?: () => void) {
         while (this.selectedItems.length > 0) {
             const currentItem = this.selectedItems[0]

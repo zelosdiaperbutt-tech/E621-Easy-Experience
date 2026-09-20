@@ -389,36 +389,6 @@ commonCancel?.addEventListener('click', () => {
     }
 })
 
-async function start() {
-    // const item1: ImageUploadItem = await createImageUploadItem("C:\\Users\\Mater\\Downloads\\HRyyxL5aIAAkZ-L.jpg", "fox diaper gaming.jpg", '.jpg', 1) as ImageUploadItem
-    // item1.rating = "e";
-    // item1.genders = ["male" as Gender]
-    // item1.general = ["diaper"]
-    // item1.creators = ['syeenyeen']
-    // item1.species = ['fox']
-    // item1.numberOfCharacters = "solo" as NumberOfCharacters
-    // item1.speciesTypes = ['anthro' as SpeciesType]
-    // item1.relations = ['m/m' as Relations]
-
-    // const item2: ImageUploadItem = await createImageUploadItem("C:\\Users\\Mater\\Downloads\\HRzqhvoa4AAr4ET.jpg", "rocky handsfree blorts.jpg", ".jpg", 2) as ImageUploadItem;
-    // item2.rating = "e";
-    // item2.genders = ["male" as Gender]
-    // item2.general = ["diaper"]
-    // item2.creators = ['poofbuttrocky']
-    // item2.species = ['wolf']
-    // item2.numberOfCharacters = "solo" as NumberOfCharacters
-    // item2.speciesTypes = ['anthro' as SpeciesType]
-    // item2.relations = ['m/m' as Relations]
-
-
-    // uploadGrid.insertAdjacentElement('beforeend', item1)
-    // uploadGrid.insertAdjacentElement('beforeend', item2)
-
-    // findCommonalitiesInSelectedElements([item1, item2])
-}
-
-start()
-
 // In case there are pre-generated upload items, the bulk action bar
 // will automatically have the correct label.
 updateSelectionQuantityLabel()

@@ -504,10 +504,6 @@ const aggregateCurrentTags = (): string[] => {
     return tags.filter(t => t.trim() !== "");
 }
 
-const placeTagsInPreview = () => {
-
-}
-
 const bulkTagInfo = async (tags: string[]): Promise<{category: number, post_count: number, name: string}[]> => {
     let list: any[] = [];
 
