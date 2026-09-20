@@ -3,61 +3,18 @@ const bulkactionCheckbox = document.getElementById('bulkaction-checkbox') as HTM
 const bulkactionDeleteButton = document.getElementById('bulkaction-delete') as HTMLButtonElement
 const mainAreaFileDrop = document.getElementById('upload-main-area-file') as HTMLElement;
 const uploadGrid = document.getElementById('upload-main-area-grid') as HTMLElement;
-const sidebar = document.getElementById('upload-right-sidebar') as HTMLElement;
 const bulkOptions = document.getElementById('bulkaction-options') as HTMLElement;
 
-
-import {setCurrentUploadItem, updateModalInfo, activateModal} from './modal.js'
-import {ImageUploadItem} from '../../components/imageUploadItem.js'
-import { VideoUploadItem } from '../../components/videoUplaodItem.js';
 
 import { SelectableButton } from '../../components/selectableButton.js'
 import { ExclusiveButton } from '../../components/exclusiveButton.js';
 import { ConditionButton } from '../../components/conditionButton.js';
 import { ConditionalButton } from '../../components/conditionalButton.js';
 
-// Selected upload elements
-let selectedItems: HTMLElement[] = [];
-
-
-/**
- * Adds an upload element to the list of selected items
- * @param element The element to add to the list
- */
-export const addToSelected = (element: HTMLElement): void => {
-    if (!selectedItems.includes(element)) {
-        selectedItems.push(element)
-        updateSelectionQuantityLabel()
-    }
-}
-
-/**
- * Removes an upload element from the list of selected items.
- * @param element The element to be removed
- */
-export const removeFromSelected = (element: HTMLElement): void => {
-    const index = selectedItems.indexOf(element)
-    if (index !== -1) {
-        selectedItems.splice(index, 1);
-        updateSelectionQuantityLabel()
-    }
-}
-
-/**
- * 
- */
-const deleteSelectedItems = (): void => {
-    while (selectedItems.length > 0) {
-        const currentItem = selectedItems[0];
-        currentItem.dispatchEvent(new Event('become-deselected'))
-        currentItem.remove()
-    }
-
-    updateSelectionQuantityLabel()
-}
+import { itemManager } from './itemManager.js'
 
 bulkactionDeleteButton.addEventListener('click', () => {
-    deleteSelectedItems()
+    itemManager.deleteAllSelected(updateSelectionQuantityLabel)
 })
 
 /**
@@ -65,9 +22,9 @@ bulkactionDeleteButton.addEventListener('click', () => {
  * the total number of items and the amount of items that are currently selected.
  * @returns 
  */
-const updateSelectionQuantityLabel = (): void => {
+export const updateSelectionQuantityLabel = (): void => {
     const totalItems: number = document.querySelectorAll('.upload-item').length;
-    const numberSelected: number = selectedItems.length;
+    const numberSelected: number = itemManager.selectedItems.length;
 
     if (!selectedLabel) return;
     selectedLabel.innerText = `${numberSelected} of ${totalItems}`;
@@ -113,59 +70,18 @@ mainAreaFileDrop.addEventListener('drop', async (event: DragEvent) => {
     if (!files) return;
 
     for (const file of files) {
-        const mediaType = mediaTypeOfFile(file.type.slice(file.type.indexOf('/') + 1))
-        if (mediaType === 'unknown') continue;
-
-        const path = window.electronAPI.getFilePath(file);
-        let uploadElement: HTMLElement;
-
-        switch(mediaType) {
-            case 'image':
-                uploadElement = await createImageUploadItem(path, file.name, file.type, file.size)
-                break;
-            case 'video':
-                uploadElement = await createVideoUploadItem(path, file.name, file.type, file.size)
-                break;
-        }
-        
-        uploadGrid.insertAdjacentElement('beforeend', uploadElement)
+        await itemManager.createFromFile(uploadGrid, file);
     }
 
     updateSelectionQuantityLabel();
 })
-
-
-const mediaTypeOfFile = (extName: string): 'image'|'video'|'unknown' => {
-    const IMAGE_FORMATS: string[] = ['png', 'apng', 'pjp', 'jfif', 'jpe', 'pjpeg', 'jpeg', 'jpg', 'webp'];
-    const VIDEO_FORMATS: string[] = ['webm', 'gif', 'm4v', 'mp4', 'webp', 'matroska'];
-
-    if (IMAGE_FORMATS.includes(extName)) return 'image';
-    if (VIDEO_FORMATS.includes(extName)) return 'video';
-
-    return 'unknown';
-}
-
 
 document.querySelectorAll<HTMLElement>('.open-file-select').forEach(fileSelect => {
     fileSelect.addEventListener('click', async () => {
         const files: FileInfo[] = await window.electronAPI.fileSelectDialog();
 
         for (let i = 0; i < files.length; i++) {
-            const mediaType = mediaTypeOfFile(files[i].type.substring(files[i].type.indexOf('.') + 1))
-            if (mediaType === "unknown") continue;
-
-            let uploadElement: HTMLElement;
-
-            switch (mediaType) {
-                case 'image':
-                    uploadElement = await createImageUploadItem(files[i].path, files[i].name, files[i].type, files[i].size);
-                    break;
-                case 'video':
-                    uploadElement = await createVideoUploadItem(files[i].path, files[i].name, files[i].type, files[i].size)
-                    break;
-            }
-
-            uploadGrid.insertAdjacentElement('beforeend', uploadElement)
+            await itemManager.createFromFileInfo(uploadGrid, files[i])
         }
 
         updateSelectionQuantityLabel()
@@ -190,40 +106,6 @@ export const getSizeString = (bytes: number): string => {
     } else {
         return `${(bytes / (1024 ** 3)).toFixed(1)} GB`
     }
-}
-
-/**
- * Creates an upload item for an image. The appropriate event listeners are added to
- * the element before it is returned.
- * 
- * @param path The path to the image file, used for the preview
- * @param name The name of the file, used as a small title
- * @param type The filetype, used as supplemental information
- * @param size The size of the file in raw bytes that will be formatted, supplemental information
- * @returns The upload image item.
- */
-const createImageUploadItem = async (path: string, name: string, type: string, size: number): Promise<HTMLElement> => {
-    
-    const item = document.createElement('image-item')
-    item.setAttribute('path', path)
-    item.setAttribute('name', name)
-    item.setAttribute('type', type)
-    item.setAttribute('size', size.toString())
-    item.setAttribute('item-id', (await window.uploadItems.getID()).toString())
-    return item;
-
-}
-
-
-
-const createVideoUploadItem = async (path: string, name: string, type: string, size: number): Promise<HTMLElement> => {
-    const item = document.createElement('video-item')
-    item.setAttribute('path', path)
-    item.setAttribute('name', name)
-    item.setAttribute('type', type)
-    item.setAttribute('size', size.toString())
-    item.setAttribute('item-id', (await window.uploadItems.getID()).toString())
-    return item;
 }
 
 function commonElements<T>(arrays: T[][]): T[] {
@@ -318,7 +200,7 @@ let tagsInCommonAtEnd: CommonTagInformation = {
 };
 
 const startEnteringCommonTags = () => {
-    const selectedUploadItems = selectedItems.map(item => item as unknown as UploadItem)
+    const selectedUploadItems = itemManager.selectedItems.map(item => item as unknown as UploadItem)
     tagsInCommonAtStart = findCommonalitiesInSelectedElements(selectedUploadItems)
     console.log(tagsInCommonAtStart)
 
@@ -485,7 +367,7 @@ bulkOptions.addEventListener('click', () => {
     const active = commonTagsArea.getAttribute('active') === "true"
     
     if (!active) {
-        if (selectedItems.length === 0) return;
+        if (itemManager.selectedItems.length === 0) return;
         commonTagsArea.setAttribute('active', 'true')
         startEnteringCommonTags()
     }
@@ -494,7 +376,7 @@ bulkOptions.addEventListener('click', () => {
 commonConfirm?.addEventListener('click', () => {
     if (commonTagsArea.getAttribute('active') === "true") {
         endEnteringCommonTags();
-        selectedItems.map(i => i as unknown as UploadItem).forEach(item => {
+        itemManager.selectedItems.map(i => i as unknown as UploadItem).forEach(item => {
             updateCommonTags(item)
         })
         commonTagsArea.setAttribute('active', "false")
@@ -506,36 +388,6 @@ commonCancel?.addEventListener('click', () => {
         commonTagsArea.setAttribute('active', 'false')
     }
 })
-
-async function start() {
-    const item1: ImageUploadItem = await createImageUploadItem("C:\\Users\\Mater\\Downloads\\HRyyxL5aIAAkZ-L.jpg", "fox diaper gaming.jpg", '.jpg', 1) as ImageUploadItem
-    item1.rating = "e";
-    item1.genders = ["male" as Gender]
-    item1.general = ["diaper"]
-    item1.creators = ['syeenyeen']
-    item1.species = ['fox']
-    item1.numberOfCharacters = "solo" as NumberOfCharacters
-    item1.speciesTypes = ['anthro' as SpeciesType]
-    item1.relations = ['m/m' as Relations]
-
-    const item2: ImageUploadItem = await createImageUploadItem("C:\\Users\\Mater\\Downloads\\HRzqhvoa4AAr4ET.jpg", "rocky handsfree blorts.jpg", ".jpg", 2) as ImageUploadItem;
-    item2.rating = "e";
-    item2.genders = ["male" as Gender]
-    item2.general = ["diaper"]
-    item2.creators = ['poofbuttrocky']
-    item2.species = ['wolf']
-    item2.numberOfCharacters = "solo" as NumberOfCharacters
-    item2.speciesTypes = ['anthro' as SpeciesType]
-    item2.relations = ['m/m' as Relations]
-
-
-    uploadGrid.insertAdjacentElement('beforeend', item1)
-    uploadGrid.insertAdjacentElement('beforeend', item2)
-
-    findCommonalitiesInSelectedElements([item1, item2])
-}
-
-start()
 
 // In case there are pre-generated upload items, the bulk action bar
 // will automatically have the correct label.

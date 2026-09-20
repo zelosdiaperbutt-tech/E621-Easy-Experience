@@ -3,8 +3,13 @@ const modalSourceInputs = document.getElementById('modal-sources-inputs') as HTM
 const modalAddSourceButton = document.getElementById('modal-add-source') as HTMLButtonElement;
 const modalContentContainer = document.getElementById('content-container') as HTMLElement;
 
+const modalNavigatePrevious = document.getElementById('modal-navigate-previous') as HTMLButtonElement;
+const modalNavigateNext = document.getElementById('modal-navigate-next') as HTMLButtonElement;
+const itemGrid = document.getElementById('upload-main-area-grid') as HTMLElement;
+
 import { getSizeString } from './index.js'
 import { ImageUploadItem } from '../../components/imageUploadItem.js'
+import { VideoUploadItem } from '../../components/videoUplaodItem.js';
 import { SelectableButton } from '../../components/selectableButton.js'
 import { ExclusiveButton } from '../../components/exclusiveButton.js';
 import { ConditionButton } from '../../components/conditionButton.js';
@@ -177,6 +182,110 @@ export const writeModalChanges = (currentItem: UploadItem) => {
 }
 
 /**
+ * When the modal is open, if there is a previous upload element,
+ * changes to the current item are saved and then the modal's information
+ * is changed to the previous item's info.
+ * 
+ * @returns 
+ */
+const navigatePrevious = () => {
+    let index: number = -1;
+
+    if (
+        !(currentUploadItem instanceof ImageUploadItem) && 
+        !(currentUploadItem instanceof VideoUploadItem) 
+    ) return; 
+
+    for (let i = 0; i < itemGrid.children.length; i++) {
+        if (currentUploadItem === itemGrid.children[i]) {
+            index = i;
+            break;
+        }
+    }
+
+    if (index === -1) return;
+    if (index === 0) return;
+
+    const previousElement = itemGrid.children.item(index - 1);
+    if (!previousElement) return;
+
+    let previousUploadItem: UploadItem;
+    let mediaType: string;
+
+    if (previousElement instanceof ImageUploadItem) {
+        previousUploadItem = previousElement;
+        mediaType = 'image'
+    } else if (previousElement instanceof VideoUploadItem) {
+        previousUploadItem = previousElement;
+        mediaType = 'video'
+    } else return;
+
+    writeModalChanges(currentUploadItem);
+    clearModal();
+    setCurrentUploadItem(previousUploadItem);
+    updateModalInfo(previousUploadItem, mediaType as 'image'|'video', {
+        path: previousUploadItem.path,
+        name: previousUploadItem.name,
+        type: previousUploadItem.type,
+        size: previousUploadItem.size
+    })
+}
+
+modalNavigatePrevious.addEventListener('click', navigatePrevious);
+
+/**
+ * When the modal is open, if there is a next uplaod element,
+ * changes to the current item are save and then the modal's information
+ * is changed to the next item's info.
+ * @returns 
+ */
+const navigateNext = () => {
+    let index: number = -1;
+
+    if (
+        !(currentUploadItem instanceof ImageUploadItem) &&
+        !(currentUploadItem instanceof VideoUploadItem)
+    ) return;
+
+    for (let i = 0; i < itemGrid.children.length; i++) {
+        if (currentUploadItem === itemGrid.children[i]) {
+            index = i;
+            break;
+        }
+    }
+
+    if (index === -1) return;
+    if (index === itemGrid.children.length - 1) return;
+
+    const nextElement = itemGrid.children.item(index + 1);
+    if (!nextElement) return;
+
+    let nextUploadItem: UploadItem;
+    let mediaType: string;
+
+    if (nextElement instanceof ImageUploadItem) {
+        nextUploadItem = nextElement;
+        mediaType = 'image'
+    } else if (nextElement instanceof VideoUploadItem) {
+        nextUploadItem = nextElement;
+        mediaType = 'video'
+    } else return;
+
+    writeModalChanges(currentUploadItem);
+    clearModal();
+    setCurrentUploadItem(nextUploadItem);
+    updateModalInfo(nextUploadItem, mediaType as 'image'|'video', {
+        path: nextUploadItem.path,
+        name: nextUploadItem.name,
+        type: nextUploadItem.type,
+        size: nextUploadItem.size
+    })
+}
+
+modalNavigateNext.addEventListener('click', navigateNext)
+
+
+/**
  * Displays the modal with the information it currenly has.
  * To update its information, call `updateModalInfo()` beforehand.
  * @see {@link updateModalInfo}
@@ -186,10 +295,10 @@ export const activateModal = () => {
 }
 
 /**
- * Called when the modal needs to be closed, prevents changes to the previous element
- * from mistakenly being carried over to the next element.
+ * Resets everything inside of the modal so that no input from one item can bleed
+ * over into another item.
  */
-const closeModal = () => {
+const clearModal = () => {
     modalBackground.querySelectorAll<HTMLElement>('.selectable-button').forEach(button => {
         button.dispatchEvent(new Event('deselect'))
     })
@@ -211,6 +320,15 @@ const closeModal = () => {
     modalBackground.querySelectorAll<ConditionalButton>('conditional-button').forEach(button => {
         button.dispatchEvent(new Event('deselect'))
     })
+    modalSourceInputs.innerHTML = "";
+}
+
+/**
+ * Called when the modal needs to be closed, prevents changes to the previous element
+ * from mistakenly being carried over to the next element.
+ */
+const closeModal = () => {
+    clearModal()
 
     modalSourceInputs.innerHTML = "";
 
@@ -384,10 +502,6 @@ const aggregateCurrentTags = (): string[] => {
     
 
     return tags.filter(t => t.trim() !== "");
-}
-
-const placeTagsInPreview = () => {
-
 }
 
 const bulkTagInfo = async (tags: string[]): Promise<{category: number, post_count: number, name: string}[]> => {
