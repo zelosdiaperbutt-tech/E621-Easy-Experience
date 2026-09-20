@@ -1,0 +1,96 @@
+#startup-modal-background {
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    cursor: pointer;
+}
+
+#startup-modal-background.hidden {
+    display: none;
+}
+
+#startup-modal {
+    --outside-gap: 40px;
+    max-width: calc(100vw - var(--outside-gap));
+    background: var(--grey-50);
+    border-radius: var(--space-8);
+    padding: var(--space-48) var(--space-24);
+    cursor: default;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    gap: var(--space-16);
+}
+
+
+
+#startup-modal header {
+    text-align: center;
+    width: 85%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    justify-content: start;
+    padding: 0;
+    margin: 0;
+}
+
+#startup-modal header h1 {
+    margin-top: 0;
+    margin-bottom: var(--space-4);
+    font-size: 2.5rem;
+    color: var(--grey-900);
+}
+
+#startup-modal header h2 {
+    margin-top: 0;
+    margin-bottom: 0;
+    color: var(--grey-700);
+}
+
+#startup-modal header p {
+    margin: 0;
+    padding: 0;
+}
+
+#startup-modal section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    width: 85%;
+}
+
+.input-field h3 {
+    margin-top: 0;
+    margin-bottom: var(--space-4);
+    font-size: 1.2rem;
+    font-weight: bolder;
+}
+
+.input-field input[type="text"] {
+    width: 100%;
+}
+
+.input-field p.disclaimer {
+    margin: 0;
+    color: var(--grey-600);
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+#startup-modal footer {
+    display: flex;
+    flex-direction: row;
+    width: 55%;
+    gap: var(--space-4);
+    justify-content: space-between;
+    align-items: baseline;
+}

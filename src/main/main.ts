@@ -1,15 +1,10 @@
 import {app, BrowserWindow, ipcMain} from 'electron'
 import path from 'node:path'
 
-
 import './ipcHandlers'
 import * as postIds from './services/postIds'
 
-// This is going to be replaced with a better system in the future, only testing for right now.
-let firstOpen = false;
-const initialPage = (hasBeenSetup: boolean): string => {
-    return hasBeenSetup ? path.join(__dirname, "../renderer/pages/startup/index.html") : path.join(__dirname, "../renderer/pages/upload/index.html");
-}
+const OPENING_PAGE = path.join(__dirname, "../renderer/pages/home/index.html")
 
 const initialize = async () => {
     await postIds.loadCounter()
@@ -28,7 +23,7 @@ const createWindow = () => {
         }
     })
 
-    win.loadFile(initialPage(firstOpen));
+    win.loadFile(OPENING_PAGE);
 }
 
 app.whenReady().then(() => {
