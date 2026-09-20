@@ -4,7 +4,7 @@ import path from 'node:path'
 import './ipcHandlers'
 import * as postIds from './services/postIds'
 
-const OPENING_PAGE = path.join(__dirname, "../renderer/pages/home/index.html")
+const OPENING_PAGE = path.join(__dirname, "../renderer/pages/upload/index.html")
 
 const initialize = async () => {
     await postIds.loadCounter()

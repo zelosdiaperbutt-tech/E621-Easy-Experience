@@ -10,7 +10,7 @@ declare global {
             getID(): Promise<number>;
         }
         queue: {
-            addUploadItem(item: UploadItem, dependencies: string[], asPending: boolean): Promise<string>;
+            addUploadItem(item: UploadItemInfo, dependencies: string[], asPending: boolean): Promise<string>;
         }
     }
 

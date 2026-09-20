@@ -24,7 +24,8 @@ contextBridge.exposeInMainWorld('uploadItems', {
 })
 
 contextBridge.exposeInMainWorld('queue', {
-    addUploadItem: (item: UploadItem, dependencies: string[], asPending: boolean = true): Promise<string> => {
+    addUploadItem: (item: UploadItemInfo, dependencies: string[], asPending: boolean = true): Promise<string> => {
+        console.log(item)
         return ipcRenderer.invoke('queue:newUploadAction', item, dependencies, asPending)
     }
 })

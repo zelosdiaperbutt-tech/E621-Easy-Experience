@@ -4,9 +4,6 @@ const bulkactionDeleteButton = document.getElementById('bulkaction-delete') as H
 const mainAreaFileDrop = document.getElementById('upload-main-area-file') as HTMLElement;
 const uploadGrid = document.getElementById('upload-main-area-grid') as HTMLElement;
 
-
-
-
 import { itemManager } from './itemManager.js'
 
 bulkactionDeleteButton.addEventListener('click', () => {
@@ -104,7 +101,27 @@ export const getSizeString = (bytes: number): string => {
     }
 }
 
+const checkIfItemIsValidForUpload = (item: UploadItem) => {
+    return item.rating !== 'u' && item.path !== "" && item.sources !== null
+}
 
+const moveSelectedItemToUploadQueue = async (asPending: boolean = true) => {
+    const acceptableItems = itemManager.selectedItems.filter(i => checkIfItemIsValidForUpload(i))
+    
+    acceptableItems.forEach(async (item) => {
+        
+        item.parent = "";   // workaround for now, since the code for parent resolution is going to be complicated
+        await window.queue.addUploadItem(item.toData(), [], asPending)
+
+        console.log(item)
+    })
+
+    itemManager.deleteAllSelected(updateSelectionQuantityLabel);
+}
+
+document.getElementById('upload-action')?.addEventListener('click', () => {
+    moveSelectedItemToUploadQueue(false)
+})
 
 // In case there are pre-generated upload items, the bulk action bar
 // will automatically have the correct label.
