@@ -6,6 +6,9 @@ const uploadGrid = document.getElementById('upload-main-area-grid') as HTMLEleme
 
 import { itemManager } from './itemManager.js'
 
+import { ImageUploadItem } from '../../components/imageUploadItem.js';
+import { VideoUploadItem } from '../../components/videoUplaodItem.js';
+
 bulkactionDeleteButton.addEventListener('click', () => {
     itemManager.deleteAllSelected(updateSelectionQuantityLabel)
 })
@@ -107,13 +110,20 @@ const checkIfItemIsValidForUpload = (item: UploadItem) => {
 
 const moveSelectedItemToUploadQueue = async (asPending: boolean = true) => {
     const acceptableItems = itemManager.selectedItems.filter(i => checkIfItemIsValidForUpload(i))
+    itemManager.selectedItems.filter(i => !checkIfItemIsValidForUpload(i)).forEach(i => {
+        console.log("Not acceptable:", i)
+        if (i instanceof ImageUploadItem) {i.dispatchEvent(new Event('become-deselected'))}
+        else if (i instanceof VideoUploadItem) {i.dispatchEvent(new Event('become-deselected'))}
+    })
     
     acceptableItems.forEach(async (item) => {
         
         item.parent = "";   // workaround for now, since the code for parent resolution is going to be complicated
+        
         await window.queue.addUploadItem(item.toData(), [], asPending)
 
         console.log(item)
+
     })
 
     itemManager.deleteAllSelected(updateSelectionQuantityLabel);

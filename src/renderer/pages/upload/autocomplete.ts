@@ -186,7 +186,7 @@ document.querySelectorAll<HTMLTextAreaElement>('.autocomplete-accepted').forEach
         switch (event.key) {
             case "Tab":
                 event.preventDefault();
-                replaceCurrentWord(auto, autocompleteSuggestions.querySelector<HTMLElement>('.autocomplete-suggestion')?.dataset.value ?? "")
+                replaceCurrentWord(auto, (autocompleteSuggestions.querySelector<HTMLElement>('.autocomplete-suggestion')?.dataset.value ?? "") + " ")
                 hideAutocompleteSuggestions()
                 break;
             case "Escape":
@@ -221,7 +221,7 @@ const updateAutocompleteSuggestions = (suggestions: AutocompleteSuggestion[], te
         item.dataset.value = sug.name
 
         item.addEventListener('click', () => {
-            replaceCurrentWord(textarea, item.dataset.value ?? "")
+            replaceCurrentWord(textarea, (item.dataset.value ?? "") + " ")
 
             hideAutocompleteSuggestions()
         })

@@ -83,10 +83,8 @@ ipcMain.handle('get-id', async () => {
 })
 
 ipcMain.handle('queue:newUploadAction', (_, item: UploadItemInfo, dependencies: string[], asPending: boolean) => {
-    console.log(item)
     const input = UploadPostActionInput.convert(item, asPending)
     const action = new UploadPostAction(input, dependencies)
     queueManager.add(action)
-    console.log(queueManager)
     return action.id;
 })

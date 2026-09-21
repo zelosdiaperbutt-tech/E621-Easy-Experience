@@ -171,7 +171,7 @@ const endEnteringCommonTags = () => {
         tagsInCommonAtEnd.parent = parent;
     }
 
-    const selectedRating = commonTagsArea.querySelector<ExclusiveButton>('exclusive-button[group-name="common-rating-button"][selected="true"]')
+    const selectedRating = commonTagsArea.querySelector<ExclusiveButton>('#common-rating exclusive-button[group-name="common-rating-button"][selected="true"]')
     if (selectedRating) {
         tagsInCommonAtEnd.rating = (ratingCon.get(selectedRating.value) as 's'|'q'|'e'|'u')
     } else {
