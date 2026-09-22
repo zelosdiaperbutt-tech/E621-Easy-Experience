@@ -13,6 +13,13 @@ contextBridge.exposeInMainWorld('saveSecure', {
     getUsername: () => ipcRenderer.invoke('get-username')
 })
 
+contextBridge.exposeInMainWorld('storage', {
+    items: {
+        saveUnfinished: (items: UploadItemInfo[]) => ipcRenderer.invoke('unfinished:save', items),
+        loadUnfinished: (): Promise<UploadItemInfo[]> => ipcRenderer.invoke('unfinished:load')
+    }
+})
+
 
 contextBridge.exposeInMainWorld('electronAPI', {
     getFilePath: (file: File): string => { return webUtils.getPathForFile(file); },

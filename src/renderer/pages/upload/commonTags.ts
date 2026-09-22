@@ -5,6 +5,7 @@ import { ExclusiveButton } from '../../components/exclusiveButton.js';
 import { ConditionButton } from '../../components/conditionButton.js';
 import { ConditionalButton } from '../../components/conditionalButton.js';
 
+const uploadGrid = document.getElementById('upload-main-area-grid') as HTMLElement;
 const bulkOptions = document.getElementById('bulkaction-options') as HTMLElement;
 
 function commonElements<T>(arrays: T[][]): T[] {
@@ -277,6 +278,7 @@ commonConfirm?.addEventListener('click', () => {
         itemManager.selectedItems.map(i => i as unknown as UploadItem).forEach(item => {
             updateCommonTags(item)
         })
+        itemManager.saveAllItems(uploadGrid);
         commonTagsArea.setAttribute('active', "false")
     }
 })

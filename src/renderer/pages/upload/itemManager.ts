@@ -1,3 +1,6 @@
+import { ImageUploadItem } from "../../components/imageUploadItem.js";
+import { VideoUploadItem } from "../../components/videoUploadItem.js";
+
 /**
  * Handles the creation, deletion, and selection of items while they are in the
  * grid.
@@ -55,6 +58,22 @@ class ItemManager {
         callback?.()
     }
 
+    async saveAllItems(parentElement: HTMLElement) {
+        let list: UploadItem[] = [];
+
+        for (let i = 0; i < parentElement.children.length; i++) {
+            const currentItem = parentElement.children[i]
+            if (currentItem instanceof ImageUploadItem) {
+                list.push(currentItem)
+            } else if (currentItem instanceof VideoUploadItem) {
+                list.push(currentItem)
+            }
+        }
+
+        const infoList: UploadItemInfo[] = list.map(item => item.toData())
+        await window.storage.items.saveUnfinished(infoList);
+    }
+
     /**
      * Using the specified file object, creates the appropriate element
      * for the file's type and appends it at the end of the specified parent
@@ -100,6 +119,34 @@ class ItemManager {
         parentElement.insertAdjacentElement('beforeend', uploadElement);
     }
 
+    async createFromUploadItemInfo(parentElement: HTMLElement, info: UploadItemInfo) {
+        let mediaType: 'image'|'video';
+        
+        if (info.fileType) mediaType = info.fileType;
+        else {
+            return;
+        }
+
+        const item = await this.getUploadItemCreationFunction(mediaType)(info.path, info.name, info.type,  info.size, false)
+        
+        item.setAttribute('item-id', info.id.toString())
+        item.setAttribute('rating', info.rating)
+        item.setAttribute('creators', info.creators.join(' '))
+        item.setAttribute('sources', info.sources.join(' '))
+        item.setAttribute('characters', info.characters.join(' '))
+        item.setAttribute('genders', info.genders.map(gen => gen.toString()).join(' '))
+        item.setAttribute('species', info.species.join(' '))
+        item.setAttribute('general', info.general.join(' '))
+        item.setAttribute('parent', info.parent)
+        item.setAttribute('description', info.description)
+        item.setAttribute('relations', info.relations.map(rel => rel.toString()).join(' '))
+        item.setAttribute('species-types', info.speciesTypes.map(t => t.toString()).join(' '))
+        item.setAttribute('number-of-characters', info.numberOfCharacters.toString())
+        item.setAttribute('state', info.state.toString())
+
+        parentElement.insertAdjacentElement('beforeend', item)
+    }
+
     /**
      * Cleans up the provided type information to give only the text after
      * the last '.' and '/'. Used to clean up the types that are given
@@ -139,7 +186,7 @@ class ItemManager {
      * function that will be returned. 
      * @returns The item creation function.
      */
-    private getUploadItemCreationFunction(type: 'image'|'video'): (path: string, name: string, type: string, size: number) => Promise<HTMLElement> {
+    private getUploadItemCreationFunction(type: 'image'|'video'): (path: string, name: string, type: string, size: number, autoID?: boolean) => Promise<HTMLElement> {
         switch(type) {
             case 'image':
                 return this.createImageUploadItem;
@@ -158,13 +205,13 @@ class ItemManager {
      * before being displayed.
      * @returns The ImageUploadItem
      */
-    private async createImageUploadItem(path: string, name: string, type: string, size: number): Promise<HTMLElement> {
+    private async createImageUploadItem(path: string, name: string, type: string, size: number, autoId: boolean = true): Promise<HTMLElement> {
         const item = document.createElement('image-item')
         item.setAttribute('path', path)
         item.setAttribute('name', name)
         item.setAttribute('type', type)
         item.setAttribute('size', size.toString())
-        item.setAttribute('item-id', (await window.uploadItems.getID()).toString())
+        if (autoId) item.setAttribute('item-id', (await window.uploadItems.getID()).toString())
         return item;
     }
 
@@ -178,13 +225,13 @@ class ItemManager {
      * before being displayed.
      * @returns The VideoUploadItem
      */
-    private async createVideoUploadItem(path: string, name: string, type: string, size: number): Promise<HTMLElement> {
+    private async createVideoUploadItem(path: string, name: string, type: string, size: number, autoId: boolean = true): Promise<HTMLElement> {
         const item = document.createElement('video-item')
         item.setAttribute('path', path)
         item.setAttribute('name', name)
         item.setAttribute('type', type)
         item.setAttribute('size', size.toString())
-        item.setAttribute('item-id', (await window.uploadItems.getID()).toString())
+        if (autoId) item.setAttribute('item-id', (await window.uploadItems.getID()).toString())
         return item;
     }
 }

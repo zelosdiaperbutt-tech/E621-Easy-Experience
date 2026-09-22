@@ -1,12 +1,12 @@
 import { ipcMain, dialog } from 'electron'
 
 import fs from 'node:fs';
-import {stat} from 'node:fs/promises'
 import path from 'node:path';
 
 import * as saveSecure from './workers/saveSecure'
-import * as api from './api'
 import {advanceCounter} from './services/postIds'
+
+import * as unfinishedItems from './services/unfinishedItems'
 
 import {queueManager} from './workers/QueueManager'
 import {UploadPostAction, UploadPostActionInput} from './workers/UploadPostAction'
@@ -36,8 +36,6 @@ ipcMain.handle('save-username', async (_, username: string) => {
 ipcMain.handle('get-username', async () => {
     return saveSecure.getUsername()
 })
-
-
 
 async function getFileSize(filePath: string): Promise<number> {
     return new Promise((resolve, reject) => {
@@ -87,4 +85,12 @@ ipcMain.handle('queue:newUploadAction', (_, item: UploadItemInfo, dependencies: 
     const action = new UploadPostAction(input, dependencies)
     queueManager.add(action)
     return action.id;
+})
+
+ipcMain.handle('unfinished:save', (_, items: UploadItemInfo[]) => {
+    unfinishedItems.save(items)
+})
+
+ipcMain.handle('unfinished:load', () => {
+    return unfinishedItems.load();
 })

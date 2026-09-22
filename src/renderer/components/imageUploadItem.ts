@@ -102,7 +102,10 @@ export class ImageUploadItem extends HTMLElement implements UploadItem {
             description: this.description,
             relations: this.relations,
             speciesTypes: this.speciesTypes,
-            numberOfCharacters: this.numberOfCharacters
+            numberOfCharacters: this.numberOfCharacters,
+            fileType: 'image',
+            state: this.state,
+            id: this.itemID.toString()
         }
     }
 

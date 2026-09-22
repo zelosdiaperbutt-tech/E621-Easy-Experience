@@ -7,10 +7,13 @@ const uploadGrid = document.getElementById('upload-main-area-grid') as HTMLEleme
 import { itemManager } from './itemManager.js'
 
 import { ImageUploadItem } from '../../components/imageUploadItem.js';
-import { VideoUploadItem } from '../../components/videoUplaodItem.js';
+import { VideoUploadItem } from '../../components/videoUploadItem.js';
 
 bulkactionDeleteButton.addEventListener('click', () => {
-    itemManager.deleteAllSelected(updateSelectionQuantityLabel)
+    itemManager.deleteAllSelected(() => {
+        updateSelectionQuantityLabel()
+        itemManager.saveAllItems(uploadGrid);
+    })
 })
 
 /**
@@ -126,12 +129,27 @@ const moveSelectedItemToUploadQueue = async (asPending: boolean = true) => {
 
     })
 
-    itemManager.deleteAllSelected(updateSelectionQuantityLabel);
+    itemManager.deleteAllSelected(() => {
+        updateSelectionQuantityLabel()
+        itemManager.saveAllItems(uploadGrid);
+    });
 }
 
 document.getElementById('upload-action')?.addEventListener('click', () => {
     moveSelectedItemToUploadQueue(false)
 })
+
+const startup = async () => {
+
+    // Load unfinished items from previous session
+    const items = await window.storage.items.loadUnfinished();
+    
+    items.forEach(i => {
+        itemManager.createFromUploadItemInfo(uploadGrid, i)
+    })
+}
+
+startup();
 
 // In case there are pre-generated upload items, the bulk action bar
 // will automatically have the correct label.

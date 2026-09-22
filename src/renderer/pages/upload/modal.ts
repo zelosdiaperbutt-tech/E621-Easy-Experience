@@ -8,8 +8,10 @@ const modalNavigateNext = document.getElementById('modal-navigate-next') as HTML
 const itemGrid = document.getElementById('upload-main-area-grid') as HTMLElement;
 
 import { getSizeString } from './index.js'
+import { itemManager } from './itemManager.js';
+
 import { ImageUploadItem } from '../../components/imageUploadItem.js'
-import { VideoUploadItem } from '../../components/videoUplaodItem.js';
+import { VideoUploadItem } from '../../components/videoUploadItem.js';
 import { SelectableButton } from '../../components/selectableButton.js'
 import { ExclusiveButton } from '../../components/exclusiveButton.js';
 import { ConditionButton } from '../../components/conditionButton.js';
@@ -179,6 +181,8 @@ export const writeModalChanges = (currentItem: UploadItem) => {
     currentItem.creators = modalBackground.querySelector<HTMLTextAreaElement>('#modal-creators textarea')!.value.split(' ')
     currentItem.description = modalBackground.querySelector<HTMLTextAreaElement>('#modal-description textarea')!.value
     currentItem.parent = modalBackground.querySelector<HTMLTextAreaElement>('#modal-parent input[type="text"]')!.value
+
+    itemManager.saveAllItems(itemGrid);
 }
 
 /**

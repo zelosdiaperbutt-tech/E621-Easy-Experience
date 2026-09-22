@@ -12,6 +12,12 @@ declare global {
         queue: {
             addUploadItem(item: UploadItemInfo, dependencies: string[], asPending: boolean): Promise<string>;
         }
+        storage: {
+            items: {
+                saveUnfinished(items: UploadItemInfo[]);
+                loadUnfinished(): Promise<UploadItemInfo[]>;
+            }
+        }
     }
 
     interface UploadItem {
@@ -75,6 +81,9 @@ declare global {
         relations: Relations[];
         speciesTypes: SpeciesType[];
         numberOfCharacters: NumberOfCharacters;
+        state: UploadItemState;
+        id: string;
+        fileType?: 'image'|'video'
     }
 
     type FileInfo = {

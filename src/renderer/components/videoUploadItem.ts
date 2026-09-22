@@ -75,7 +75,10 @@ export class VideoUploadItem extends HTMLElement implements UploadItem {
             description: this.description,
             relations: this.relations,
             speciesTypes: this.speciesTypes,
-            numberOfCharacters: this.numberOfCharacters
+            numberOfCharacters: this.numberOfCharacters,
+            fileType: 'video',
+            state: this.state,
+            id: this.itemID.toString()
         }
     }
 
