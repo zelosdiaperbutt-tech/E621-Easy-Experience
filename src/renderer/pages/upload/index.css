@@ -196,6 +196,7 @@ body {
     width: 100%;
     height: auto;
     background: var(--grey-50);
+    flex-basis: 50%;
 }
 
 #content-container img,
@@ -212,7 +213,21 @@ body {
 }
 
 #modal-sources {
-    flex-basis: 0%;
+    flex-basis: 10%;
+    width: 100%;
+    flex-grow: 0;
+}
+
+#modal-sources-inputs {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    overflow-y: scroll;
+}
+
+#modal-sources-inputs input[type="text"] {
+    width: 100%;
 }
 
 #modal-characters {
