@@ -240,6 +240,10 @@ const updateCommonTags = (item: UploadItem) => {
         item.rating = tagsInCommonAtEnd.rating
     }
 
+    if (tagsInCommonAtEnd.numberOfCharacters) {
+        item.numberOfCharacters = tagsInCommonAtEnd.numberOfCharacters;
+    }
+
     if (tagsInCommonAtEnd.description) {
         item.description = tagsInCommonAtEnd.description
     }
