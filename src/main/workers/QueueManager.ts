@@ -176,6 +176,7 @@ class QueueManager implements ActionContext {
         }
 
         try {
+            console.log("Executing:", action)
             const result = await this.executeAction(action)
 
             action.result = result;
