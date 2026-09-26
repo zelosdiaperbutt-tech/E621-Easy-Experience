@@ -244,7 +244,6 @@ declare global {
     }
 
     interface Dependency{
-        dependentQueueActionID: string;
         resolved: boolean;
 
         /**
