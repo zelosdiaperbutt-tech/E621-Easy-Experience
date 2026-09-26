@@ -2,8 +2,6 @@ import {app} from 'electron'
 import fs from "node:fs"
 import path from "node:path"
 
-import {TestAction} from './TestAction'
-
 /**
  * @unfinished
  */
@@ -46,10 +44,6 @@ class QueueStorage {
 
     private deserializeAction(data: any): QueueAction {
         switch(data.type) {
-            case "testAction":
-                return TestAction.deserialize(data)
-                break;
-
             default:
                 throw new Error(`Unknown action type: ${data.type}`)
         }

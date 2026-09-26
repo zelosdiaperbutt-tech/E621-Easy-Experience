@@ -10,7 +10,7 @@ declare global {
             getID(): Promise<number>;
         }
         queue: {
-            addUploadItem(item: UploadItemInfo, dependencies: string[], asPending: boolean): Promise<string>;
+            addUploadItem(item: UploadItemInfo, asPending: boolean, uploadActionParentID?: string): Promise<string>;
         }
         storage: {
             items: {
@@ -50,6 +50,8 @@ declare global {
         set speciesTypes(sT: SpeciesType[]);
         get numberOfCharacters(): NumberOfCharacters;
         set numberOfCharacters(n: NumberOfCharacters);
+        set itemID(n: number);
+        get itemID(): number;
 
         set state(s: UploadItemState);
         get state(): UploadItemState;
@@ -214,7 +216,7 @@ declare global {
 
         input: TInput;
 
-        dependencies: string[]; // IDs of actions that must be completed first
+        dependencies: Dependency[]; // IDs of actions that must be completed first
 
         status: ActionStatus;
 
@@ -232,12 +234,28 @@ declare global {
             status: string,
             attempts: number,
             maxAttempts: number,
-            dependencies: string[],
+            dependencies: Dependency[],
             nextAttemptAt: number|undefined
         };
     }
 
     interface ActionContext {
         getResult<T>(actionId: string): T;
+    }
+
+    interface Dependency{
+        dependentQueueActionID: string;
+        resolved: boolean;
+
+        /**
+         * The dependency attempts to resolve itself by checking the context
+         * to see if the dependent is finished. If it is, then it will perform
+         * changes to the queueAction that it's attached to; it will also set its 
+         * own resolved state to `true`.
+         * @param context The context that will be checked to see if the depenent action
+         * has completed.
+         * @param attachedAction The action that will be modified if the dependent is completed.
+         */
+        attemptResolution(context: ActionContext, attachedAction: QueueAction): Promise<boolean>;
     }
 }

@@ -42,13 +42,15 @@ class QueueManager implements ActionContext {
 
         if (!action) {
             throw new Error(
-                `Action ${actionId} does not exist`
+                `Action ${actionId} does not exist`,
+                {cause: 0}
             )
         }
 
         if (action.status !== 'completed') {
             throw new Error(
-                `Action ${actionId} has not completed`
+                `Action ${actionId} has not completed`,
+                {cause: 1}
             )
         }
 
@@ -65,10 +67,8 @@ class QueueManager implements ActionContext {
     private dependenciesSatisfied(
         action: QueueAction
     ): boolean {
-        return action.dependencies.every(id => {
-            const dependency = this.actions.get(id)
-
-            return dependency?.status === "completed"
+        return action.dependencies.every(dep => {
+            return dep.resolved;
         })
     }
 
@@ -116,6 +116,8 @@ class QueueManager implements ActionContext {
                 }
 
                 await this.execute(action);
+
+                await this.updateActionDependencies();
             }
 
             this.scheduleNextWakeUp();
@@ -136,6 +138,18 @@ class QueueManager implements ActionContext {
                 action.status = "waiting";
             }
         })
+    }
+
+    /**
+     * After each item in the queue has been processed, this method should be called
+     * so that the dependencies in the other Queue Actions can be updated.
+     */
+    private async updateActionDependencies() {
+        for (const action of this.actions.values()) {
+            for (const dep of action.dependencies) {
+                await dep.attemptResolution(this, action);
+            }
+        }
     }
 
     private scheduleNextWakeUp(): void {

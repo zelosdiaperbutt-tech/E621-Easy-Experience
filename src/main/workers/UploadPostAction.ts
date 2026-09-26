@@ -164,7 +164,7 @@ export class UploadPostAction implements QueueAction<UploadPostActionInput, Uplo
     type: string = "uploadPostAction";
     input: UploadPostActionInput;
 
-    dependencies: string[]
+    dependencies: Dependency[];
 
     status: ActionStatus = "pending"
     result: UploadPostActionResult|undefined = undefined
@@ -175,12 +175,16 @@ export class UploadPostAction implements QueueAction<UploadPostActionInput, Uplo
     nextAttemptAt?: number = undefined;
     error?: QueueError = undefined;
 
-    constructor(input: UploadPostActionInput, dependencies: string[]) {
+    constructor(input: UploadPostActionInput, dependencies: Dependency[]) {
         this.input = input;
         this.dependencies = dependencies;
     }
 
     async execute(): Promise<UploadPostActionResult> {
+
+        if (!this.dependencies.every(dep => dep.resolved)) {
+            throw new Error('UploadPostAction was set to execute, but not all dependencies were resolved.')
+        }
         
         // Taking all of the data from the input and turning it into the acceptable 
         // format that the endpoint expects
