@@ -40,27 +40,3 @@ app.on('window-all-closed', () => {
     
     if (process.platform !== 'darwin') app.quit()
 })
-
-
-// test work
-
-import {TestAction, TestActionInput} from './workers/TestAction'
-import { UserLoginDependency } from './workers/userLoginDependency'
-import { queueManager } from './workers/QueueManager'
-
-const testInput = new TestActionInput(true, 5, false);
-const testAction = new TestAction(testInput, [new UserLoginDependency()])
-
-const test = async () => {
-    try {
-        testAction.dependencies[0].attemptResolution(queueManager, testAction)
-        const result = testAction.execute()
-        console.log(result)
-    } catch(err) {
-        console.log(err)
-    }
-}
-
-setTimeout(test, 5000)
-
-// end test work
