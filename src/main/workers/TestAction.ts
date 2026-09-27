@@ -1,7 +1,7 @@
 export class TestActionInput {
     constructor(
         public readonly willSucceed: boolean,
-        public readonly value: number,
+        public value: number,
         public readonly throwsError: boolean
     ) {}
 
@@ -22,14 +22,14 @@ export class TestActionResult {
 }
 
 
-import {NetworkError, ApiError, RateLimitError} from './Errors.js'
+import {ApiError} from './Errors.js'
 import { assignID } from './QueueManager.js'
 
 export class TestAction implements QueueAction<TestActionInput, TestActionResult> {
     id: string = assignID(this)
     type: string = "testAction"
     input: TestActionInput;
-    dependencies: string[];
+    dependencies: Dependency[];
     status: ActionStatus = "pending"
     result: TestActionResult|undefined = undefined;
 
@@ -54,12 +54,18 @@ export class TestAction implements QueueAction<TestActionInput, TestActionResult
         return testAction;
     }
 
-    constructor(input: TestActionInput, dependencies: string[]) {
+    constructor(input: TestActionInput, dependencies: Dependency[]) {
         this.input = input;
         this.dependencies = dependencies;
     }
 
     async execute(): Promise<TestActionResult> {
+
+        const isReady = this.dependencies.every(dep => dep.resolved)
+        if (!isReady) {
+            throw new Error('dependencies not finished')
+        }
+
         if (this.input.throwsError) {
             throw new ApiError(429, "Network Error")
         }

@@ -10,6 +10,7 @@ import * as unfinishedItems from './services/unfinishedItems'
 
 import {queueManager} from './workers/QueueManager'
 import {UploadPostAction, UploadPostActionInput} from './workers/UploadPostAction'
+import { PostActionParentDependency } from './workers/postActionParentDependency';
 
 ipcMain.handle('save-api-key', async (_, key: string) => {
     try {
@@ -80,9 +81,18 @@ ipcMain.handle('get-id', async () => {
     return advanceCounter()
 })
 
-ipcMain.handle('queue:newUploadAction', (_, item: UploadItemInfo, dependencies: string[], asPending: boolean) => {
+ipcMain.handle('queue:newUploadAction', (_, item: UploadItemInfo, asPending: boolean, uploadActionParentId?: string) => {
     const input = UploadPostActionInput.convert(item, asPending)
-    const action = new UploadPostAction(input, dependencies)
+    
+    // dependencies are currently not being passed during 
+    // test implemenation.
+    const action = new UploadPostAction(input, [])
+    if (uploadActionParentId) {
+        action.dependencies.push(
+            new PostActionParentDependency(uploadActionParentId, false)
+        )
+    }
+    
     queueManager.add(action)
     return action.id;
 })

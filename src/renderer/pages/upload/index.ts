@@ -119,15 +119,44 @@ const moveSelectedItemToUploadQueue = async (asPending: boolean = true) => {
         else if (i instanceof VideoUploadItem) {i.dispatchEvent(new Event('become-deselected'))}
     })
     
-    acceptableItems.forEach(async (item) => {
-        
-        item.parent = "";   // workaround for now, since the code for parent resolution is going to be complicated
-        
-        await window.queue.addUploadItem(item.toData(), [], asPending)
+    let uploadItemToAssignedActionIds: Map<number, string> = new Map<number, string>();
 
-        console.log(item)
+ 
 
-    })
+    console.log('Starting items without parents')
+    console.group()
+
+    for (const item of acceptableItems) {
+        if (item.parent === "" || (item.parent.length > 0 && item.parent[0] !== '#')) {
+            
+            uploadItemToAssignedActionIds.set(
+                item.itemID,
+                await window.queue.addUploadItem(item.toData(), asPending)
+            )
+ 
+        }
+    }
+
+    console.groupEnd()
+    console.log("Map at end:", uploadItemToAssignedActionIds)
+    
+    console.log("Starting items with parents")
+    console.group()
+
+    for (const item of acceptableItems) {
+        if (item.parent.length > 0 && item.parent[0] === "#") {
+            const originalItemParentId = Number(item.parent.substring(1));
+            const actionParentId = uploadItemToAssignedActionIds.has(originalItemParentId) ? uploadItemToAssignedActionIds.get(originalItemParentId) : undefined;
+            if (actionParentId) {
+                item.parent = actionParentId;
+            } else {
+                item.parent = "";
+            }
+            await window.queue.addUploadItem(item.toData(), asPending, actionParentId);
+        }
+    }
+
+    console.groupEnd();
 
     itemManager.deleteAllSelected(() => {
         updateSelectionQuantityLabel()

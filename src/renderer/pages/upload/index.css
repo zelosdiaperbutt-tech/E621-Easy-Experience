@@ -180,7 +180,14 @@ body {
     width: 50%;
     display: flex;
     justify-content: space-between;
+    align-items: baseline;
     gap: var(--space-8);
+}
+
+#modal-navigation-buttons p {
+    margin: 0;
+    color: var(--grey-900);
+    font-weight: bold;
 }
 
 #left-modal {

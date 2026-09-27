@@ -68,6 +68,8 @@ export const updateModalInfo = (
         modalContentContainer.insertAdjacentElement('beforeend', videoElement)
     }
 
+    modalBackground.querySelector<HTMLParagraphElement>('#modal-navigate-item-id')!.innerText = `ID: #${uploadElement.itemID}`
+
     modalBackground.querySelector<HTMLElement>('#left-modal .content-name')!.innerText = info.name;
     modalBackground.querySelector<HTMLElement>('#left-modal .format')!.innerText = info.type;
     modalBackground.querySelector<HTMLElement>('#left-modal .file-size')!.innerText = getSizeString(info.size);
@@ -324,6 +326,7 @@ const clearModal = () => {
     modalBackground.querySelectorAll<ConditionalButton>('conditional-button').forEach(button => {
         button.dispatchEvent(new Event('deselect'))
     })
+    modalBackground.querySelector<HTMLParagraphElement>('#modal-navigate-item-id')!.innerHTML = "ID: #___"
     modalSourceInputs.innerHTML = "";
 }
 
