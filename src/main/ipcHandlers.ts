@@ -12,6 +12,8 @@ import {queueManager} from './workers/QueueManager'
 import {UploadPostAction, UploadPostActionInput} from './workers/UploadPostAction'
 import { PostActionParentDependency } from './workers/postActionParentDependency';
 
+import { downloadImage } from './services/downloadImage';
+
 ipcMain.handle('save-api-key', async (_, key: string) => {
     try {
         saveSecure.saveAPIKey(key);
@@ -103,4 +105,16 @@ ipcMain.handle('unfinished:save', (_, items: UploadItemInfo[]) => {
 
 ipcMain.handle('unfinished:load', () => {
     return unfinishedItems.load();
+})
+
+ipcMain.handle('url-conversion:download-bluesky', (_, url: string) => {
+    const data = url.match(/did\:plc\:\w+\/\w+$/)
+    if (!data) return null;
+    const str = data[0];
+    const slashIndex = str.indexOf('/')
+    const first = str.substring(0, slashIndex)
+    const second = str.substring(slashIndex + 1)
+
+    const resolvedPath = `https://bsky.social/xrpc/com.atproto.sync.getBlob?did=${first}&cid=${second}`
+    return downloadImage(resolvedPath, second);
 })

@@ -35,3 +35,7 @@ contextBridge.exposeInMainWorld('queue', {
         return ipcRenderer.invoke('queue:newUploadAction', item, asPending, uploadActionParentId)
     }
 })
+
+contextBridge.exposeInMainWorld('urlConversion', {
+    downloadFromBlusky: (url: string) => ipcRenderer.invoke('url-conversion:download-bluesky', url)
+})
