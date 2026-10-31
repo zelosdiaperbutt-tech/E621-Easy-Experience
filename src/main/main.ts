@@ -1,8 +1,9 @@
 import {app, BrowserWindow, ipcMain} from 'electron'
 import path from 'node:path'
 
-import './ipcHandlers'
 import * as postIds from './services/postIds'
+
+import { registerIpcHandlers } from './ipc'
 
 const OPENING_PAGE = path.join(__dirname, "../renderer/pages/upload/index.html")
 
@@ -29,6 +30,8 @@ const createWindow = () => {
 app.whenReady().then(() => {
     initialize()
     createWindow()
+
+    registerIpcHandlers();
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
