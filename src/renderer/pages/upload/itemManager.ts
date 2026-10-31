@@ -96,6 +96,7 @@ class ItemManager {
         let uploadElement: HTMLElement = await this.getUploadItemCreationFunction(mediaType)(path, file.name, cleanedType, file.size)
 
         parentElement.insertAdjacentElement('beforeend', uploadElement)
+        this.saveAllItems(parentElement)
         console.log('Item appended')
     }
 
@@ -117,6 +118,7 @@ class ItemManager {
         let uploadElement: HTMLElement = await this.getUploadItemCreationFunction(mediaType)(info.path, info.name, cleanedType, info.size)
 
         parentElement.insertAdjacentElement('beforeend', uploadElement);
+        this.saveAllItems(parentElement)
     }
 
     async createFromUploadItemInfo(parentElement: HTMLElement, info: UploadItemInfo) {
@@ -145,6 +147,7 @@ class ItemManager {
         item.setAttribute('state', info.state.toString())
 
         parentElement.insertAdjacentElement('beforeend', item)
+        this.saveAllItems(parentElement)
     }
 
     /**
