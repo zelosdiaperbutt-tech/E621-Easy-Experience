@@ -1,5 +1,6 @@
-import { ipcMain } from 'electron'
+import { ipcMain, app } from 'electron'
 import { downloadImage } from '../services/downloadImage';
+import { remapBlueskyImageUrl, selectBestImage } from '../services/selectBestImage';
 
 export function registerImageHandlers(): void {
 
@@ -13,5 +14,12 @@ export function registerImageHandlers(): void {
 
         const resolvedPath = `https://bsky.social/xrpc/com.atproto.sync.getBlob?did=${first}&cid=${second}`
         return downloadImage(resolvedPath, second);
+    })
+
+    ipcMain.handle('image-select-best', async (_, urls: string[]) => {
+        const properUrls = urls.map(remapBlueskyImageUrl)
+        const result = await selectBestImage(properUrls, {keepDir: app.getPath('desktop')})
+        console.log(result);
+        return true
     })
 }

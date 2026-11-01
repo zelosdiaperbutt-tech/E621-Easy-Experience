@@ -39,3 +39,7 @@ contextBridge.exposeInMainWorld('queue', {
 contextBridge.exposeInMainWorld('urlConversion', {
     downloadFromBlusky: (url: string) => ipcRenderer.invoke('url-conversion:download-bluesky', url)
 })
+
+contextBridge.exposeInMainWorld('image', {
+    selectBest: (urls: string[]) => ipcRenderer.invoke('image-select-best', urls)
+})
