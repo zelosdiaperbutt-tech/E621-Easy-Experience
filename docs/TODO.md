@@ -1,10 +1,12 @@
 # TODO
 
-## Current Features
+## Work on First:
 
 - [ ] Move Modals into custom, reusable element to make using them easier.
+- [ ] Make application "Single Page," with a hamburger menu on the left side
+- [ ] Update colors
 
-## Features
+## All Features
 
 - [ ] Startup
     - [ ] Should open on the first time the user opens the program and subsequently after each update
