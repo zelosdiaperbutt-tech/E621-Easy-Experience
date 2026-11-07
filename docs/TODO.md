@@ -15,11 +15,11 @@
 - [ ] Settings
     - [ ] Application settings, and the store custom tag and implications
 - [ ] Upload
-    - [-] Upload one or more posts to e621 in sequence
-    - [-] Allows relationships to be created and/or edited upon upload, displayed in the UI
-    - [-] Tagging can be done on multiple posts at once
+    - [X] Upload one or more posts to e621 in sequence
+    - [X] Allows relationships to be created and/or edited upon upload, displayed in the UI
+    - [X] Tagging can be done on multiple posts at once
     - [ ] Custom tags and aliases can be made, and will be substituted upon upload (setting may allow implications to be resolved on a keyboard shortcut)
-    - [-] Descriptions for posts can be synchronized
+    - [X] Descriptions for posts can be synchronized
     - [ ] Sources can be specified for multiple posts at once, same thing for characters, artists, etc
     - [ ] Warns against bad practices (such as daizy-chaining posts instead of shallow relationships)
 
@@ -27,7 +27,7 @@
     - The queue is where posts and other actions are placed before being acted upon
     - [ ] As per site recommendations, 1000ms (1s) delays will be enforced for uploads
     - [ ] The queue is keen on errors, and be set to fail out, skip, or try again in settings
-    - [-] Responds to upload limits and pauses itself if limits are exceeded
+    - [X] Responds to upload limits and pauses itself if limits are exceeded
 
 - [ ] Browse
     - [ ] Lets you browse e621 posts using your custom tags, implications, and better logic
