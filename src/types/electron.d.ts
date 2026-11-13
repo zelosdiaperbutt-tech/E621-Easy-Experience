@@ -18,6 +18,12 @@ declare global {
                 loadUnfinished(): Promise<UploadItemInfo[]>;
             }
         }
+        saveSecure: {
+            saveAPIKey(key: string);
+            getAPIKey(): Promise<string>;
+            saveUsername(username: string);
+            getUsername(): Promise<string>;
+        }
     }
 
     interface UploadItem {

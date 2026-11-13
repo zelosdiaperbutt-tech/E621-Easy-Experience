@@ -16,7 +16,7 @@ export class StartupModal extends Modal {
                 </div>
                 <div class="input-field">
                     <h3>Auth Token</h3>
-                    <input type="text" class="auto-token" placeholder="Ex: 1nHrmzmsvJf26EhU1F7CjnjC">
+                    <input type="text" class="auth-token" placeholder="Ex: 1nHrmzmsvJf26EhU1F7CjnjC">
                     <p class="disclaimer">Your auth token is sensitive information, do not share it with anyone you do not absolutely trust</p>
                 </div>
                 <div class="flex-group">
@@ -110,7 +110,22 @@ export class StartupModal extends Modal {
     }
 
     protected onRender(): void {
+        this.querySelector('.skip-button')!.addEventListener('click', () => {
+            this.close();
+        });
 
+        this.querySelector('.save-button')!.addEventListener('click', () => {
+            const usernameInput = this.querySelector('.auth-username')! as HTMLInputElement;
+            const keyInput = this.querySelector('.auth-token')! as HTMLInputElement;
+
+            // might want to make this appear as an error
+            if (usernameInput.value.trim() === "" || keyInput.value.trim() === "") return;
+
+            window.saveSecure.saveUsername(usernameInput.value.trim());
+            window.saveSecure.saveAPIKey(keyInput.value.trim());
+
+            this.close();
+        })
     }
 }
 
