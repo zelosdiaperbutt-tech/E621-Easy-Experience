@@ -62,7 +62,7 @@ button.button-danger:hover {
 }
 
 button.button-good {
-    color: var(--green-500);
+    color: var(--green-600);
 }
 
 button.button-good:hover {

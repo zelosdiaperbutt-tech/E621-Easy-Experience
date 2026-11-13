@@ -68,24 +68,6 @@
     width: 85%;
 }
 
-.input-field h3 {
-    margin-top: 0;
-    margin-bottom: var(--space-4);
-    font-size: 1.2rem;
-    font-weight: bolder;
-}
-
-.input-field input[type="text"] {
-    width: 100%;
-}
-
-.input-field p.disclaimer {
-    margin: 0;
-    color: var(--grey-600);
-    font-size: 0.9rem;
-    font-style: italic;
-}
-
 #startup-modal footer {
     display: flex;
     flex-direction: row;

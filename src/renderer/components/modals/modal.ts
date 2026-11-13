@@ -90,7 +90,7 @@ export abstract class Modal extends HTMLElement {
 
             .modal-container {
                 position: relative;
-                background: var(--grey-50);
+                background: linear-gradient(var(--grey-50) 0%, var(--grey-100) 20%, var(--grey-200) 90%, var(--grey-300) 100%);
                 color: var(--grey-900);
                 padding: var(--space-16);
                 border-radius: var(--space-8);
