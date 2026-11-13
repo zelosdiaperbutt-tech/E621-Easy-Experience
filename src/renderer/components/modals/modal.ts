@@ -1,6 +1,5 @@
 
 export abstract class Modal extends HTMLElement {
-    protected shadow: ShadowRoot;
     protected dialog!: HTMLDialogElement;
 
     private rendered = false;
@@ -8,7 +7,6 @@ export abstract class Modal extends HTMLElement {
     constructor() {
         super();
 
-        this.shadow = this.attachShadow({ mode: 'open' });
     }
 
     connectedCallback(): void {
@@ -28,7 +26,7 @@ export abstract class Modal extends HTMLElement {
     }
 
     private render(): void {
-        this.shadow.innerHTML = `
+        this.innerHTML = `
             <style>
                 ${this.getBaseCSS()}
                 ${this.getCSS()}
@@ -42,7 +40,7 @@ export abstract class Modal extends HTMLElement {
             </dialog>
         `;
 
-        this.dialog = this.shadow.querySelector("dialog")!;
+        this.dialog = this.querySelector("dialog")!;
         this.dialog
             .querySelector('.close-button')!
             .addEventListener('click', () => {this.close()})
@@ -78,10 +76,10 @@ export abstract class Modal extends HTMLElement {
         return `
             dialog {
                 border: none;
-                border-radius: 10px;
+                border-radius: var(--space-16);
                 padding: 0;
                 background: transparent;
-                color: inherit;
+                color: var(--grey-900);
                 max-width: 90vw;
                 max-height: 90vh;
             }
@@ -92,16 +90,26 @@ export abstract class Modal extends HTMLElement {
 
             .modal-container {
                 position: relative;
-                background: #252525;
-                color: white;
-                padding: 24px;
-                border-radius: 10px;
+                background: var(--grey-50);
+                color: var(--grey-900);
+                padding: var(--space-16);
+                border-radius: var(--space-8);
             }
 
             .close-button {
                 position: absolute;
                 top: 10px;
                 right: 10px;
+                border: none;
+                border-radius: 50%;
+                aspect-ratio: 1 / 1;
+                background: var(--grey-100);
+                cursor: pointer;
+                transition: background 300ms ease;
+            }
+
+            .close-button:hover {
+                background: var(--grey-300);
             }
         `;
     }

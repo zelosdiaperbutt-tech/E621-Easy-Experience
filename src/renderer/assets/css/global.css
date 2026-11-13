@@ -190,17 +190,18 @@ input[type="checkbox"] {
     --purple-900: #29083F;
     --purple-1000:#0f0317;
 
-    --grey-50:  #EFF1F5;
-    --grey-100: #D3D8E4;
-    --grey-200: #B7BFD2;
-    --grey-300: #9BA6C0;
-    --grey-400: #7E8DAE;
-    --grey-500: #65769E;
-    --grey-600: #515F81;
-    --grey-700: #3F4A64;
-    --grey-800: #2D3548;
-    --grey-900: #1B202C;
-    --grey-1000:#0A0C10;
+    --grey-0: white;
+    --grey-50:  #F0F1F4;
+    --grey-100: #D6D8E1;
+    --grey-200: #BBC0CE;
+    --grey-300: #A0A7BA;
+    --grey-400: #7D86A1;
+    --grey-500: #6B7594;
+    --grey-600: #586079;
+    --grey-700: #454B5F;
+    --grey-800: #313644;
+    --grey-900: #1E2129;
+    --grey-1000:#0B0C0F;
 
     --space-4: 4px;
     --space-8: 8px;

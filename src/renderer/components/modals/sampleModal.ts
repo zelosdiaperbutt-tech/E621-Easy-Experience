@@ -22,17 +22,17 @@ export class SampleModal extends Modal {
             }
             
             #confirm {
-                background: #3478db;
+                background: var(--blue-600);
                 color: white;
             }
         `
     }
 
     protected onRender(): void {
-        this.shadow.querySelector("#cancel")!
+        this.querySelector("#cancel")!
             .addEventListener('click', () => {this.close()})
         
-        this.shadow.querySelector("#confirm")!
+        this.querySelector("#confirm")!
             .addEventListener('click', () => {
                 this.dispatchEvent(
                     new CustomEvent('confirmed', {bubbles: true, composed: true})
