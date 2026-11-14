@@ -12,10 +12,12 @@ export class StartupModal extends Modal {
             <section>
                 <div class="input-field">
                     <h3>Username</h3>
+                    <p class="input-error" data-visible="false">Username cannot be empty</p>
                     <input type="text" class="auth-username" placeholder="Ex: hexerade">
                 </div>
                 <div class="input-field">
                     <h3>Auth Token</h3>
+                    <p class="input-error" data-visible="false">Auth token cannot be empty</p>
                     <input type="text" class="auth-token" placeholder="Ex: 1nHrmzmsvJf26EhU1F7CjnjC">
                     <p class="disclaimer">Your auth token is sensitive information, do not share it with anyone you do not absolutely trust</p>
                 </div>
@@ -106,23 +108,53 @@ export class StartupModal extends Modal {
             section .flex-group {
                 justify-content: center;
             }
+
+            p.input-error {
+                color: var(--red-500);
+                margin: 0;
+                padding: 0;
+                font-size: 0.8rem;
+                font-style: italic;
+            }
+
+            p.input-error[data-visible="false"] {
+                display: none;
+            }
         `
     }
 
     protected onRender(): void {
+        const usernameError = this.querySelector('.auth-username')!.closest('div.input-field')!.querySelector('.input-error')! as HTMLElement;
+        const keyError = this.querySelector('.auth-token')!.closest('div.input-field')!.querySelector('.input-error')! as HTMLElement;
+        const usernameInput = this.querySelector('.auth-username')! as HTMLInputElement;
+        const keyInput = this.querySelector('.auth-token')! as HTMLInputElement;
+
+        usernameInput.addEventListener('input', () => {
+            usernameError.dataset.visible = "false"
+        })
+
+        keyInput.addEventListener('input', () => {
+            keyError.dataset.visible = "false"
+        })
+
         this.querySelector('.skip-button')!.addEventListener('click', () => {
             this.close();
         });
 
         this.querySelector('.save-button')!.addEventListener('click', () => {
-            const usernameInput = this.querySelector('.auth-username')! as HTMLInputElement;
-            const keyInput = this.querySelector('.auth-token')! as HTMLInputElement;
+            const usernameValue = usernameInput.value.trim()
+            const keyValue = keyInput.value.trim();
 
             // might want to make this appear as an error
-            if (usernameInput.value.trim() === "" || keyInput.value.trim() === "") return;
+            if (usernameValue === "" || keyValue === "") {
+                if (usernameValue === "") usernameError.dataset.visible = "true";
+                if (keyValue === "") keyError.dataset.visible = "true"
+                console.log("write canceled")
+                return;
+            }
 
-            window.saveSecure.saveUsername(usernameInput.value.trim());
-            window.saveSecure.saveAPIKey(keyInput.value.trim());
+            window.saveSecure.saveUsername(usernameValue);
+            window.saveSecure.saveAPIKey(keyValue);
 
             this.close();
         })
