@@ -34,16 +34,12 @@ export abstract class Modal extends HTMLElement {
 
             <dialog>
                 <div class="modal-container">
-                    <button class="close-button" type="button">&times;</button>
                     <div class="modal-content">${this.getHtml()}</div>
                 </div>
             </dialog>
         `;
 
         this.dialog = this.querySelector("dialog")!;
-        this.dialog
-            .querySelector('.close-button')!
-            .addEventListener('click', () => {this.close()})
 
         this.dialog.addEventListener('click', (event) => {
             if (event.target === this.dialog) {
@@ -106,22 +102,6 @@ export abstract class Modal extends HTMLElement {
                 color: var(--grey-900);
                 padding: var(--space-16);
                 border-radius: var(--space-8);
-            }
-
-            .close-button {
-                position: absolute;
-                top: 10px;
-                right: 10px;
-                border: none;
-                border-radius: 50%;
-                aspect-ratio: 1 / 1;
-                background: var(--grey-100);
-                cursor: pointer;
-                transition: background 300ms ease;
-            }
-
-            .close-button:hover {
-                background: var(--grey-300);
             }
         `;
     }

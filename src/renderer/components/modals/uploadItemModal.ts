@@ -1,12 +1,12 @@
-import { Modal } from "./modal";
+import { Modal } from "./modal.js";
 import { itemManager } from "../../pages/upload/itemManager";
 
 import { SelectableButton } from "../selectableButton";
 import { ExclusiveButton } from "../exclusiveButton";
 import { ConditionButton } from "../conditionButton";
 import { ConditionalButton } from "../conditionalButton";
-import { getSizeString } from "../../pages/upload";
-import { createNewModalSource } from "../../pages/upload/modal";
+import { getSizeString } from "../../pages/upload/index.js";
+import { createNewModalSource } from "../../pages/upload/modal.js";
 
 export class UploadItemModal extends Modal {
 
@@ -121,8 +121,8 @@ export class UploadItemModal extends Modal {
 
     protected getHtml(): string {
         return `
-        <div data-id="modal-background" class="modal-background modal-hidden"> <!-- modal-hidden -->
-            <div class="modal" role="dialog" aria-modal="true">
+        <div data-id="modal-background"> <!-- modal-hidden -->
+            <div role="dialog" aria-modal="true">
 
                 <header data-id="modal-header">
                     <div data-id="modal-navigation-buttons">
