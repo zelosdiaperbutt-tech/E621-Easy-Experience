@@ -1,5 +1,5 @@
 import { Modal } from "./modal.js";
-import { itemManager } from "../../pages/upload/itemManager";
+import { itemManager } from "../../pages/upload/itemManager.js";
 
 import { SelectableButton } from "../selectableButton";
 import { ExclusiveButton } from "../exclusiveButton";
@@ -16,6 +16,12 @@ export class UploadItemModal extends Modal {
         ['s', 'safe'],
         ['u', 'unset']
     ]); 
+
+    static readonly ratingLonghand: Map<string, string> = new Map<string, string>([
+        ['safe', 's'],
+        ['questionable', 'q'],
+        ['explicit', 'e']
+    ])
 
     private currentUploadItem: UploadItem | null = null;
 
@@ -103,13 +109,93 @@ export class UploadItemModal extends Modal {
     }
 
     public writeModalChanges(currentItem: UploadItem): void {
+        // get all the elements at the start.
+        // replacement for old code that had references at the top of file, but that likely won't work here.
+        const modalBackground = this.querySelector('[data-id="modal-background"]') as HTMLElement
+        const modalSourceInputs = this.querySelector('[data-id="modal-sources-inputs"]') as HTMLElement
+        const modalAddSourceButton = this.querySelector('[data-id="modal-add-source"]') as HTMLButtonElement
+        const modalContentContainer = this.querySelector('[data-id="content-container"]') as HTMLElement
+        const modalNavigatePrevious = this.querySelector('[data-id="modal-navigate-previous"]') as HTMLButtonElement
+        const modalNavigateNext = this.querySelector('[data-id="modal-navigate-next"]') as HTMLButtonElement
+        const itemGrid = document.getElementById('upload-main-area-grid') as HTMLElement
+    
+        const selectedRating = modalBackground.querySelector<ExclusiveButton>('exclusive-button[group-name="modal-rating-button"][selected="true"]')
+        if (selectedRating) {
+            currentItem.rating = (UploadItemModal.ratingLonghand.get(selectedRating.value)) as 'e'|'q'|'s'|'u'
+        } else {
+            currentItem.rating = 'u'
+        }
 
+        let speciesTypes: SpeciesType[] = [];
+        modalBackground.querySelectorAll<SelectableButton>('[data-id="modal-species-types"] selectable-button[selected="true"]').forEach(button => {
+            speciesTypes.push(button.value as SpeciesType)
+        })
+        currentItem.speciesTypes = speciesTypes;
+
+        let genders: Gender[] = [];
+        modalBackground.querySelectorAll<SelectableButton>('[data-id="modal-genders"] condition-button[selected="true"]').forEach(button => {
+            genders.push(button.value as Gender)
+        })
+        currentItem.genders = genders;
+
+        let relations: Relations[] = []
+        modalBackground.querySelectorAll<ConditionButton>('[data-id="modal-relations"] conditional-button[active="true"][selected="true"]').forEach(button => {
+            if (button.value === "") return;
+            relations.push(button.value as Relations)
+        })
+        currentItem.relations = relations
+
+        const selectedNumberOfCharacters = modalBackground.querySelector<ExclusiveButton>('[data-id="modal-characters"] exclusive-button[group-name="modal-character-number"][selected="true"]')
+        if (selectedNumberOfCharacters) {
+            currentItem.numberOfCharacters = (selectedNumberOfCharacters.value as NumberOfCharacters)
+        } else {
+            currentItem.numberOfCharacters = ('unset' as NumberOfCharacters)
+        }
+
+        let sources: string[] = [];
+        modalSourceInputs.querySelectorAll<HTMLInputElement>('input[type="text"]').forEach(source => {
+            if (source.value && source.value.trim() !== "") sources.push(source.value)
+        })
+        currentItem.sources = sources;
+
+        currentItem.characters = modalBackground.querySelector<HTMLTextAreaElement>('[data-id="modal-characters"] textarea')!.value.split(' ')
+        currentItem.general = modalBackground.querySelector<HTMLTextAreaElement>('[data-id="modal-general"] textarea')!.value.split(' ')
+        currentItem.species = modalBackground.querySelector<HTMLTextAreaElement>('[data-id="modal-species"] textarea')!.value.split(' ')
+        currentItem.creators = modalBackground.querySelector<HTMLTextAreaElement>('[data-id="modal-creators"] textarea')!.value.split(' ')
+        currentItem.description = modalBackground.querySelector<HTMLTextAreaElement>('[data-id="modal-description"] textarea')!.value
+        currentItem.parent = modalBackground.querySelector<HTMLTextAreaElement>('[data-id="modal-parent"] input[type="text"]')!.value
+
+        itemManager.saveAllItems(itemGrid);
     }
 
     private navigatePrevious(): void { }
     private navigateNext(): void { }
 
-    private clearModal(): void { }
+    private clearModal(): void {
+        const modalBackground = this.querySelector('[data-id="modal-background"]') as HTMLElement
+        const modalSourceInputs = this.querySelector('[data-id="modal-sources-inputs"]') as HTMLElement
+
+        modalBackground.querySelectorAll<HTMLElement>('.selectable-button').forEach(button => {
+            button.dispatchEvent(new Event('deselect'))
+        })
+        modalBackground.querySelectorAll<HTMLTextAreaElement>('textarea').forEach(textArea => {
+            textArea.value = ""
+        })
+        modalBackground.querySelectorAll<HTMLInputElement>('input[type="text"]').forEach(input => {
+            input.value = "";
+        })
+        modalBackground.querySelectorAll<SelectableButton>('selectable-button').forEach(button => {
+            button.dispatchEvent(new Event('deselect'))
+        })
+        modalBackground.querySelectorAll<ConditionButton>('condition-button').forEach(button => {
+            button.dispatchEvent(new Event('deselect'))
+        })
+        modalBackground.querySelectorAll<ConditionalButton>('conditional-button').forEach(button => {
+            button.dispatchEvent(new Event('deselect'))
+        })
+        modalBackground.querySelector<HTMLParagraphElement>('[data-id="modal-navigate-item-id"]')!.innerHTML = "ID: #___"
+        modalSourceInputs.innerHTML = "";
+    }
 
     //---------------------------------//
     //      Inherited Modal            //
@@ -117,6 +203,7 @@ export class UploadItemModal extends Modal {
 
     protected onClose(): void {
         this.currentUploadItem = null;
+        this.clearModal();
     }
 
     protected getHtml(): string {
@@ -258,7 +345,25 @@ export class UploadItemModal extends Modal {
     }
 
     protected onRender(): void {
+        this.querySelector('[data-id="modal-confirm-button"]')!.addEventListener('click', () => {
+            if (this.currentUploadItem) {
+                this.writeModalChanges(this.currentUploadItem);
+            }
 
+            this.close();
+        })
+
+        this.querySelector('[data-id="modal-cancel-button"]')!.addEventListener('click', () => {
+            this.close();
+        })
+
+        this.querySelector('[data-id="modal-add-source"]')?.addEventListener('click', () => {
+            
+            const modalSourceInputs = this.querySelector('[data-id="modal-sources-inputs"]') as HTMLElement
+            const newSource = createNewModalSource()
+            modalSourceInputs.insertAdjacentElement('beforeend', newSource)
+
+        })
     }
 }
 
