@@ -360,7 +360,7 @@ modalAddSourceButton.addEventListener('click', () => {
     modalSourceInputs.insertAdjacentElement('beforeend', newSource)
 })
 
-const createNewModalSource = (value: string = "") => {
+export const createNewModalSource = (value: string = "") => {
     const sourceInput = document.createElement('input')
     sourceInput.setAttribute('type', 'text')
     sourceInput.classList = "source-input"

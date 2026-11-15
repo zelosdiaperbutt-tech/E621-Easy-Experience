@@ -60,15 +60,27 @@ export abstract class Modal extends HTMLElement {
      */
     protected onRender(): void { }
 
+    /**
+     * Called when the modal is opened.
+     */
+    protected onOpen(): void {}
+
+    /**
+     * Called when the modal is closed.
+     */
+    protected onClose(): void {}
+
     open(): void {
         if (!this.dialog.open) {
             this.dialog.showModal()
+            this.onOpen();
         }
     }
 
     close(): void {
         if (this.dialog.open) {
             this.dialog.close()
+            this.onClose()
         }
     }
 
