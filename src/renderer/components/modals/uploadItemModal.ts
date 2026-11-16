@@ -7,6 +7,8 @@ import { ConditionButton } from "../conditionButton";
 import { ConditionalButton } from "../conditionalButton";
 import { getSizeString } from "../../pages/upload/index.js";
 import { createNewModalSource } from "../../pages/upload/modal.js";
+import { ImageUploadItem } from "../imageUploadItem.js";
+import { VideoUploadItem } from "../videoUploadItem.js";
 
 export class UploadItemModal extends Modal {
 
@@ -168,8 +170,91 @@ export class UploadItemModal extends Modal {
         itemManager.saveAllItems(itemGrid);
     }
 
-    private navigatePrevious(): void { }
-    private navigateNext(): void { }
+    private navigatePrevious(itemGrid: HTMLElement): void {
+        let index: number = -1;
+
+        if (
+            !(this.currentUploadItem instanceof ImageUploadItem) &&
+            !(this.currentUploadItem instanceof VideoUploadItem) 
+        ) return;
+
+        for (let i = 0; i < itemGrid.children.length; i++) {
+            if (this.currentUploadItem === itemGrid.children[i]) {
+                index = i;
+                break;
+            }
+        }
+
+        if (index === -1) return;
+        if (index === 0) return;
+
+        const previousElement = itemGrid.children.item(index - 1);
+        if (!previousElement) return;
+
+        let previousUploadItem: UploadItem;
+        let mediaType: string;
+
+        if (previousElement instanceof ImageUploadItem) {
+            previousUploadItem = previousElement;
+            mediaType = 'image';
+        } else if (previousElement instanceof VideoUploadItem) {
+            previousUploadItem = previousElement;
+            mediaType = 'video'
+        } else return;
+
+        this.writeModalChanges(this.currentUploadItem);
+        this.clearModal();
+        this.setCurrentUploadItem(previousUploadItem);
+        this.updateModalInfo(previousUploadItem, mediaType as 'image'|'video', {
+            path: previousUploadItem.path,
+            name: previousUploadItem.name,
+            type: previousUploadItem.type,
+            size: previousUploadItem.size
+        });
+    }
+    
+    private navigateNext(itemGrid: HTMLElement): void {
+        let index: number = -1;
+
+        if (
+            !(this.currentUploadItem instanceof ImageUploadItem) &&
+            !(this.currentUploadItem instanceof VideoUploadItem) 
+        ) return;
+
+        for (let i = 0; i < itemGrid.children.length; i++) {
+            if (this.currentUploadItem === itemGrid.children[i]) {
+                index = i;
+                break;
+            }
+        }
+
+        if (index === -1) return;
+        if (index === itemGrid.children.length - 1) return;
+
+        const nextElement = itemGrid.children.item(index + 1);
+        if (!nextElement) return;
+
+        let nextUploadItem: UploadItem;
+        let mediaType: string;
+
+        if (nextElement instanceof ImageUploadItem) {
+            nextUploadItem = nextElement;
+            mediaType = 'image'
+        } else if (nextElement instanceof VideoUploadItem) {
+            nextUploadItem = nextElement;
+            mediaType = 'video'
+        } else return;
+
+        this.writeModalChanges(this.currentUploadItem);
+        this.clearModal();
+        this.setCurrentUploadItem(nextUploadItem);
+        this.updateModalInfo(nextUploadItem, mediaType as 'image'|'video', {
+            path: nextUploadItem.path,
+            name: nextUploadItem.name,
+            type: nextUploadItem.type,
+            size: nextUploadItem.size
+        })
+    }
 
     private clearModal(): void {
         const modalBackground = this.querySelector('[data-id="modal-background"]') as HTMLElement
@@ -363,6 +448,24 @@ export class UploadItemModal extends Modal {
             const newSource = createNewModalSource()
             modalSourceInputs.insertAdjacentElement('beforeend', newSource)
 
+        })
+
+        this.querySelector('[data-id="modal-navigate-previous"]')!.addEventListener('click', () => {
+            const itemGrid = document.getElementById('upload-main-area-grid')
+            if (!itemGrid) {
+                console.error("Unable to find item grid, which as html element with the id of 'upload-main-area-grid'");
+                return;
+            }
+            this.navigatePrevious(itemGrid);
+        })
+
+        this.querySelector('[data-id="modal-navigate-next"]')!.addEventListener('click', () => {
+            const itemGrid = document.getElementById('upload-main-area-grid')
+            if (!itemGrid) {
+                console.error("Unable to find item grid, which as html element with the id of 'upload-main-area-grid'");
+                return;
+            }
+            this.navigateNext(itemGrid);
         })
     }
 }
