@@ -27,10 +27,27 @@ export class UploadItemModal extends Modal {
 
     private currentUploadItem: UploadItem | null = null;
 
+    /**
+     * Updates the interal state of the modal to use the specified UploadItem as the one
+     * to operate on.
+     * @param item The UploadItem the modal should now use.
+     */
     public setCurrentUploadItem(item: UploadItem): void {
         this.currentUploadItem = item;
     }
 
+    /**
+     * Updates the current state of the modal to reflect the properties of the Upload element
+     * specified, which is configured using the `type`, and `info` properties. This function 
+     * does not save changes made to the current UploadItem.
+     * 
+     * @param uploadElement The UploadItem with the information, which is read to sync the 
+     * modal's appearance and initial state to its current values.
+     * @param type Whether the upload item is an image or a video, used mainly so the preview
+     * loads correctly.
+     * @param info A FileInfo object which shows the item's metadata to the user.
+     * @see {@link writeModalChanges} to save changes to the current UploadItem
+     */
     public updateModalInfo(uploadElement: UploadItem, type: 'image' | 'video', info: FileInfo): void {
         // get all the elements at the start.
         // replacement for old code that had references at the top of file, but that likely won't work here.
@@ -110,6 +127,14 @@ export class UploadItemModal extends Modal {
         modalBackground.querySelector<HTMLTextAreaElement>('[data-id="modal-parent"] input[type="text"]')!.value = uploadElement.parent
     }
 
+    /**
+     * Writes the current state of the elements in the modal to the specified UploadItem.
+     * This function does not close the modal, nor prepares it for another item to overwrite
+     * the current one.
+     * 
+     * @param currentItem 
+     * @see {@link Modal.close} To close the modal.
+     */
     public writeModalChanges(currentItem: UploadItem): void {
         // get all the elements at the start.
         // replacement for old code that had references at the top of file, but that likely won't work here.
@@ -170,6 +195,20 @@ export class UploadItemModal extends Modal {
         itemManager.saveAllItems(itemGrid);
     }
 
+    /**
+     * Navigation function that finds the previous item inside of the specified grid and, if
+     * that previous item is an uploadItem, does the following:
+     * 1. Saves all changes to the currently opened item
+     * 2. Clears all contextual information and fields inside the modal
+     * 3. Overwrites the current upload item with the newly found one
+     * 4. Opens the new item.
+     * 
+     * Nothing will happen if the current item is the first in the list or if the previous 
+     * element in the specified grid is not an uploadItem.
+     * 
+     * @param itemGrid The grid HTML element which all uploadItems are in. Used to find the 
+     * index of the current item and the previous item.
+     */
     private navigatePrevious(itemGrid: HTMLElement): void {
         let index: number = -1;
 
@@ -213,6 +252,20 @@ export class UploadItemModal extends Modal {
         });
     }
     
+    /**
+     * Navigation function that finds the next item inside of the specified grid and, if
+     * that next item is an uploadItem, does the following:
+     * 1. Saves all changes to the currently opened item
+     * 2. Clears all contextual information and fields inside the modal
+     * 3. Overwrites the current upload item with the newly found one
+     * 4. Opens the new item.
+     * 
+     * Nothing will happen if the current item is the last in the list or if the next element
+     * in the specified grid is not an uploadItem.
+     * 
+     * @param itemGrid The grid HTML element which all uploadItems are in. Used to find the 
+     * index of the current item and the next item.
+     */
     private navigateNext(itemGrid: HTMLElement): void {
         let index: number = -1;
 

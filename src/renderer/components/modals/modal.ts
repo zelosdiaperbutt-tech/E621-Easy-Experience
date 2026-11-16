@@ -17,14 +17,21 @@ export abstract class Modal extends HTMLElement {
     }
 
     /**
-     * HTML supplied by individual modal.
+     * HTML supplied by individual modals.
      */
     protected abstract getHtml(): string;
 
+    /**
+     * CSS supplied by individual modals.
+     */
     protected getCSS(): string {
         return "";
     }
 
+    /**
+     * Gives the modals a standard structure and incorporates the default
+     * CSS, along with the modal specified structure and style.
+     */
     private render(): void {
         this.innerHTML = `
             <style>
@@ -66,6 +73,9 @@ export abstract class Modal extends HTMLElement {
      */
     protected onClose(): void {}
 
+    /**
+     * If the modal is not open, opens it.
+     */
     open(): void {
         if (!this.dialog.open) {
             this.dialog.showModal()
@@ -73,6 +83,9 @@ export abstract class Modal extends HTMLElement {
         }
     }
 
+    /**
+     * If the modal is not closed, closes it.
+     */
     close(): void {
         if (this.dialog.open) {
             this.dialog.close()
@@ -80,6 +93,10 @@ export abstract class Modal extends HTMLElement {
         }
     }
 
+    /**
+     * Base CSS
+     * @returns Base CSS 
+     */
     protected getBaseCSS(): string {
         return `
             dialog {
