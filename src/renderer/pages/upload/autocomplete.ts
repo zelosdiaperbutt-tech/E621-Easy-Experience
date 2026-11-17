@@ -90,10 +90,12 @@ async function getTagPreview(tags: string[], success: (previewTags: string[]) =>
 
         let finalTags: Set<string> = new Set<string>();
         result.forEach((r: any) => {
-            finalTags.add(r.consequent_name)
-            r.descendant_names.forEach((d: string) => {
-                finalTags.add(d)
-            })
+            if (r.status === "active") {
+                finalTags.add(r.consequent_name)
+                r.descendant_names.forEach((d: string) => {
+                    finalTags.add(d)
+                })
+            }
         })
 
         let tagsArray: string[] = [];
