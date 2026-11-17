@@ -4,6 +4,7 @@ import {setCurrentUploadItem, updateModalInfo, writeModalChanges, activateModal}
 
 import {itemManager} from '../pages/upload/itemManager.js'
 import { updateSelectionQuantityLabel } from '../pages/upload/index.js';
+import { uploadItemModal } from '../pages/upload/uploadItemModalHelper.js';
 
 export class VideoUploadItem extends HTMLElement implements UploadItem {
 
@@ -142,8 +143,8 @@ export class VideoUploadItem extends HTMLElement implements UploadItem {
     }
 
     private selectedForModal() {
-        setCurrentUploadItem(this);
-        updateModalInfo(
+        uploadItemModal.setCurrentUploadItem(this);
+        uploadItemModal.updateModalInfo(
             this,
             'video',
             {
@@ -153,7 +154,7 @@ export class VideoUploadItem extends HTMLElement implements UploadItem {
                 size: this.size
             }
         );
-        activateModal();
+        uploadItemModal.open();
     }
 }
 
