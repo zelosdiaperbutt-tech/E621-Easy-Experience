@@ -493,7 +493,7 @@ const aggregateCurrentTags = (): string[] => {
         if (button.value === "") return;
         tags.push(relationsToTag(button.value as Relations))
     })
-    modalAddSourceButton.querySelectorAll<ExclusiveButton>('#modal-characters exclusive-button[group-name="modal-character-number"][selected="true"]').forEach(button => {
+    modalBackground.querySelectorAll<ExclusiveButton>('#modal-characters exclusive-button[group-name="modal-character-number"][selected="true"]').forEach(button => {
         tags.push(numberOfCharactersToTag(button.value as NumberOfCharacters))
     })
 

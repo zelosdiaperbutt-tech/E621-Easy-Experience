@@ -9,6 +9,7 @@ import { getSizeString } from "../../pages/upload/index.js";
 import { createNewModalSource } from "../../pages/upload/modal.js";
 import { ImageUploadItem } from "../imageUploadItem.js";
 import { VideoUploadItem } from "../videoUploadItem.js";
+import { TagPreviewModal } from "./tagPreviewModal.js";
 
 export class UploadItemModal extends Modal {
 
@@ -519,6 +520,14 @@ export class UploadItemModal extends Modal {
                 return;
             }
             this.navigateNext(itemGrid);
+        })
+
+        const tagPreview = document.createElement('tag-preview-modal') as TagPreviewModal
+        tagPreview.setModalBackground(this.querySelector('[data-id="modal-background"]') as HTMLElement)
+        this.appendChild(tagPreview)
+
+        this.querySelector('[data-id="tag-preview-button"]')?.addEventListener('click', () => {
+            tagPreview.open();
         })
     }
 }

@@ -76,7 +76,8 @@ async function getTagPreview(tags: string[], success: (previewTags: string[]) =>
     tagPreviewController = new AbortController()
 
     try {
-        const response = await fetch(`https://e621.net/tag_implications.json?search[antecedent_name]=${tags.join(',')}`, {
+        const query = `https://e621.net/tag_implications.json?search[antecedent_name]=${tags.join(',')}`
+        const response = await fetch(query, {
             signal: tagPreviewController.signal
         })
 
